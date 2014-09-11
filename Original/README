@@ -1,0 +1,425 @@
+**************************************************************
+***********README FOR GContainsH and its Components***********
+**************************************************************
+
+A few things need to be made clear before using this software
+and source code. Since it relies on nauty for graph implementation
+and manipulation, there is a limitation on the types of graphs
+that can be handled:
+
+-Since bit patterns are used to determine whether or not a vertex
+ is adjacent to another vertex, this means that the only
+ possibilities for the number of edges from one vertex to another
+ is 0 or 1
+-This applies to edges from a vertex to itself (loops)
+-Thus, the limitation is that there cannot be multiple edges
+
+To represent undirected graphs (since, here, an adjacency states
+that an edge is directed from one vertex to another), for each
+vertex X, each vertex in X's adjacency list must have X in its
+adjacency list. Think of it as having all double edges, but
+with the pairs of edges having opposite direction.
+
+=== GContainsHUI ===============================================
+Prompts for the path to 2 files that contain adjacency lists
+to represent graphs. The first path that's entered is that of
+the G (containing graph), and the second path that's entered is
+that of the H (contained graph). If any error occurs (except
+any that have to do with the format of the graph files), they
+are displayed to the user. If no errors occur, a message is
+displayed indicating how many isomorphisms exist between H and
+induced subgraphs of G. All isomorphisms between H and induced
+subgraphs of G are mapped out after that.
+
+=== Compiling GContainsHUI ===
+A makefile has been supplied to compile the GContainsHUI executable.
+The following command will use the makefile "makefile"
+to perform the compilation:
+
+make GContainsHUI
+
+=== Files Required to Compile GContainsHUI ===
+nauty.h
+nauty.c
+nautil.c
+naugraph.c
+Utilities.h
+Utilities.c
+GraphLinkedList.h
+GraphLinkedList.c
+GraphTextToLinkedList.h
+GraphTextToLinkedList.c
+GraphLinkedListTonauty.h
+GraphLinkedListTonauty.c
+IndexCombinations.h
+IndexCombinations.c
+InduceSubgraph.h
+InduceSubgraph.c
+Isomorphism.h
+Isomorphism.c
+GContainsH.h
+GContainsH.c
+GContainsHUI.c
+
+=== Using GContainsHUI ===
+Simply call the executable GContainsHUI after it is compiled
+and follow the on-screen instructions.
+
+=== GContainsHCMD ===============================================
+This program performs the exact same function as GContainsHUI.
+The only difference is that the paths of the graph files are passed
+on the command line.
+
+=== Compiling GContainsHCMD ===
+A makefile has been supplied to compile the GContainsHCMD executable.
+The following command will use the makefile "makefile"
+to perform the compilation:
+
+make GContainsHCMD
+
+Note that the following 2 commands equivalently compile both
+GContainsHUI and GContainsHCMD
+
+make
+make all
+
+=== Files Required to Compile GContainsHCMD ===
+nauty.h
+nauty.c
+nautil.c
+naugraph.c
+Utilities.h
+Utilities.c
+GraphLinkedList.h
+GraphLinkedList.c
+GraphTextToLinkedList.h
+GraphTextToLinkedList.c
+GraphLinkedListTonauty.h
+GraphLinkedListTonauty.c
+IndexCombinations.h
+IndexCombinations.c
+InduceSubgraph.h
+InduceSubgraph.c
+Isomorphism.h
+Isomorphism.c
+GContainsH.h
+GContainsH.c
+GContainsHCMD.c
+
+=== Using GContainsHCMD ===
+This is the command-line usage of this program:
+
+GContainsHCMD GGraphText HGraphText
+
+After executing this command, the program does precisely the same
+thing as GContainsHUI.
+
+=== GContainsH ===================================================
+The function "GContainsH" is declared in the header file
+GContainsH.h and defined in GContainsH.c. The function's header
+is as follows:
+
+int GContainsH(char *GGraphText,
+               char *HGraphText,
+               int *p,
+               BijectionLL **HToXIsomorphisms);
+
+Consult GContainsH.c for more details on this function.
+
+=== Compiling Programs to Use GContainsH ===
+There is no "main" function defined in GContainsH.c. This
+means one will have to be defined in order for a program
+using GContainsH to compile and run. A sample compiling
+command is this:
+
+gcc -g nauty.c nautil.c naugraph.c Utilities.c GraphLinkedList.c GraphTextToLinkedList.c GraphLinkedListTonauty.c IndexCombinations.c InduceSubgraph.c Isomorphism.c GContainsH.c MyProgram.c -o MyProgram
+
+=== Files Required to Compile With GContainsH ===
+nauty.h
+nauty.c
+nautil.c
+naugraph.c
+Utilities.h
+Utilities.c
+GraphLinkedList.h
+GraphLinkedList.c
+GraphTextToLinkedList.h
+GraphTextToLinkedList.c
+GraphLinkedListTonauty.h
+GraphLinkedListTonauty.c
+IndexCombinations.h
+IndexCombinations.c
+InduceSubgraph.h
+InduceSubgraph.c
+Isomorphism.h
+Isomorphism.c
+GContainsH.h
+GContainsH.c
+
+=== GraphTextToLinkedList =======================================
+The function "GraphTextToLinkedList" is declared in the header
+file GraphTextToLinkedList.h and defined in GraphTextToLinkedList.c.
+This is the function's header:
+
+GraphLinkedList *GraphTextToLinkedList(char *GraphTextFilename);
+
+Consult GraphTextToLinkedList.c for more details on this function.
+
+=== Compiling Programs to Use GraphTextToLinkedList ===
+There is no "main" function defined in GraphTextToLinkedList.c.
+This means one will have to be defined in order for a program
+using GraphTextToLinkedList to compile and run. A sample compiling
+command is this:
+
+gcc -g nauty.c nautil.c naugraph.c Utilities.c GraphLinkedList.c GraphTextToLinkedList.c MyProgram.c -o MyProgram
+
+=== Files Required to Compile With GraphTextToLinkedList ===
+nauty.h
+nauty.c
+nautil.c
+naugraph.c
+Utilities.h
+Utilities.c
+GraphLinkedList.h
+GraphLinkedList.c
+GraphTextToLinkedList.h
+GraphTextToLinkedList.c
+
+=== GraphLinkedListTonauty =====================================
+The function "GraphLinkedListTonauty" is declared in the header
+file GraphLinkedListTonauty.h and defined in GraphLinkedListTonauty.c.
+This is the function's header:
+
+graph *GraphLinkedListTonauty(GraphLinkedList *GraphLinked);
+
+Consult GraphLinkedListTonauty.c for more details on this function.
+
+=== Compiling Programs to Use GraphLinkedListTonauty ===
+There is no "main" function defined in GraphLinkedListTonauty.c.
+This means one will have to be defined in order for a program
+using GraphLinkedListTonauty to compile and run. A sample compiling
+command is this:
+
+gcc -g nauty.c nautil.c naugraph.c Utilities.c GraphLinkedList.c GraphLinkedListTonauty.c MyProgram.c -o MyProgram
+
+=== Files Required to Compile With GraphLinkedListTonauty ===
+nauty.h
+nauty.c
+nautil.c
+naugraph.c
+Utilities.h
+Utilities.c
+GraphLinkedList.h
+GraphLinkedList.c
+GraphLinkedListTonauty.h
+GraphLinkedListTonauty.c
+
+=== IndexCombinations ==========================================
+The following functions are declared in the header file
+IndexCombinations.h and defined in IndexCombinations.c:
+
+PrintAllCombs
+makeComb
+firstIndexComb
+nextIndexComb
+printComb
+
+These are the function headers:
+
+int PrintAllCombs(int n, int k);
+int makeComb(int **comb, int k);
+int firstIndexComb(int *comb, int k);
+int nextIndexComb(int *curComb, int n, int k);
+int printComb(int *comb, int k);
+
+For more details on any of these functions, consult
+IndexCombinations.c.
+
+=== Compiling Programs to Use IndexCombinations ===
+There is no "main" function defined in IndexCombinations.c.
+This means one will have to be defined in order for a program
+using any of the functions defined in IndexCombinations.c
+to compile and run. A sample compiling command is this:
+
+gcc -g IndexCombinations.c MyProgram.c -o MyProgram
+
+=== Files Required to Compile With IndexCombinations ===
+IndexCombinations.h
+IndexCombinations.c
+
+=== InduceSubgraph =============================================
+The function "InduceSubgraph" is declared in the header
+file InduceSubgraph.h and defined in InduceSubgraph.c.
+This is the function's header:
+
+graph *InduceSubgraph(graph *g,
+                             int *SubgraphVertices,
+                             int m,
+                             int n,
+                             int p);
+
+Consult InduceSubgraph.c for more details on this function.
+
+=== Compiling Programs to Use InduceSubgraph ===
+There is no "main" function defined in InduceSubgraph.c.
+This means one will have to be defined in order for a program
+using InduceSubgraph to compile and run. A sample compiling
+command is this:
+
+gcc -g nauty.c nautil.c naugraph.c InduceSubgraph.c MyProgram.c -o MyProgram
+
+=== Files Required to Compile With InduceSubgraph ===
+nauty.h
+nauty.c
+nautil.c
+naugraph.c
+InduceSubgraph.h
+InduceSubgraph.c
+
+=== Isomorphism ===============================================
+The following functions are declared in the header file
+Isomorphism.h and defined in Isomorphism.c:
+
+GraphsEqual
+GetIsomorphism
+
+These are the function headers:
+
+extern int GraphsEqual(graph *g0,
+                graph *g1,
+                int m,
+                int n);
+extern int *GetIsomorphism(graph *g0,
+                    graph *g1,
+                    int m,
+                    int n);
+
+For more details on any of these functions, consult
+Isomorphism.c.
+
+=== Compiling Programs to Use Isomorphism ===
+There is no "main" function defined in Isomorphism.c.
+This means one will have to be defined in order for a program
+using any of these functions to compile and run. A sample
+compiling command is this:
+
+gcc -g nauty.c nautil.c naugraph.c Utilities.c Isomorphism.c MyProgram.c -o MyProgram
+
+=== Files Required to Compile With Isomorphism ===
+nauty.h
+nauty.c
+nautil.c
+naugraph.c
+Utilities.h
+Utilities.c
+Isomorphism.h
+Isomorphism.c
+
+=== GraphLinkedList ==============================================
+The header file GraphLinkedList.h defines the following types:
+
+AdjListNode
+AdjList
+GraphLinkedList
+
+and declares the following functions (defined in GraphLinkedList.c):
+
+GraphLinkedListCreate
+GraphLinkedListInsertVertex
+GraphLinkedListInsertAdj
+AreAdjacent
+
+These are the functions' headers:
+
+extern GraphLinkedList *GraphLinkedListCreate();
+extern void GraphLinkedListInsertVertex(GraphLinkedList *g);
+extern void GraphLinkedListInsertAdj(GraphLinkedList *g,
+                                     int VertexA,
+                                     int VertexB);
+extern int AreAdjacent(GraphLinkedList *g, int VertexA, int VertexB);
+
+Consult GraphLinkedList.h for more information on the type definitions
+and GraphLinkedList.c for more information on the functions.
+
+=== Compiling Programs to Use GraphLinkedList ===
+There is no "main" function defined in GraphLinkedList.c.
+This means one will have to be defined in order for a program
+using any of these functions to compile and run. A sample
+compiling command is this:
+
+gcc -g nauty.c nautil.c naugraph.c GraphLinkedList.c MyProgram.c -o MyProgram
+
+=== Files Required to Compile With GraphLinkedList ===
+nauty.h
+nauty.c
+nautil.c
+naugraph.c
+GraphLinkedList.h
+GraphLinkedList.c
+
+=== Utilities =================================================
+General utility type definitions and function headers are
+defined in Utlities.h. The functions themselves are defined
+in Utilities.c. Consult either of these files for more details.
+
+=== Compiling Programs to Use Utilities ===
+There is no "main" function defined in Utilities.c.
+This means one will have to be defined in order for a program
+using any of these functions to compile and run. A sample
+compiling command is this:
+
+gcc -g Utilities.c MyProgram.c -o MyProgram
+
+=== Files Required to Compile With Utilities ===
+Utilities.h
+Utilities.c
+
+
+=== Credits ======================================================
+
+=== Main Program Code ===
+==================================================================
+Daniel Steeves
+090565910
+stee5910@mylaurier.ca
+
+with Chinh Hoang
+choang@wlu.ca
+chinhthoang@gmail.com
+==================================================================
+
+=== Combination Generation ===
+==================================================================
+Thanks to scvalex on compprog.wordpress.com for providing
+a detailed explanation of combinations, and an algorithm and code
+to generate all k-combinations of a set of size n. This was
+invaluable in the process of generating induced subgraphs of G.
+
+[http://compprog.wordpress.com/2007/10/17/generating-combinations-1/]
+==================================================================
+
+=== Isomorphism Generation ===
+==================================================================
+Thanks to Brendan McKay for developing nauty. It has enabled this
+software to determine isomorphisms between graphs in a very
+efficient and robust manner.
+
+Copyright (1984-2010) Brendan McKay. All rights reserved. Permission
+is hereby given for use and/or distribution with the exception of
+sale for profit or application with nontrivial military significance.
+You must not remove this copyright notice, and you must document any
+changes that you make to this program. This software is subject to
+this copyright only, irrespective of any copyright attached to any
+package of which this is a part.
+
+Absolutely no guarantees or warranties are made concerning the
+suitability, correctness, or any other aspect of this program. Any
+use is at your own risk.
+
+Brendan D. McKay
+Computer Science Department
+Australian National University
+bdm@cs.anu.edu.au
+
+[http://cs.anu.edu.au/~bdm/nauty/]
+==================================================================
