@@ -65,10 +65,10 @@ class tester(unittest.TestCase):
     def tearDown(self):
         pass
 
-    def testContains(self):
+    def testInducedSubgraph(self):
         h = helper.make_claw()
         g = helper.make_wheel(7)
-        induced = contains(g, h)
+        induced = induced_subgraph(g, h)
         expected = [0, 2, 4, 6] 
         self.assertEqual(induced.nodes(), expected,
                          "Contains: Failed to find a claw in W7")

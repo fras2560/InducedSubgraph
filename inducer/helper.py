@@ -177,3 +177,25 @@ class tester(unittest.TestCase):
         g.add_edge(2,4)
         g.add_edge(3,4)
         self.assertEqual(w.edges(), g.edges(), "Make wheel: Failed for W5 test")
+
+    def testConvertToNetworkx(self):
+        g = {'edges': [[1,2]], 'nodes':[0, 1, 2]}
+        result = convert_to_networkx(g)
+        self.assertEqual(result.edges(), [(1, 2)],
+                         "Convert to Networkx: Failed to add edges")
+        self.assertEqual(result.nodes(), [0, 1, 2],
+                         "Convert to Networkx: Failed to add nodes")
+
+    def testConverToD3(self):
+        g = make_cycle(4)
+        result = convert_to_d3(g)
+        edges = [(0,1), (0,3), (1,2), (2,3)]
+        nodes = [0, 1, 2 ,3] 
+        self.assertEqual(result['edges'], edges,
+                         "Convert to D3: failed to add edges")
+        self.assertEqual(result['nodes'], nodes,
+                         "Convert to D3: failed to add nodes")
+
+        
+        
+        
