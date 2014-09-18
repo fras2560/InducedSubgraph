@@ -11,7 +11,7 @@ Version: 2014-09-17
 """
 import itertools
 import networkx as nx
-import helper
+import inducer.helper
 def contains(G, H):
     '''
     contains
@@ -37,7 +37,11 @@ def contains(G, H):
         subgraph = G.subgraph(subset)
         if nx.faster_could_be_isomorphic(subgraph, H):
             if nx.is_isomorphic(subgraph, H):
-                induced = subgraph.nodes()
+                induced = {
+                           'nodes': subgraph.nodes(),
+                           'edges': subgraph.edges()
+                           }
+                break # only want to find one
     return induced
         
 def create_permutations(n, k):
@@ -71,4 +75,3 @@ class tester(unittest.TestCase):
         expected = [1, 3, 5, 6] 
         self.assertEqual(induced, expected,
                          "Contains: Failed to find a claw in W7")
-        print()

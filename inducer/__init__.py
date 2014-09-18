@@ -1,8 +1,8 @@
 """
 -------------------------------------------------------
 inducer
-a python class for helping determine if G contains
-an induced subgraph H
+a flask app using d3 and networkx to helper find induced
+subgraphs
 -------------------------------------------------------
 Author:  Dallas Fraser
 ID:      110242560
@@ -10,3 +10,17 @@ Email:   fras2560@mylaurier.ca
 Version: 2014-09-11
 -------------------------------------------------------
 """
+from flask import Flask, g , request
+
+# create the application
+app = Flask(__name__)
+app.config.from_object(__name__)
+#load default config
+app.config.update(dict(
+                       DEBUG=True,
+                       SECRET_KEY="development key",
+                       USERNAME="admin",
+                       PASSWORD="default"))
+app.config.from_envvar('FLASKR_SETTINGS', silent=True)
+
+from inducer import views

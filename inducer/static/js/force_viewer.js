@@ -98,9 +98,16 @@ var g_graph = {
     vis: g_vis,
     force: g_force
 }
+// keeps track of which grpah is selected
+var last_clicked = null;
+
+// add keyboard callback
+d3.select(window)
+    .on("keydown", keydown);
 
 redraw(g_graph);
 redraw(h_graph);
+
 function mousedown(graph) {
   if (!graph.mousedown_node && !graph.mousedown_link) {
     // allow panning if nothing is selected
@@ -120,21 +127,27 @@ function mousemove(graph, xpoint, ypoint) {
 
 }
 function gmousedown(){
+  last_clicked = g_graph;
+  updateClickLabel("G");
   mousedown(g_graph);
 }
+
 function hmousedown(){
+  last_clicked = h_graph;
+  updateClickLabel("H")
   mousedown(h_graph);
 }
+
 function gmousemove(){
   var point = d3.svg.mouse(this);
-  console.log("Mousemove:", point);
   mousemove(g_graph, point[0], point[1]);
 }
+
 function hmousemove(){
   var point = d3.svg.mouse(this)
-  console.log("Mousemove:", point)
   mousemove(h_graph, point[0], point[1]);
 }
+
 function mouseup(graph, xpoint, ypoint) {
   if (graph.mousedown_node) {
     // hide drag line
@@ -159,16 +172,17 @@ function mouseup(graph, xpoint, ypoint) {
   // clear mouse event vars
   resetMouseVars(graph);
 }
+
 function gmouseup(){
   var point = d3.svg.mouse(this);
-  console.log("Mouseup:", point);
   mouseup(g_graph, point[0], point[1]);
 }
+
 function hmouseup(){
   var point = d3.svg.mouse(this)
-  console.log("Mouseup:", point)
   mouseup(h_graph, point[0], point[1]);
 }
+
 function resetMouseVars(graph) {
   graph.mousedown_node = null;
   graph.mouseup_node = null;
@@ -205,7 +219,6 @@ function rescale(graph) {
       + " scale(" + scale + ")");
 }
 
-// redraw h_force layout
 function redraw(graph) {
 
   graph.link = graph.link.data(graph.links);
@@ -259,7 +272,7 @@ function redraw(graph) {
         function(d) { 
           if (graph.mousedown_node) {
             graph.mouseup_node = d; 
-            if (graph.mouseup_node == graph.mousedown_node) { resetMouseVars(); return; }
+            if (graph.mouseup_node == graph.mousedown_node) { resetMouseVars(graph); return; }
 
             // add link
             var link = {source: graph.mousedown_node, target: graph.mouseup_node};
@@ -294,14 +307,86 @@ function redraw(graph) {
   }
 
   graph.force.start();
-
 }
 
-function spliceLinksForNode(graph) {
+function spliceLinksForNode(graph, node) {
   toSplice = graph.links.filter(
     function(l) { 
-      return (l.source === graph.node) || (l.target === graph.node); });
+      return (l.source === node) || (l.target === node); });
   toSplice.map(
     function(l) {
       graph.links.splice(graph.links.indexOf(l), 1); });
+}
+
+function keydown() {
+  if (!last_clicked) return;
+  if (!last_clicked.selected_node && !last_clicked.selected_link) return;
+  switch (d3.event.keyCode) {
+    case 8: // backspace
+    case 46: { // delete
+      if (last_clicked.selected_node) {
+        last_clicked.nodes.splice(last_clicked.nodes.indexOf(last_clicked.selected_node), 1);
+        spliceLinksForNode(last_clicked, selected_node);
+      }
+      else if (last_clicked.selected_link) {
+        last_clicked.links.splice(last_clicked.links.indexOf(last_clicked.selected_link), 1);
+      }
+      last_clicked.selected_link = null;
+      last_clicked.selected_node = null;
+      redraw(last_clicked);
+      break;
+    }
+  }
+}
+
+function updateClickLabel(graph){
+  $('#selected').text("Selected Graph: "+graph);
+}
+
+function checkContains(){
+  var G = {
+      nodes: [],
+      edges: []
+  };
+  var H = {
+      nodes: [],
+      edges: []
+  };
+  var arrayLength = g_graph.nodes.length;
+  for (var i = 0; i < arrayLength; i++) {
+    G.nodes.push(g_graph.nodes[i].index);
+  }
+  arrayLength = g_graph.links.length;
+  for (var i = 0; i < arrayLength; i++) {
+    G.edges.push([g_graph.links[i].source.index, g_graph.links[i].target.index]);
+  }
+
+  var arrayLength = h_graph.nodes.length;
+  for (var i = 0; i < arrayLength; i++) {
+    H.nodes.push(h_graph.nodes[i].index);
+  }
+  arrayLength = h_graph.links.length;
+  for (var i = 0; i < arrayLength; i++) {
+    H.edges.push([h_graph.links[i].source.index, h_graph.links[i].target.index]);
+  }
+  console.log("G Graph:", G);
+  console.log("H Graph:", H);
+  $.ajax(
+    {
+       type: "POST",
+       contentType: "application/json",
+       url: "/contains",
+       data: JSON.stringify({"g":G, "H":H}),
+               dataType: "json",
+               success: function(results)
+               {
+                console.log('Result', results)
+                
+               }, error: function(request, error){                                  
+                 console.log("ERROR", error)
+                 console.log("Request:", request)
+               }          
+    }
+    );
+
 }
