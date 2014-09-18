@@ -1,7 +1,9 @@
 InducedSubgraph
 ===============
 
-A project to take some WLU C code which finds an induced subgraph and port it over to python
+~~A project to take some WLU C code which finds an induced subgraph and port it over to python~~
+Creating a D3 web page to check if G contains H
+
 
 Version
 ----
