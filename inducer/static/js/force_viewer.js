@@ -81,7 +81,8 @@ var h_graph = {
     mousedown_node: null,
     mouseup_node: null,
     vis: h_vis,
-    force: h_force
+    force: h_force,
+    type:"H"
 };
 
 var g_graph = {
@@ -96,7 +97,10 @@ var g_graph = {
     mousedown_node: null,
     mouseup_node: null,
     vis: g_vis,
-    force: g_force
+    force: g_force,
+    type:"G",
+    induced_nodes:null,
+    induced_edges:null,
 }
 // keeps track of which grpah is selected
 var last_clicked = null;
@@ -299,6 +303,40 @@ function redraw(graph) {
   graph.node
     .classed("node_selected", function(d) { return d === graph.selected_node; });
 
+  if (graph.type == "G"){
+      graph.node
+        .classed("induced_node", function(d){
+            console.log("d", d);
+            if (!g_graph.induced_nodes){return false}
+            arrayLength = g_graph.induced_nodes.length;
+            for (var i = 0; i < arrayLength; i++) {
+              if (d.index === g_graph.induced_nodes[i]){
+                console.log("HitTTTT");
+                return true;
+              }else{
+                console.log("Induced node:", g_graph.induced_nodes[i] );
+              }
+            }
+          }
+        );
+      graph.link
+        .classed("induced_edge", function(d) { 
+            console.log("d", d);
+            if (!g_graph.induced_edges){return false}
+            arrayLength = g_graph.induced_edges.length;
+            for (var i = 0; i < arrayLength; i++) {
+              if ((d.target.index === g_graph.induced_edges[i][0] && d.source.index === g_graph.induced_edges[i][1]) 
+                  || (d.target.index === g_graph.induced_edges[i][1] && d.source.index === g_graph.induced_edges[i][0])
+                ){
+                console.log("HITTTTT");
+                return true;
+              }else{
+                console.log("Induced edge:", g_graph.induced_edges[i]);
+              }
+            }
+          }
+        );
+  }
   
 
   if (d3.event) {
@@ -361,7 +399,7 @@ function checkContains(){
     G.edges.push([g_graph.links[i].source.index, g_graph.links[i].target.index]);
   }
 
-  var arrayLength = h_graph.nodes.length;
+  arrayLength = h_graph.nodes.length;
   for (var i = 0; i < arrayLength; i++) {
     H.nodes.push(h_graph.nodes[i].index);
   }
@@ -382,17 +420,21 @@ function checkContains(){
                {
                 if (results.success == true){
                   $('#contains').text("Contains: Yes");
+                  g_graph.induced_nodes = results.nodes;
+                  g_graph.induced_edges = results.edges;
+                  redraw(g_graph);
                 }else{
                   $('#contains').text("Contains: No");
+                  g_graph.induced_nodes = null;
+                  g_graph.induced_edges = null;
                 }
-                console.log('Result', results)
-                
+                console.log('Result', results)                
                }, error: function(request, error){                                  
                  console.log("ERROR", error)
                  console.log("Request:", request)
                  $('#contains').text("Contains: Error check console");
                }          
-    }
+      }
     );
 
 }

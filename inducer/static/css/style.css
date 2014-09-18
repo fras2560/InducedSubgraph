@@ -15,6 +15,11 @@ body {
   stroke: #ff7f0e;
 }
 
+.induced_node {
+  fill: #CC66FF;
+  stroke: #ff7f0e;
+}
+
 .drag_line {
   stroke: #999;
   stroke-width: 5;
@@ -35,4 +40,8 @@ body {
 
 .link_selected {
   stroke: #ff7f0e;
+}
+
+.induced_edge {
+  stroke: #CC99FF;
 }
