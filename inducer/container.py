@@ -11,16 +11,16 @@ Version: 2014-09-17
 """
 import itertools
 import networkx as nx
-import inducer.helper
-def contains(G, H):
+import inducer.helper as helper
+def induced_subgraph(G, H):
     '''
-    contains
+    induced_subgraph
     a function that checks if G has an induced subgraph of H
     Parameters:
         G: the graph to check (networkx)
         H: the induced subgraph (networkx)
     Returns:
-        induced: nodes of induced isomorphic graph in G
+        induced: the induced subgraph (networkx)
     Method:
         just create every permutation of the G graph with as many vertices
         as H and use networkx to check if isomorphic
@@ -37,10 +37,7 @@ def contains(G, H):
         subgraph = G.subgraph(subset)
         if nx.faster_could_be_isomorphic(subgraph, H):
             if nx.is_isomorphic(subgraph, H):
-                induced = {
-                           'nodes': subgraph.nodes(),
-                           'edges': subgraph.edges()
-                           }
+                induced = subgraph
                 break # only want to find one
     return induced
         
@@ -72,6 +69,6 @@ class tester(unittest.TestCase):
         h = helper.make_claw()
         g = helper.make_wheel(7)
         induced = contains(g, h)
-        expected = [1, 3, 5, 6] 
-        self.assertEqual(induced, expected,
+        expected = [0, 2, 4, 6] 
+        self.assertEqual(induced.nodes(), expected,
                          "Contains: Failed to find a claw in W7")

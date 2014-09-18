@@ -376,15 +376,21 @@ function checkContains(){
        type: "POST",
        contentType: "application/json",
        url: "/contains",
-       data: JSON.stringify({"g":G, "H":H}),
+       data: JSON.stringify({"G":G, "H":H}),
                dataType: "json",
                success: function(results)
                {
+                if (results.success == true){
+                  $('#contains').text("Contains: Yes");
+                }else{
+                  $('#contains').text("Contains: No");
+                }
                 console.log('Result', results)
                 
                }, error: function(request, error){                                  
                  console.log("ERROR", error)
                  console.log("Request:", request)
+                 $('#contains').text("Contains: Error check console");
                }          
     }
     );

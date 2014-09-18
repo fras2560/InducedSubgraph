@@ -100,6 +100,22 @@ def join(G, H):
             F.add_edge(v1,v2+shift)
     return F
 
+def convert_to_networkx(g):
+    graph = nx.Graph()
+    for node in g['nodes']:
+        graph.add_node(node)
+    for edge in g['edges']:
+        graph.add_edge(edge[0], edge[1])
+    return graph
+
+def convert_to_d3(g):
+    graph = {'nodes': [], 'edges':[]}
+    for node in g.nodes():
+        graph['nodes'].append(node)
+    for edge in g.edges():
+        graph['edges'].append(edge)
+    return graph
+
 import unittest
 class tester(unittest.TestCase):
     def setUp(self):
