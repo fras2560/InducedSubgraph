@@ -8,7 +8,6 @@ certifi==14.05.14
 decorator==3.4.0
 networkx==1.9
 requests==2.4.0
-mercurial==2.6.1
 pep8==1.4.5
 virtualenv==1.9.1
 wtf==0.1
