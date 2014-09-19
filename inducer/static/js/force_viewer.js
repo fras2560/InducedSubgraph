@@ -7,7 +7,7 @@ var g_outer = d3.select("#g_graph")
   .append("svg:svg")
     .attr("width", width)
     .attr("height". height)
-    .attr("potiner-events", 'all')
+    .attr("pointer-events", 'all')
 
 // init svg
 var h_outer = d3.select("#h_graph")
@@ -17,7 +17,10 @@ var h_outer = d3.select("#h_graph")
     .attr("pointer-events", "all");
 
 var g_vis = g_outer
-  .append("svg:svg")
+  .append('svg:g')
+    .call(d3.behavior.zoom().on("zoom", grescale))
+    .on("dblclick.zoom", null)
+  .append("svg:g")
     .on("mousemove", gmousemove)
     .on("mousedown", gmousedown)
     .on("mouseup", gmouseup);
@@ -28,6 +31,9 @@ g_vis.append('svg:rect')
     .attr('fill', 'white');  
 
 var h_vis = h_outer
+  .append('svg:g')
+    .call(d3.behavior.zoom().on("zoom", hrescale))
+    .on("dblclick.zoom", null)
   .append('svg:g')
     .on("mousemove", hmousemove)
     .on("mousedown", hmousedown)
@@ -82,7 +88,8 @@ var h_graph = {
     mouseup_node: null,
     vis: h_vis,
     force: h_force,
-    type:"H"
+    type:"H",
+    scale:hrescale
 };
 
 var g_graph = {
@@ -101,6 +108,7 @@ var g_graph = {
     type:"G",
     induced_nodes:null,
     induced_edges:null,
+    scale:grescale,
 }
 // keeps track of which grpah is selected
 var last_clicked = null;
@@ -130,6 +138,7 @@ function mousemove(graph, xpoint, ypoint) {
       .attr("y2", ypoint);
 
 }
+
 function gmousedown(){
   last_clicked = g_graph;
   updateClickLabel("G");
@@ -159,6 +168,9 @@ function mouseup(graph, xpoint, ypoint) {
       .attr("class", "drag_line_hidden")
 
     if (!graph.mouseup_node) {
+      // induced subgraph no longer valid
+      clearSubgraph();
+
       // add node
       var node = {x: xpoint, y: ypoint},
         n = graph.nodes.push(node);
@@ -211,6 +223,14 @@ function g_tick(){
 
   g_graph.node.attr("cx", function(d) { return d.x; })
       .attr("cy", function(d) { return d.y; });
+}
+
+function grescale(){
+  rescale(g_graph);
+}
+
+function hrescale(){
+  rescale(h_graph);
 }
 
 // rescale g
@@ -287,7 +307,7 @@ function redraw(graph) {
             graph.selected_node = null;
 
             // enable zoom
-            graph.vis.call(d3.behavior.zoom().on("zoom"), rescale);
+            graph.vis.call(d3.behavior.zoom().on("zoom"), graph.scale);
             redraw(graph);
           } 
         })
@@ -302,7 +322,7 @@ function redraw(graph) {
 
   graph.node
     .classed("node_selected", function(d) { return d === graph.selected_node; });
-
+  // draw induced subgraph
   if (graph.type == "G"){
       graph.node
         .classed("induced_node", function(d){
@@ -381,6 +401,13 @@ function updateClickLabel(graph){
   $('#selected').text("Selected Graph: "+graph);
 }
 
+function clearSubgraph(){
+  $('#contains').text("G contains H:");
+  g_graph.induced_nodes = null;
+  g_graph.induced_edges = null;
+  redraw(g_graph); 
+}
+
 function checkContains(){
   var G = {
       nodes: [],
@@ -419,12 +446,12 @@ function checkContains(){
                success: function(results)
                {
                 if (results.success == true){
-                  $('#contains').text("Contains: Yes");
+                  $('#contains').text("G contains H: Yes");
                   g_graph.induced_nodes = results.nodes;
                   g_graph.induced_edges = results.edges;
                   redraw(g_graph);
                 }else{
-                  $('#contains').text("Contains: No");
+                  $('#contains').text("G contains H: No");
                   g_graph.induced_nodes = null;
                   g_graph.induced_edges = null;
                 }

@@ -54,7 +54,7 @@ def create_permutations(n, k):
     number_list = []
     for x in range(0,n):
         number_list.append(x)
-    return itertools.permutations(number_list, k)
+    return itertools.combinations(number_list, k)
 
 
 import unittest
