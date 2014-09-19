@@ -14,7 +14,7 @@ from flask import Flask, g , request
 
 # create the application
 app = Flask(__name__)
-app.config.from_object(__name__)
+app.config.from_object("config")
 #load default config
 app.config.update(dict(
                        DEBUG=True,
@@ -24,3 +24,6 @@ app.config.update(dict(
 app.config.from_envvar('FLASKR_SETTINGS', silent=True)
 
 from inducer import views
+
+if __name__ == '__main__':
+    app.run()

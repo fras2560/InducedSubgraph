@@ -3,8 +3,8 @@ Flask-RESTful==0.2.12
 Jinja2==2.7.3
 MarkupSafe==0.23
 Werkzeug==0.9.6
+gunicorn==19.1.1
 certifi==14.05.14
 decorator==3.4.0
 networkx==1.9
 requests==2.4.0
-gunicorn==0.17.4
