@@ -7,3 +7,4 @@ certifi==14.05.14
 decorator==3.4.0
 networkx==1.9
 requests==2.4.0
+gunicorn==0.17.4
