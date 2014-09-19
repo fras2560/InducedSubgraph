@@ -12,7 +12,7 @@
     <title>Does Graph G contain Graph H</title>
 
     <!-- Bootstrap Core CSS -->
-    <link href="{{ url_for('static', filename="css/bootstrap.min.css") }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename="css/bootstrap.css") }}" rel="stylesheet">
     <link href="{{ url_for('static', filename="css/style.css") }}" rel="stylesheet">
     <!-- Custom CSS -->
     <link href="{{ url_for('static', filename="css/simple-sidebar.css") }}" rel="stylesheet">
@@ -72,6 +72,19 @@
                             <h3>
                                 Graph H
                             </h3>
+                        </div>
+                        <div id="4-vertex-graphs">
+                            <input type="checkbox" id="K4" name="K4" value="K4">: K4<br/>
+                            <input type="checkbox" id="co-K4" name="co-K4" value="co_K4">: co-K4<br/>
+                            <input type="checkbox" id="diamond" name="diamond" value="diamond">: diamond<br/>
+                            <input type="checkbox" id="co-diamond" name="co-diamond" value="co_diamond">: co-diamond<br/>
+                            <input type="checkbox" id="paw" name="paw" value="paw">: paw<br/>
+                            <input type="checkbox" id="co-paw" name="co-paw" value="co_paw">: co-paw<br/>
+                            <input type="checkbox" id="claw" name="claw" value="claw">: claw<br/>
+                            <input type="checkbox" id="co-claw" name="co-claw" value="co_claw">: co-claw<br/>
+                            <input type="checkbox" id="C4" name="C4" value="C4">: C4<br/>
+                            <input type="checkbox" id="2K2" name="2K2" value="co_C4">: 2K2<br/><br/>
+                            <button onclick="check4VertexGraphs()" type="button" class="btn btn-info" value="G contains">G contains?</button>
                         </div>
                     </div>
                 </div>

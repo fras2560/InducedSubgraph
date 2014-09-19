@@ -23,6 +23,7 @@ def index():
 
 @app.route("/contains" , methods=["POST"])
 def contains():
+    print(request.data)
     graphs = json.loads(request.data)
     g = convert_to_networkx(graphs['G'])
     h = convert_to_networkx(graphs['H'])
@@ -34,4 +35,5 @@ def contains():
         subgraph['success'] = True
     pp.pprint(graphs['H'])
     pp.pprint(graphs['G'])
+    print("Done")
     return json.dumps(subgraph)

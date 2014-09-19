@@ -407,7 +407,6 @@ function clearSubgraph(){
   g_graph.induced_edges = null;
   redraw(g_graph); 
 }
-
 function checkContains(){
   var G = {
       nodes: [],
@@ -436,6 +435,50 @@ function checkContains(){
   }
   console.log("G Graph:", G);
   console.log("H Graph:", H);
+  checkContains_aux(G, H, false);
+
+}
+function check4VertexGraphs(){
+  var G = {
+      nodes: [],
+      edges: []
+  };
+  var arrayLength = g_graph.nodes.length;
+  for (var i = 0; i < arrayLength; i++) {
+    G.nodes.push(g_graph.nodes[i].index);
+  }
+  arrayLength = g_graph.links.length;
+  for (var i = 0; i < arrayLength; i++) {
+    G.edges.push([g_graph.links[i].source.index, g_graph.links[i].target.index]);
+  }
+  var n = [0,1,2,3];
+  var FourGraphs = {
+                  claw:{nodes:n, edges:[[0,1],[0,2],[0,3]]},
+                  co_claw:{nodes:n, edges:[[1,2],[2,3],[1,3]]},
+                  K4:{nodes:n, edges:[[0,1],[0,2],[0,3],[1,2],[1,3],[2,3]]},
+                  co_K4:{nodes:n, edges:[]},
+                  diamond:{noes:n, edges:[[0,1],[0,2],[0,3],[1,2],[1,3]]},
+                  co_diamond:{nodes:n, edges:[[2,3]]},
+                  C4:{nodes:n, edges:[[0,1],[0,3],[1,2],[2,3]]},
+                  co_C4:{nodes:n, edges:[[0,2],[1,3]]},
+                  paw:{nodes:n, edges:[[0,1],[1,2],[2,3],[1,3]]},
+                  co_paw:{nodes:n, edges:[[0,2],[0,3]]}
+                };
+  var Hgraphs = [];
+  $(':checkbox').each(function() {
+    if (this.checked == true){
+       Hgraphs.push(FourGraphs[this.value]);
+    }
+  });
+  var end = Hgraphs.length;
+  for(var graph = 0; graph<end;graph++){
+    checkContains_aux(G, Hgraphs[graph], true);
+  }
+}
+
+function checkContains_aux(G, H, multi){
+  console.log("AUX");
+  var contains = false;
   $.ajax(
     {
        type: "POST",
@@ -450,18 +493,16 @@ function checkContains(){
                   g_graph.induced_nodes = results.nodes;
                   g_graph.induced_edges = results.edges;
                   redraw(g_graph);
-                }else{
+                }
+                if (multi == false){
                   $('#contains').text("G contains H: No");
                   g_graph.induced_nodes = null;
                   g_graph.induced_edges = null;
                 }
-                console.log('Result', results)                
-               }, error: function(request, error){                                  
-                 console.log("ERROR", error)
-                 console.log("Request:", request)
+               }, error: function(request, error){ 
+                 alert("Error");                                 
                  $('#contains').text("Contains: Error check console");
                }          
       }
     );
-
 }
