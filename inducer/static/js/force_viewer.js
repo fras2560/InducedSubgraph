@@ -326,32 +326,26 @@ function redraw(graph) {
   if (graph.type == "G"){
       graph.node
         .classed("induced_node", function(d){
-            console.log("d", d);
             if (!g_graph.induced_nodes){return false}
             arrayLength = g_graph.induced_nodes.length;
             for (var i = 0; i < arrayLength; i++) {
               if (d.index === g_graph.induced_nodes[i]){
-                console.log("HitTTTT");
                 return true;
               }else{
-                console.log("Induced node:", g_graph.induced_nodes[i] );
               }
             }
           }
         );
       graph.link
         .classed("induced_edge", function(d) { 
-            console.log("d", d);
             if (!g_graph.induced_edges){return false}
             arrayLength = g_graph.induced_edges.length;
             for (var i = 0; i < arrayLength; i++) {
               if ((d.target.index === g_graph.induced_edges[i][0] && d.source.index === g_graph.induced_edges[i][1]) 
                   || (d.target.index === g_graph.induced_edges[i][1] && d.source.index === g_graph.induced_edges[i][0])
                 ){
-                console.log("HITTTTT");
                 return true;
               }else{
-                console.log("Induced edge:", g_graph.induced_edges[i]);
               }
             }
           }
@@ -384,7 +378,7 @@ function keydown() {
     case 46: { // delete
       if (last_clicked.selected_node) {
         last_clicked.nodes.splice(last_clicked.nodes.indexOf(last_clicked.selected_node), 1);
-        spliceLinksForNode(last_clicked, selected_node);
+        spliceLinksForNode(last_clicked, last_clicked.selected_node);
       }
       else if (last_clicked.selected_link) {
         last_clicked.links.splice(last_clicked.links.indexOf(last_clicked.selected_link), 1);
@@ -433,8 +427,6 @@ function checkContains(){
   for (var i = 0; i < arrayLength; i++) {
     H.edges.push([h_graph.links[i].source.index, h_graph.links[i].target.index]);
   }
-  console.log("G Graph:", G);
-  console.log("H Graph:", H);
   checkContains_aux(G, H, false);
 
 }
@@ -457,7 +449,7 @@ function check4VertexGraphs(){
                   co_claw:{nodes:n, edges:[[1,2],[2,3],[1,3]]},
                   K4:{nodes:n, edges:[[0,1],[0,2],[0,3],[1,2],[1,3],[2,3]]},
                   co_K4:{nodes:n, edges:[]},
-                  diamond:{noes:n, edges:[[0,1],[0,2],[0,3],[1,2],[1,3]]},
+                  diamond:{nodes:n, edges:[[0,1],[0,2],[0,3],[1,2],[1,3]]},
                   co_diamond:{nodes:n, edges:[[2,3]]},
                   C4:{nodes:n, edges:[[0,1],[0,3],[1,2],[2,3]]},
                   co_C4:{nodes:n, edges:[[0,2],[1,3]]},
@@ -465,19 +457,22 @@ function check4VertexGraphs(){
                   co_paw:{nodes:n, edges:[[0,2],[0,3]]}
                 };
   var Hgraphs = [];
+  var names = [];
   $(':checkbox').each(function() {
     if (this.checked == true){
        Hgraphs.push(FourGraphs[this.value]);
+       names.push(this.value);
     }
   });
+  // hide all indicators
+  $('.containsPictures').hide();
   var end = Hgraphs.length;
-  for(var graph = 0; graph<end;graph++){
-    checkContains_aux(G, Hgraphs[graph], true);
+  for(var graph = 0; graph < end;graph++){
+    checkContains_aux(G, Hgraphs[graph], names[graph]);
   }
 }
 
 function checkContains_aux(G, H, multi){
-  console.log("AUX");
   var contains = false;
   $.ajax(
     {
@@ -494,10 +489,19 @@ function checkContains_aux(G, H, multi){
                   g_graph.induced_edges = results.edges;
                   redraw(g_graph);
                 }
-                if (multi == false){
+                if (multi == false && results.success == false){
                   $('#contains').text("G contains H: No");
                   g_graph.induced_nodes = null;
                   g_graph.induced_edges = null;
+                }else{
+                  console.log("here")
+                  if (results.success == true){
+                    console.log(results);
+                    $('#'+multi+'Yes').show();
+                  }else{
+                    $('#'+multi+'No').show();
+                  }
+                  
                 }
                }, error: function(request, error){ 
                  alert("Error");                                 
@@ -506,3 +510,48 @@ function checkContains_aux(G, H, multi){
       }
     );
 }
+
+$(function() {
+    $('#upload-file-btn').click(function() {
+        var form_data = new FormData($('#upload-file')[0]);
+        $.ajax({
+            type: 'POST',
+            url: '/loadGraph',
+            data: form_data,
+            contentType: false,
+            cache: false,
+            processData: false,
+            async: false,
+            success: function(data) {
+                data = $.parseJSON(data);
+                console.log('Success!');
+                console.log(data);
+                console.log(data.success);
+                if (data.success == true){
+                  end = data.graph.nodes.length;
+                  var node;
+                  var xpoint = width / 2;
+                  var ypoint = height / 2;
+                  var nodes = [];
+                  g_graph.nodes = []
+                  for(var i = 0; i < end; i++){
+                    node = {x: xpoint, y: ypoint}
+                    g_graph.nodes.push(node);
+                    xpoint = (xpoint + 20) % width;
+                    ypoint = (ypoint + 20) % height;
+                    nodes.push(node)
+                  }
+                  end = data.graph.edges.length;
+                  g_graph.links = []
+                  for (var i = 0; i < end; i++){
+                    g_graph.links.push({source: nodes[data.graph.edges[i][0]], target: nodes[data.graph.edges[i][1]]});
+                  }
+                  redraw(g_graph);
+                  console.log("Updates");
+                }else{
+                  alert("Failed to load graph");
+                }
+            },
+        });
+    });
+});
