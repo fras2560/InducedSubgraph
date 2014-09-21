@@ -11,7 +11,6 @@ Version: 2014-09-11
 -------------------------------------------------------
 """
 from flask import Flask, g , request
-
 # create the application
 app = Flask(__name__)
 app.config.from_object("config")

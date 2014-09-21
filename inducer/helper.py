@@ -116,6 +116,33 @@ def convert_to_d3(g):
         graph['edges'].append(edge)
     return graph
 
+def text_to_d3(lines):
+    '''
+    text_to_networkx
+    a function that takes the lines from a text file and puts into a format for 
+    d3 graph
+    Parameters:
+        lines: a list of lines from the text file (list)
+    Returns:
+        d3: a d3 representation of the graph
+    '''
+#     try:
+    graph = {'nodes':[], 'edges':[]}
+    for line in lines:
+        entries = line.split(":")
+        node = int(entries[0])
+        entries[1] = entries[1].replace(" ", "")
+        edges = entries[1].split(",")
+        for edge in edges:
+            e = int(edge)
+            if [e, node] not in graph['edges'] and node != e:
+                # do not want to add an edges twice
+                graph['edges'].append([node, e])
+        graph['nodes'].append(node)
+#     except:
+#         graph = None
+    return graph
+
 import unittest
 class tester(unittest.TestCase):
     def setUp(self):
