@@ -10,6 +10,7 @@ Version: 2014-09-10
 -------------------------------------------------------
 """
 import networkx as nx
+from networkx.readwrite import graphml
 def make_claw():
     '''
     make_claw
@@ -143,6 +144,9 @@ def text_to_d3(lines):
 #         graph = None
     return graph
 
+def complement(g):
+    return nx.complement(g)
+    
 import unittest
 class tester(unittest.TestCase):
     def setUp(self):

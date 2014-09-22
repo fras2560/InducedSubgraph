@@ -44,6 +44,9 @@
                     <a onclick="checkContains();">Contains</a>
                 </li>
                 <li>
+                    <a onclick="loadComplement();">Complement G</a>
+                </li>
+                <li>
                     <a onclick="ClearGraphs();">Clear</a>
                 </li>
                 <form id="upload-file" method="post" enctype="multipart/form-data">
@@ -74,13 +77,13 @@
         <div id="page-content-wrapper">
             <div class="container-fluid">
                 <div class="row">
-                    <div class="col-lg-12">
-                        <div id="g_graph" style="">
+                    <div class="col-lg-12" >
+                        <div id="g_graph" style="width:400px; height:200px">
                             <h3>
                                 Graph G
                             </h3>
                         </div>
-                        <div id="h_graph" style="">
+                        <div id="h_graph" style="width:400px; height:250px">
                             <h3>
                                 Graph H
                             </h3>
@@ -133,18 +136,70 @@
             </div>
         </div>
         <!-- /#page-content-wrapper -->
-
+        <!-- modal -->
+        <div class="modal fade" id="modal">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="modalTitle"></h4>
+              </div>
+              <div class="modal-body" id="modalBody" >
+                <p id="modalText"></p>
+                <ul id="modalList">
+                </ul>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+              </div>
+            </div><!-- /.modal-content -->
+          </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
+    <a class="btn btn-mini btn-link " onclick="showAbout()">About</a>
+    <a class="btn btn-mini btn-link " onclick="showHelp();">Help</a>
+    <a class="btn btn-mini btn-link " href="http://jquery.com/">jQuery</a>
+    <a class="btn btn-mini btn-link " href="http://twitter.github.io/bootstrap/">Bootstrap</a>
+    <a class="btn btn-mini btn-link " href="http://flask.pocoo.org/">Flask</a>
+    <a class="btn btn-mini btn-link " href="http://d3js.org/">D3</a>
+    <a class="btn btn-mini btn-link " href="https://networkx.github.io/">Networkx</a>
+    <!-- Bootstrap Core JavaScript -->
     </div>
     <!-- /#wrapper -->
 
-    <!-- Bootstrap Core JavaScript -->
     <script src="{{ url_for('static', filename="js/bootstrap.min.js") }}"></script>
 
     <!-- Menu Toggle Script -->
     <script>
+    function showAbout(){
+        $("#modalTitle").text("About");
+        $('#modalText').empty();
+        $('#modalText').append("A simple web app to help find induced subgrpahs<br/>Created by: Dallas Fraser <br/>Tools used:");
+        $('#modalBody ul').empty();
+        $('#modalBody ul').append("<li>Flask -> python framework</li>");
+        $('#modalBody ul').append("<li>D3 -> javascript visualization library</li>");
+        $('#modalBody ul').append("<li>Networkx -> python graph library</li>");
+        $('#modal').modal("show");
+    }
+
+    function showHelp(){
+        $("#modalTitle").text("Help");
+        $('#modalText').empty();
+        $('#modalText').append("If you question is un-answered feel free to send an email to fras2560@mylaurier.ca");
+        $('#modalBody ul').empty();
+        $('#modalBody ul').append("<li>Contains -> Checks if G contains a induced subgraph H/li>");
+        $('#modalBody ul').append("<li>Complement -> Takes the complement of G</li>");
+        $('#modalBody ul').append("<li>Clear -> Clears the graph G</li>");
+        $('#modalBody ul').append("<li>Choose file -> Load a graph from a txt file into graph G with the file format <br/>node:edge,edge<br/>node2:edge,edge </li>");
+        $('#modalBody ul').append("<li>Create vertex -> Click on existing vertex and drag to new spot.</li>");
+        $('#modalBody ul').append("<li>Create edge -> Click on existing vertex and drag to another vertex.</li>");
+        $('#modalBody ul').append("<li>Delete vertex -> Click on existing vertex and hit delete or backspace.</li>");
+        $('#modalBody ul').append("<li>Delete edge -> Click on existing edge and hit delete or backspace.</li>");
+        $('#modalBody ul').append("<li>Zoom -> Use the wheel to zoom in and out</li>");
+        $('#modalBody ul').append("<li>Drag Graph -> Click on graph(not on vertex or edge) and draw to move graph</li>");
+        $('#modal').modal("show")
+    }
     </script>
     <script src="{{ url_for('static', filename="js/force_viewer.js") }}"></script>
 
 </body>
-
 </html>

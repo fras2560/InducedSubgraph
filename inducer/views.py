@@ -14,6 +14,7 @@ from inducer import app
 from inducer.container import induced_subgraph
 from pprint import PrettyPrinter
 from inducer.helper import convert_to_networkx, convert_to_d3, text_to_d3
+from inducer.helper import complement
 import sys
 pp = PrettyPrinter(indent=5)
 ALLOWED_EXTENSIONS = set(['txt'])
@@ -58,3 +59,11 @@ def load_graph():
         if result['graph'] is not None:
             result['success'] = True
         return json.dumps(result)
+
+@app.route("/complement", methods=["POST"])
+def complement_graph():
+    graph = json.loads(request.data)
+    g = convert_to_networkx(graph)
+    co_g = complement(g)
+    co_g = convert_to_d3(co_g)
+    return json.dumps(co_g)

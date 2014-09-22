@@ -394,13 +394,12 @@ function keydown() {
 
 function clearGraph(graph){
   var node;
-  while (graph.nodes.length > 1){
+  while (graph.nodes.length > 0){
     node = graph.nodes[graph.nodes.length - 1];
     graph.nodes.splice(graph.nodes.indexOf(node) , 1);
     spliceLinksForNode(graph, node);
     redraw(graph);
   }
-
 }
 
 function updateClickLabel(graph){
@@ -441,7 +440,6 @@ function checkContains(){
     H.edges.push([h_graph.links[i].source.index, h_graph.links[i].target.index]);
   }
   checkContains_aux(G, H, false);
-
 }
 
 function check4VertexGraphs(){
@@ -519,11 +517,59 @@ function checkContains_aux(G, H, multi){
                   
                 }
                }, error: function(request, error){ 
-                 alert("Error");                                 
-                 $('#contains').text("Contains: Error check console");
+                 alert("Error: Check console");
+                 console.log(request);
+                 console.log(error)
                }          
       }
     );
+}
+
+function loadComplement(){
+  var G = {
+      nodes: [],
+      edges: []
+  };
+  var arrayLength = g_graph.nodes.length;
+  for (var i = 0; i < arrayLength; i++) {
+    G.nodes.push(g_graph.nodes[i].index);
+  }
+  arrayLength = g_graph.links.length;
+  for (var i = 0; i < arrayLength; i++) {
+    G.edges.push([g_graph.links[i].source.index, g_graph.links[i].target.index]);
+  }
+  $.ajax({
+    type: "POST",
+    contentType: "application/json",
+    url: "\complement",
+    data: JSON.stringify(G),
+      dataType: "json",
+      success: function(results){
+        console.log(results);
+        end = results.nodes.length;
+        var node;
+        var xpoint = width / 2;
+        var ypoint = height / 2;
+        var nodes = [];
+        clearGraph(g_graph);
+        for(var i = 0; i < end; i++){
+          node = {x: xpoint, y: ypoint}
+          g_graph.nodes.push(node);
+          xpoint = (xpoint + 20) % width;
+          ypoint = (ypoint + 20) % height;
+          nodes.push(node)
+        }
+        end = results.edges.length;
+        for (var i = 0; i < end; i++){
+          g_graph.links.push({source: nodes[results.edges[i][0]], target: nodes[results.edges[i][1]]});
+        }
+        redraw(g_graph);
+      }, error: function(request, error){
+        alert("Error");
+        console.log(request);
+        console.log(error)
+      }
+  })
 }
 
 $(function() {
