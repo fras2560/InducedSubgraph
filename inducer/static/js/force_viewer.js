@@ -620,4 +620,10 @@ function ClearGraphs(){
   // clear G graph
   clearGraph(g_graph);
   clearGraph(h_graph);
+  
+  var node = {x: width / 2, y: height / 2}
+  g_graph.nodes.push(node);
+  h_graph.nodes.push(node);
+  redraw(g_graph);
+  redraw(h_graph);
 }
