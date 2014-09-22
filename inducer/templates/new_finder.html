@@ -43,6 +43,9 @@
                 <li>
                     <a onclick="checkContains();">Contains</a>
                 </li>
+                <li>
+                    <a onclick="ClearGraphs();">Clear</a>
+                </li>
                 <form id="upload-file" method="post" enctype="multipart/form-data">
                     <fieldset>
                         <input name="file" type="file" style="color: #fff;background-color: #5bc0de;border-color: #46b8da; margin-left:15px;">
@@ -92,7 +95,7 @@
                             <img src="{{ url_for('static', filename="images/small-x.jpg") }}" alt="Induced subgraph in G" style="height:15px;width:15px;display: none;" id="co_K4No" class="containsPictures">
                             <br/>
                             <input type="checkbox" id="diamond" name="diamond" value="diamond">: diamond
-                            <img src="{{ url_for('static', filename="images/small-checkmark.jpg") }}" alt="Induced subgraph in G" style="height:15px;width:15px;display: none;" id="diamondYEs" class="containsPictures">
+                            <img src="{{ url_for('static', filename="images/small-checkmark.jpg") }}" alt="Induced subgraph in G" style="height:15px;width:15px;display: none;" id="diamondYes" class="containsPictures">
                             <img src="{{ url_for('static', filename="images/small-x.jpg") }}" alt="Induced subgraph in G" style="height:15px;width:15px;display: none;" id="diamondNo" class="containsPictures">
                             <br/>
                             <input type="checkbox" id="co-diamond" name="co-diamond" value="co_diamond">: co-diamond

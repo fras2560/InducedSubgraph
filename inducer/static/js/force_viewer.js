@@ -376,6 +376,7 @@ function keydown() {
   switch (d3.event.keyCode) {
     case 8: // backspace
     case 46: { // delete
+      clearSubgraph();
       if (last_clicked.selected_node) {
         last_clicked.nodes.splice(last_clicked.nodes.indexOf(last_clicked.selected_node), 1);
         spliceLinksForNode(last_clicked, last_clicked.selected_node);
@@ -391,6 +392,17 @@ function keydown() {
   }
 }
 
+function clearGraph(graph){
+  var node;
+  while (graph.nodes.length > 1){
+    node = graph.nodes[graph.nodes.length - 1];
+    graph.nodes.splice(graph.nodes.indexOf(node) , 1);
+    spliceLinksForNode(graph, node);
+    redraw(graph);
+  }
+
+}
+
 function updateClickLabel(graph){
   $('#selected').text("Selected Graph: "+graph);
 }
@@ -401,6 +413,7 @@ function clearSubgraph(){
   g_graph.induced_edges = null;
   redraw(g_graph); 
 }
+
 function checkContains(){
   var G = {
       nodes: [],
@@ -430,7 +443,9 @@ function checkContains(){
   checkContains_aux(G, H, false);
 
 }
+
 function check4VertexGraphs(){
+  clearSubgraph();
   var G = {
       nodes: [],
       edges: []
@@ -533,7 +548,7 @@ $(function() {
                   var xpoint = width / 2;
                   var ypoint = height / 2;
                   var nodes = [];
-                  g_graph.nodes = []
+                  clearGraph(g_graph);
                   for(var i = 0; i < end; i++){
                     node = {x: xpoint, y: ypoint}
                     g_graph.nodes.push(node);
@@ -542,7 +557,6 @@ $(function() {
                     nodes.push(node)
                   }
                   end = data.graph.edges.length;
-                  g_graph.links = []
                   for (var i = 0; i < end; i++){
                     g_graph.links.push({source: nodes[data.graph.edges[i][0]], target: nodes[data.graph.edges[i][1]]});
                   }
@@ -555,3 +569,9 @@ $(function() {
         });
     });
 });
+
+function ClearGraphs(){
+  // clear G graph
+  clearGraph(g_graph);
+  clearGraph(h_graph);
+}
