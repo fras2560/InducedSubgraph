@@ -10,7 +10,6 @@ Version: 2014-09-10
 -------------------------------------------------------
 """
 import networkx as nx
-from networkx.readwrite import graphml
 def make_claw():
     '''
     make_claw
@@ -18,16 +17,47 @@ def make_claw():
     Parameters:
         None
     Returns:
-        claw: the claw (Graph)
+        claw: the claw (networkx)
     '''
     claw = nx.Graph()
     for x in range(0, 4):
         # add four vertices
         claw.add_node(x)
-    hub = 0 #0-vertex is the hub of claw
+    hub = 0 # 0-vertex is the hub of claw
     for x in range(1, 4):
         claw.add_edge(hub, x)
     return claw
+
+def make_diamond():
+    '''
+    make_diamond
+    assembles a diamond
+    Parameters:
+        None
+    Returns:
+        diamond: the diamond graph (networkx)
+    '''
+    diamond = nx.Graph()
+    for x in range(0, 4):
+        # add four vertices
+        diamond.add_node(x)
+    diamond.add_edge(0, 1)
+    diamond.add_edge(0, 2)
+    diamond.add_edge(0, 3)
+    diamond.add_edge(1, 2)
+    diamond.add_edge(1, 3)
+    return diamond
+
+def make_co_diamond():
+    '''
+    make_co_diamond
+    assembles a co-diamond
+    Parameters:
+        None
+    Returns:
+        co_diamond: the co-diamond graph (networkx)
+    '''
+    return nx.complement(make_diamond())
 
 def make_co_claw():
     '''
@@ -36,7 +66,7 @@ def make_co_claw():
     Parameters:
         None
     Returns:
-        co_claw: the co_claw (Graph)
+        co_claw: the co_claw (networkx)
     '''
     return nx.complement(make_claw())
 
@@ -47,7 +77,7 @@ def make_cycle(n):
     Parameters:
         n: the number of vertices in cycle (int)
     Returns:
-        cycle: the cycle (Graph)
+        cycle: the cycle (networkx)
     '''
     cycle = nx.Graph()
     for vertex in range(0,n):
@@ -79,8 +109,8 @@ def join(G, H):
     join
     a function which (complete) joins one graph G to graph H
     Parameters:
-        G: Graph with at least one vertice (Graph)
-        H: Graph with at least one vertice (Graph)
+        G: Graph with at least one vertice (networkx)
+        H: Graph with at least one vertice (networkx)
     Returns:
         F: The join of G and H (Graph)
     '''
@@ -184,7 +214,21 @@ class tester(unittest.TestCase):
 
     def tearDown(self):
         pass
-
+    def testMakeDiamond(self):
+        g = make_diamond()
+        edges = [(0, 1), (0, 2), (0, 3), (1, 2), (1, 3)]
+        vertices = [0, 1, 2, 3]
+        self.assertEqual(edges, g.edges(), "Make Diamond: failed on edges")
+        self.assertEqual(vertices, g.nodes(),
+                         "Make Diamond: failed on vertices")
+    def testMakeCoDiamond(self):
+        g = make_co_diamond()
+        edges = [(2, 3)]
+        vertices = [0, 1, 2, 3]
+        self.assertEqual(edges, g.edges(),
+                         "Make Co-Diamond: failed on edges")
+        self.assertEqual(vertices, g.nodes(),
+                         "Make Co-Diamond: failed on vertices")
     def testMakeClaw(self):
         g = make_claw()
         edges = [(0, 1), (0, 2), (0, 3)]
@@ -261,7 +305,6 @@ class tester(unittest.TestCase):
         directory = os.getcwd()
         while "inducer" in directory:
             directory = os.path.dirname(directory)
-        print(directory)
         claw = {'edges':[[0, 1], [0, 2], [0, 3]], 'nodes':[0, 1, 2, 3]}
         c7 = {'edges':[[0, 1], [0, 6], [1, 2], [2, 3], [3, 4], [4, 5], [5, 6]] ,
               'nodes':[0, 1, 2, 3, 4, 5, 6]}
