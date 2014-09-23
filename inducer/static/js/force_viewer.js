@@ -555,8 +555,11 @@ function loadComplement(){
         for(var i = 0; i < end; i++){
           node = {x: xpoint, y: ypoint}
           g_graph.nodes.push(node);
-          xpoint = (xpoint + 20) % width;
-          ypoint = (ypoint + 20) % height;
+          ypoint = ypoint + 50
+          if (ypoint > height){
+            ypoint = ypoint - height
+            xpoint = (xpoint + 50) % width
+          }
           nodes.push(node)
         }
         end = results.edges.length;
@@ -598,8 +601,11 @@ $(function() {
                   for(var i = 0; i < end; i++){
                     node = {x: xpoint, y: ypoint}
                     g_graph.nodes.push(node);
-                    xpoint = (xpoint + 20) % width;
-                    ypoint = (ypoint + 20) % height;
+                    ypoint = ypoint + 50
+                    if (ypoint > height){
+                      ypoint = ypoint - height
+                      xpoint = (xpoint + 50) % width
+                    }
                     nodes.push(node)
                   }
                   end = data.graph.edges.length;
