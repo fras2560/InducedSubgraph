@@ -172,7 +172,7 @@ function mouseup(graph, xpoint, ypoint) {
       clearSubgraph();
 
       // add node
-      var node = {x: xpoint, y: ypoint},
+      var node = {x: xpoint, y: ypoint, name:graph.nodes.length},
         n = graph.nodes.push(node);
 
       // select new node
@@ -265,7 +265,8 @@ function redraw(graph) {
 
   graph.node = graph.node.data(graph.nodes);
 
-  graph.node.enter().insert("circle")
+  graph.node.enter()
+      .insert("circle")
       .attr("class", "node")
       .attr("r", 5)
       .on("mousedown", 
@@ -599,7 +600,7 @@ $(function() {
                   var nodes = [];
                   clearGraph(g_graph);
                   for(var i = 0; i < end; i++){
-                    node = {x: xpoint, y: ypoint}
+                    node = {x: xpoint, y: ypoint, name:i}
                     g_graph.nodes.push(node);
                     ypoint = ypoint + 50
                     if (ypoint > height){
@@ -617,7 +618,11 @@ $(function() {
                 }else{
                   alert("Failed to load graph");
                 }
-            },
+            }, error: function(request, error){
+                alert("Error: check console");
+                console.log(request);
+                console.log(error) ;
+            }
         });
     });
 });
@@ -632,4 +637,76 @@ function ClearGraphs(){
   h_graph.nodes.push(node);
   redraw(g_graph);
   redraw(h_graph);
+}
+
+function k_vertex(){
+  var G = {
+      nodes: [],
+      edges: []
+  };
+  var arrayLength = g_graph.nodes.length;
+  for (var i = 0; i < arrayLength; i++) {
+    G.nodes.push(g_graph.nodes[i].index);
+  }
+  arrayLength = g_graph.links.length;
+  for (var i = 0; i < arrayLength; i++) {
+    G.edges.push([g_graph.links[i].source.index, g_graph.links[i].target.index]);
+  }
+  var n = [0,1,2,3];
+  var FourGraphs = {
+                  claw:{nodes:n, edges:[[0,1],[0,2],[0,3]]},
+                  co_claw:{nodes:n, edges:[[1,2],[2,3],[1,3]]},
+                  K4:{nodes:n, edges:[[0,1],[0,2],[0,3],[1,2],[1,3],[2,3]]},
+                  co_K4:{nodes:n, edges:[]},
+                  diamond:{nodes:n, edges:[[0,1],[0,2],[0,3],[1,2],[1,3]]},
+                  co_diamond:{nodes:n, edges:[[2,3]]},
+                  C4:{nodes:n, edges:[[0,1],[0,3],[1,2],[2,3]]},
+                  co_C4:{nodes:n, edges:[[0,2],[1,3]]},
+                  paw:{nodes:n, edges:[[0,1],[1,2],[2,3],[1,3]]},
+                  co_paw:{nodes:n, edges:[[0,2],[0,3]]}
+                };
+  var Hgraphs = [];
+  var names = [];
+  $(':checkbox').each(function() {
+    if (this.checked == true){
+       Hgraphs.push(FourGraphs[this.value]);
+       names.push(this.value);
+    }
+  });
+  $.ajax({
+    type: 'POST',
+    url: '/k_vertex',
+    contentType: "application/json",
+    data: JSON.stringify({'G':G, 'subgraphs':Hgraphs}),
+      dataType: "json",
+    success: function(data) {
+      console.log(data);
+      var end = data.length;
+      var entry;
+      var subsets;
+      var subsetsLength;
+      $('#k_modalList').empty();
+      for (var k = 0; k < end; k++){
+        if(data[k].has_k_vertex == true && data[k].combinations.length > 0){
+          subset = " (" + data[k].combinations[0] + ")";
+          subsetsLength = data[k].combinations.length;
+          for (var set = 1; set < subsetsLength; set++){
+            subset += " , (" + data[k].combinations[set] + ")";
+          }
+          entry = "<li>" + k + ": Yes " + subset + "</li>";
+        }else if(data[k].has_k_vertex == true){
+          entry = "<li>" + k + ": Yes </li>";
+        }else{
+          entry = "<li>" + k + ": No </li>";
+        }
+        $('#k_modalList').append(entry);
+      }
+      $('#k_modal').modal("show");
+
+    }, error: function(request, error){
+      alert("Error: check console");
+      console.log(request);
+      console.log(error);
+    }
+  });
 }

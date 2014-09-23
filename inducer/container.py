@@ -105,8 +105,8 @@ def k_vertex(g, subgraphs):
     return k_vertexes
 
 import unittest
-from helper import make_cycle, make_claw, make_co_claw
-from helper import make_diamond, make_co_diamond
+from inducer.helper import make_cycle, make_claw, make_co_claw
+from inducer.helper import make_diamond, make_co_diamond
 from pprint import PrettyPrinter
 class tester(unittest.TestCase):
     def setUp(self):
@@ -138,7 +138,6 @@ class tester(unittest.TestCase):
                                  '''
                                  K Vertex says (claw,co-claw)-free Graph 
                                  has no a %s-vertex'''  % index)
-
 
     def testC5DiamondCoDiamondFree(self):
         g = make_cycle(5)

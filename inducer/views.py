@@ -11,11 +11,10 @@ Version: 2014-09-18
 """
 from flask import render_template, json, request
 from inducer import app
-from inducer.container import induced_subgraph
+from inducer.container import induced_subgraph, k_vertex
 from pprint import PrettyPrinter
 from inducer.helper import convert_to_networkx, convert_to_d3, text_to_d3
 from inducer.helper import complement
-import sys
 pp = PrettyPrinter(indent=5)
 ALLOWED_EXTENSIONS = set(['txt'])
 
@@ -67,3 +66,14 @@ def complement_graph():
     co_g = complement(g)
     co_g = convert_to_d3(co_g)
     return json.dumps(co_g)
+
+@app.route("/k_vertex", methods=["POST"])
+def k():
+    graphs = json.loads(request.data)
+    g = convert_to_networkx(graphs['G'])
+    subgraphs = []
+    for subgraph in graphs['subgraphs']:
+        subgraphs.append(convert_to_networkx(subgraph))
+    k_vertexes = k_vertex(g, subgraphs)
+    return json.dumps(k_vertexes)
+

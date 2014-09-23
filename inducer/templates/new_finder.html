@@ -130,6 +130,7 @@
                             <img src="{{ url_for('static', filename="images/small-x.jpg") }}" alt="Induced subgraph in G" style="height:15px;width:15px;display: none;" id="co_C4No" class="containsPictures">
                             <br/><br/>
                             <button onclick="check4VertexGraphs()" type="button" class="btn btn-info" value="G contains">G contains?</button>
+                            <button onclick="k_vertex()" type="button" class="btn btn-success" value="G's k-vertex">G find k-vertex</button>
                         </div>
                     </div>
                 </div>
@@ -155,6 +156,25 @@
             </div><!-- /.modal-content -->
           </div><!-- /.modal-dialog -->
         </div><!-- /.modal -->
+        
+        <div class="modal fade" id="k_modal">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="modalTitle">G contains K-Vertex</h4>
+              </div>
+              <div class="modal-body" id="k_modalBody" >
+                <p id="k_modalText">The following summarizes G's k-vertex set:</p>
+                <ul id="k_modalList">
+                </ul>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+              </div>
+            </div><!-- /.modal-content -->
+          </div><!-- /.modal-dialog -->
+        </div><!-- /.k_modal -->
     <a class="btn btn-mini btn-link " onclick="showAbout()">About</a>
     <a class="btn btn-mini btn-link " onclick="showHelp();">Help</a>
     <a class="btn btn-mini btn-link " href="http://jquery.com/">jQuery</a>
@@ -196,6 +216,8 @@
         $('#modalBody ul').append("<li>Delete edge -> Click on existing edge and hit delete or backspace.</li>");
         $('#modalBody ul').append("<li>Zoom -> Use the wheel to zoom in and out</li>");
         $('#modalBody ul').append("<li>Drag Graph -> Click on graph(not on vertex or edge) and draw to move graph</li>");
+        $('#modalBody ul').append("<li>G Contains -> Check if the graph G contains the checked 4-vertex subgraphs</li>");
+        $('#modalBody ul').append("<li> G's k-vertex -> Checks if G contains a k-vertex without contained an induced subgraph of the ones checked</li>");
         $('#modal').modal("show")
     }
     </script>
