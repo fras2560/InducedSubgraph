@@ -102,6 +102,15 @@ def join(G, H):
     return F
 
 def convert_to_networkx(g):
+    '''
+    convert_to_networkx
+    a function which take a {'nodes':[n1],'edges':[[n1,n2]]}
+    and converts it to a networkx Graph object
+    Parameters:
+        g: the python dictionary repesentation of a graph (dictionary)
+    Returns:
+        graph: the graph G (networkx)
+    '''
     graph = nx.Graph()
     for node in g['nodes']:
         graph.add_node(node)
@@ -110,6 +119,15 @@ def convert_to_networkx(g):
     return graph
 
 def convert_to_d3(g):
+    '''
+    conver_to_d3
+    a function which takes a networkx Graph object and converts it to
+    a {'nodes':[n1],'edges':[[n1,n2]]}
+    Parameters:
+        g: the graph G (networkx)
+    Returns:
+        graph: python dictionary representation of a graph (dictionary)
+    '''
     graph = {'nodes': [], 'edges':[]}
     for node in g.nodes():
         graph['nodes'].append(node)
@@ -135,19 +153,31 @@ def text_to_d3(lines):
         entries[1] = entries[1].replace(" ", "")
         edges = entries[1].split(",")
         for edge in edges:
-            e = int(edge)
-            if [e, node] not in graph['edges'] and node != e:
-                # do not want to add an edges twice
-                graph['edges'].append([node, e])
+            if edge != '':
+                e = int(edge)
+                if [e, node] not in graph['edges'] and node != e:
+                    # do not want to add an edges twice
+                    graph['edges'].append([node, e])
         graph['nodes'].append(node)
 #     except:
 #         graph = None
     return graph
 
 def complement(g):
+    '''
+    complement
+    a function which takes the complement of g
+    Parameters:
+        g: the graph (networkx)
+    Returns:
+        co_g: the complement graph (networkx)
+    Note:
+        does not have a unittest since not needed (written by someone else)
+    '''
     return nx.complement(g)
-    
+
 import unittest
+import os
 class tester(unittest.TestCase):
     def setUp(self):
         pass
@@ -227,6 +257,24 @@ class tester(unittest.TestCase):
         self.assertEqual(result['nodes'], nodes,
                          "Convert to D3: failed to add nodes")
 
-        
-        
-        
+    def testTextToD3(self):
+        directory = os.getcwd()
+        while "inducer" in directory:
+            directory = os.path.dirname(directory)
+        print(directory)
+        claw = {'edges':[[0, 1], [0, 2], [0, 3]], 'nodes':[0, 1, 2, 3]}
+        c7 = {'edges':[[0, 1], [0, 6], [1, 2], [2, 3], [3, 4], [4, 5], [5, 6]] ,
+              'nodes':[0, 1, 2, 3, 4, 5, 6]}
+        co_claw = {'edges':[[1, 2], [1, 3], [2, 3]], 'nodes':[0, 1, 2, 3] }
+        tests = {'test1.txt': claw, 'test2.txt': c7, 'test3.txt': co_claw}
+        for file, expect in tests.items():
+            filepath = os.path.join(directory, "graphs", file)
+            with open(filepath) as f:
+                content = f.read()
+                lines = content.replace("\r", "")
+                lines = lines.split("\n")
+                result = text_to_d3(lines)
+                self.assertEqual(expect ,result ,
+                                 "Test to D3 Failed: %s" % file)
+
+
