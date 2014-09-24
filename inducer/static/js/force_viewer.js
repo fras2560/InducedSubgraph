@@ -458,6 +458,11 @@ function keydown() {
 }
 
 function clearGraph(graph){
+  /* clearGraph 
+      a function that takes a graph and clears it nodes
+      Paramaters:
+        graph: the graph to clear
+   */
   var node;
   while (graph.nodes.length > 0){
     node = graph.nodes[graph.nodes.length - 1];
@@ -472,6 +477,9 @@ function updateClickLabel(graph){
 }
 
 function clearSubgraph(){
+  /* clearSubgraph
+      a function that clear the induced subgraph of H
+   */
   $('#contains').text("G contains H:");
   g_graph.induced_nodes = null;
   g_graph.induced_edges = null;
@@ -588,18 +596,24 @@ function checkContains_aux(G, H, multi){
     );
 }
 
-function loadComplement(){
+function complementGraph(A){
+  /*
+    complementGraph
+      a function that take the complement of a graph
+    Parameters:
+      A: the graph to take the complement of
+  */
   var G = {
       nodes: [],
       edges: []
   };
-  var arrayLength = g_graph.nodes.length;
+  var arrayLength = A.nodes.length;
   for (var i = 0; i < arrayLength; i++) {
-    G.nodes.push(g_graph.nodes[i].index);
+    G.nodes.push(A.nodes[i].index);
   }
-  arrayLength = g_graph.links.length;
+  arrayLength = A.links.length;
   for (var i = 0; i < arrayLength; i++) {
-    G.edges.push([g_graph.links[i].source.index, g_graph.links[i].target.index]);
+    G.edges.push([A.links[i].source.index, A.links[i].target.index]);
   }
   $.ajax({
     type: "POST",
@@ -613,10 +627,10 @@ function loadComplement(){
         var xpoint = width / 2;
         var ypoint = height / 2;
         var nodes = [];
-        clearGraph(g_graph);
+        clearGraph(A);
         for(var i = 0; i < end; i++){
           node = {x: xpoint, y: ypoint, name:i};
-          g_graph.nodes.push(node);
+          A.nodes.push(node);
           ypoint = ypoint + 50
           if (ypoint > height){
             ypoint = ypoint - height
@@ -626,9 +640,9 @@ function loadComplement(){
         }
         end = results.edges.length;
         for (var i = 0; i < end; i++){
-          g_graph.links.push({source: nodes[results.edges[i][0]], target: nodes[results.edges[i][1]]});
+          A.links.push({source: nodes[results.edges[i][0]], target: nodes[results.edges[i][1]]});
         }
-        redraw(g_graph);
+        redraw(A);
       }, error: function(request, error){
         alert("Error");
         console.log(request);
@@ -638,65 +652,87 @@ function loadComplement(){
 }
 
 $(function() {
-    $('#upload-file-btn').click(function() {
+    $('#upload-file-btn-g').click(function() {
         var form_data = new FormData($('#upload-file')[0]);
-        $.ajax({
-            type: 'POST',
-            url: '/loadGraph',
-            data: form_data,
-            contentType: false,
-            cache: false,
-            processData: false,
-            async: false,
-            success: function(data) {
-                data = $.parseJSON(data);
-                if (data.success == true){
-                  end = data.graph.nodes.length;
-                  var node;
-                  var xpoint = width / 2;
-                  var ypoint = height / 2;
-                  var nodes = [];
-                  clearGraph(g_graph);
-                  for(var i = 0; i < end; i++){
-                    node = {x: xpoint, y: ypoint, name:i}
-                    g_graph.nodes.push(node);
-                    ypoint = ypoint + 50
-                    if (ypoint > height){
-                      ypoint = ypoint - height
-                      xpoint = (xpoint + 50) % width
-                    }
-                    nodes.push(node)
-                  }
-                  end = data.graph.edges.length;
-                  for (var i = 0; i < end; i++){
-                    g_graph.links.push({source: nodes[data.graph.edges[i][0]], target: nodes[data.graph.edges[i][1]]});
-                  }
-                  redraw(g_graph);
-                }else{
-                  alert("Failed to load graph");
-                }
-            }, error: function(request, error){
-                alert("Error: check console");
-                console.log(request);
-                console.log(error) ;
-            }
-        });
+        loadGraph(g_graph, form_data);
+    });
+});
+$(function() {
+    $('#upload-file-btn-h').click(function() {
+        var form_data = new FormData($('#upload-file')[0]);
+        loadGraph(h_graph, form_data);
     });
 });
 
-function clearGraphs(){
-  // clear G graph
-  clearGraph(g_graph);
-  clearGraph(h_graph);
-  
-  var node = {x: width / 2, y: height / 2, name:0}
-  g_graph.nodes.push(node);
-  h_graph.nodes.push(node);
-  redraw(g_graph);
-  redraw(h_graph);
+function loadGraph(A, form_data){
+  /* loadGraph
+      a function that loads a graph
+      Parameters:
+        A: the graph A to be loaded to
+   */
+     $('.loadClose').hide();
+     $.ajax({
+      type: 'POST',
+      url: '/loadGraph',
+      data: form_data,
+      contentType: false,
+      cache: false,
+      processData: false,
+      async: false,
+      success: function(data) {
+          data = $.parseJSON(data);
+          if (data.success == true){
+            end = data.graph.nodes.length;
+            var node;
+            var xpoint = width / 2;
+            var ypoint = height / 2;
+            var nodes = [];
+            clearGraph(A);
+            for(var i = 0; i < end; i++){
+              node = {x: xpoint, y: ypoint, name:i}
+              A.nodes.push(node);
+              ypoint = ypoint + 50
+              if (ypoint > height){
+                ypoint = ypoint - height
+                xpoint = (xpoint + 50) % width
+              }
+              nodes.push(node)
+            }
+            end = data.graph.edges.length;
+            for (var i = 0; i < end; i++){
+              A.links.push({source: nodes[data.graph.edges[i][0]], target: nodes[data.graph.edges[i][1]]});
+            }
+            redraw(A);
+            $('.loadClose').show()
+          }else{
+            alert("Failed to load graph");
+          }
+      }, error: function(request, error){
+          alert("Error: check console");
+          console.log(request);
+          console.log(error) ;
+      }
+  });
+}
+function resetGraph(A){
+  /*
+    resetGraph
+    a function that resets the graph to one vertex
+    Parameters
+      A: the graph A to be reset
+  */
+  clearGraph(A);
+  var node = {x: width/2, y: height / 2, name:0};
+  A.nodes.push(node);
+  redraw(A);
 }
 
 function k_vertex(){
+  /* k_vertex
+      a function that checks if graph G has a k-vertex for k=0 to v
+      Parameters:
+        none
+  */
   var G = {
       nodes: [],
       edges: []
@@ -767,7 +803,13 @@ function k_vertex(){
   });
 }
 
-function joinGwithH(){
+function joinGraphs(A, B){
+  /* joinGraphs
+      a function which joins one graph with another
+      Parameters:
+        A: the graph to join to
+        B: the graph that being join on another
+   */
   var G = {
       nodes: [],
       edges: []
@@ -776,22 +818,22 @@ function joinGwithH(){
       nodes: [],
       edges: []
   };
-  var arrayLength = g_graph.nodes.length;
+  var arrayLength = A.nodes.length;
   for (var i = 0; i < arrayLength; i++) {
-    G.nodes.push(g_graph.nodes[i].index);
+    G.nodes.push(A.nodes[i].index);
   }
-  arrayLength = g_graph.links.length;
+  arrayLength = A.links.length;
   for (var i = 0; i < arrayLength; i++) {
-    G.edges.push([g_graph.links[i].source.index, g_graph.links[i].target.index]);
+    G.edges.push([A.links[i].source.index, A.links[i].target.index]);
   }
 
-  arrayLength = h_graph.nodes.length;
+  arrayLength = B.nodes.length;
   for (var i = 0; i < arrayLength; i++) {
-    H.nodes.push(h_graph.nodes[i].index);
+    H.nodes.push(B.nodes[i].index);
   }
-  arrayLength = h_graph.links.length;
+  arrayLength = B.links.length;
   for (var i = 0; i < arrayLength; i++) {
-    H.edges.push([h_graph.links[i].source.index, h_graph.links[i].target.index]);
+    H.edges.push([B.links[i].source.index, B.links[i].target.index]);
   }
   $.ajax({
     type: 'POST',
@@ -805,10 +847,10 @@ function joinGwithH(){
       var xpoint = width / 2;
       var ypoint = height / 2;
       var nodes = [];
-      clearGraph(g_graph);
+      clearGraph(A);
       for(var i = 0; i < end; i++){
         node = {x: xpoint, y: ypoint, name:i}
-        g_graph.nodes.push(node);
+        A.nodes.push(node);
         ypoint = ypoint + 50
         if (ypoint > height){
           ypoint = ypoint - height
@@ -818,9 +860,9 @@ function joinGwithH(){
       }
       end = graph.edges.length;
       for (var i = 0; i < end; i++){
-        g_graph.links.push({source: nodes[graph.edges[i][0]], target: nodes[graph.edges[i][1]]});
+        A.links.push({source: nodes[graph.edges[i][0]], target: nodes[graph.edges[i][1]]});
       }
-      redraw(g_graph);
+      redraw(A);
     }, error: function(request, error){
       alert("Error: check console");
       console.log(request);
@@ -828,39 +870,25 @@ function joinGwithH(){
     }
   });
 }
-
-function copyGtoH(){
-  var end = g_graph.nodes.length;
+function copyGraph(A, B){
+  /* copyGraph
+      a function which copies one graph to another
+      parameters:
+        A: the graph to copy from
+        B: the graph to copy to
+   */
+  var end = A.nodes.length;
   var node;
-  var nodes = {}
-  clearGraph(h_graph)
-  for (var x = 0; x < end; x ++){
-    node = g_graph.nodes[x];
-    node = {x:node.x, y:node.y, name:node.name};
-    h_graph.nodes.push(node);
+  var nodes = {};
+  clearGraph(B);
+  for(var x = 0; x < end; x++){
+    node = {x:A.nodes[x].x, y:A.nodes[x].y, name:A.nodes[x].name};
+    B.nodes.push(node);
     nodes[node.name] = node;
   }
-  end = g_graph.links.length;
+  end = A.links.length;
   for(var y = 0; y < end; y++){
-    h_graph.links.push({source: nodes[g_graph.links[y].source.name], target: nodes[g_graph.links[y].target.name]});
+    B.links.push({source: nodes[A.links[y].source.name], target: nodes[A.links[y].target.name]});
   }
-  redraw(h_graph);
-}
-
-function copyHtoG(){
-  var end = h_graph.nodes.length;
-  var node;
-  var nodes = {}
-  clearGraph(g_graph)
-  for (var x = 0; x < end; x ++){
-    node = h_graph.nodes[x];
-    node = {x:node.x, y:node.y, name:node.name};
-    g_graph.nodes.push(node);
-    nodes[node.name] = node;
-  }
-  end = h_graph.links.length;
-  for(var y = 0; y < end; y++){
-    g_graph.links.push({source: nodes[h_graph.links[y].source.name], target: nodes[h_graph.links[y].target.name]});
-  }
-  redraw(g_graph);
+  redraw(B);
 }
