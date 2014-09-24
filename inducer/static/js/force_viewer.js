@@ -47,14 +47,14 @@ h_vis.append('svg:rect')
 // init h_force layout
 var h_force = d3.layout.force()
     .size([width, height])
-    .nodes([{}]) // initialize with a single node
+    .nodes([{name:0}]) // initialize with a single node
     .linkDistance(50)
     .charge(-200)
     .on("tick", h_tick);
 
 var g_force = d3.layout.force()
   .size([width, height])
-  .nodes([{}])
+  .nodes([{name:0}])
   .linkDistance(50)
   .charge(-200)
   .on("tick", g_tick)
@@ -89,7 +89,8 @@ var h_graph = {
     vis: h_vis,
     force: h_force,
     type:"H",
-    scale:hrescale
+    scale:hrescale,
+    text:h_vis.selectAll('.text')
 };
 
 var g_graph = {
@@ -109,7 +110,8 @@ var g_graph = {
     induced_nodes:null,
     induced_edges:null,
     scale:grescale,
-}
+    text:g_vis.selectAll(".text")
+};
 // keeps track of which grpah is selected
 var last_clicked = null;
 
@@ -213,6 +215,10 @@ function h_tick() {
 
   h_graph.node.attr("cx", function(d) { return d.x; })
       .attr("cy", function(d) { return d.y; });
+
+  h_graph.text.attr("x", function(d) { return d.x-4;})
+    .attr("y", function(d) { return d.y+4;})
+
 }
 
 function g_tick(){
@@ -223,6 +229,9 @@ function g_tick(){
 
   g_graph.node.attr("cx", function(d) { return d.x; })
       .attr("cy", function(d) { return d.y; });
+
+  g_graph.text.attr("x", function(d) { return d.x-4;})
+    .attr("y", function(d) { return d.y+5;})
 }
 
 function grescale(){
@@ -262,9 +271,8 @@ function redraw(graph) {
 
   graph.link
     .classed("link_selected", function(d) { return d === graph.selected_link; });
-
+  
   graph.node = graph.node.data(graph.nodes);
-
   graph.node.enter()
       .insert("circle")
       .attr("class", "node")
@@ -352,7 +360,65 @@ function redraw(graph) {
           }
         );
   }
-  
+  graph.text = graph.text.data(graph.nodes);
+  console.log(graph.text);
+  graph.text.enter()
+    .insert("text")
+    .attr("x", 1)
+    .attr("y", ".1em")
+    .attr("class", "text")
+    .text(function(d) { 
+      console.log(d);
+      return d.name; })
+      .on("mousedown", 
+    function(d) { 
+      // disable zoom
+      graph.vis.call(d3.behavior.zoom().on("zoom"), null);
+
+      graph.mousedown_node = d;
+      if (graph.mousedown_node == graph.selected_node) graph.selected_node = null;
+      else graph.selected_node = graph.mousedown_node; 
+      graph.selected_link = null; 
+
+      // reposition drag line
+      graph.drag_line
+          .attr("class", "link")
+          .attr("x1", graph.mousedown_node.x)
+          .attr("y1", graph.mousedown_node.y)
+          .attr("x2", graph.mousedown_node.x)
+          .attr("y2", graph.mousedown_node.y);
+
+      redraw(graph); 
+    })
+  .on("mousedrag",
+    function(d) {
+      // redraw();
+    })
+  .on("mouseup", 
+    function(d) { 
+      if (graph.mousedown_node) {
+        graph.mouseup_node = d; 
+        if (graph.mouseup_node == graph.mousedown_node) { resetMouseVars(graph); return; }
+
+        // add link
+        var link = {source: graph.mousedown_node, target: graph.mouseup_node};
+        graph.links.push(link);
+
+        // select new link
+        graph.selected_link = link;
+        graph.selected_node = null;
+
+        // enable zoom
+        graph.vis.call(d3.behavior.zoom().on("zoom"), graph.scale);
+        redraw(graph);
+      } 
+    })
+    .transition()
+      .duration(750)
+      .ease('elastic');
+
+  graph.text.exit().transition()
+    .remove();
 
   if (d3.event) {
     // prevent browser's default behavior
@@ -632,7 +698,7 @@ function ClearGraphs(){
   clearGraph(g_graph);
   clearGraph(h_graph);
   
-  var node = {x: width / 2, y: height / 2}
+  var node = {x: width / 2, y: height / 2, name:0}
   g_graph.nodes.push(node);
   h_graph.nodes.push(node);
   redraw(g_graph);
