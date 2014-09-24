@@ -37,7 +37,7 @@ Start Server
 
 Contact
 -----------
-Feel free to contact me for ideas and help at [email]
+Feel free to contact me for ideas and help at [fras2560@mylaurier.ca]
 
 License
 ----
@@ -48,4 +48,4 @@ MIT
 [Networkx]:http://networkx.github.io/documentation/networkx-1.9/
 [Flask]:http://flask.pocoo.org/
 [inducer]:http://induced-subgraph.herokuapp.com/
-[email]:mailto:fras2560@mylaurier.ca
+[fras2560@mylaurier.ca]:mailto:fras2560@mylaurier.ca
