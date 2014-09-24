@@ -29,6 +29,16 @@ Install Dependencies
 	pip install networkx
 ```
 
+Start Server
+-----------
+```sh
+	python run.py
+```
+
+Contact
+-----------
+Feel free to contact me for ideas and help at [email]
+
 License
 ----
 
@@ -38,3 +48,4 @@ MIT
 [Networkx]:http://networkx.github.io/documentation/networkx-1.9/
 [Flask]:http://flask.pocoo.org/
 [inducer]:http://induced-subgraph.herokuapp.com/
+[email]:mailto:fras2560@mylaurier.ca
