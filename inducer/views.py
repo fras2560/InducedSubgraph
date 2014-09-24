@@ -14,7 +14,7 @@ from inducer import app
 from inducer.container import induced_subgraph, k_vertex
 from pprint import PrettyPrinter
 from inducer.helper import convert_to_networkx, convert_to_d3, text_to_d3
-from inducer.helper import complement
+from inducer.helper import complement, join
 pp = PrettyPrinter(indent=5)
 ALLOWED_EXTENSIONS = set(['txt'])
 
@@ -77,3 +77,13 @@ def k():
     k_vertexes = k_vertex(g, subgraphs)
     return json.dumps(k_vertexes)
 
+@app.route("/join", methods=["POST"])
+def join_graphs():
+    graphs = json.loads(request.data)
+    g = convert_to_networkx(graphs["G"])
+    h = convert_to_networkx(graphs["H"])
+    f = join(g, h)
+    f = convert_to_d3(f)
+    return json.dumps(f)
+
+    
