@@ -47,7 +47,21 @@
                     <a onclick="loadComplement();">Complement G</a>
                 </li>
                 <li>
-                    <a onclick="ClearGraphs();">Clear</a>
+                    <a onclick="clearGraphs();">Clear</a>
+                </li>
+                <li>
+                    <a onclick="joinGwithH();">Join G with H</a>
+                </li>
+                <li>
+                    <a onclick="toggleCopyCommands();">
+                        Copy Commands <img src="{{ url_for('static', filename="images/dropdown.png") }}" alt="Dropdown" style="height:15px;width:15px;" >
+                    </a>
+                <li class="CopyCommands" style="display:none" >
+                    <a role="menuitem" tabindex="-1" onclick="copyGtoH();">Copy G to H</a>
+                </li>
+                <li class="CopyCommands" style="display:none">
+                    <a role="menuitem" tabindex="-1" onclick="copyHtoG();">Copy H to G</a>
+                </li>
                 </li>
                 <form id="upload-file" method="post" enctype="multipart/form-data">
                     <fieldset>
@@ -219,6 +233,9 @@
         $('#modalBody ul').append("<li>G Contains -> Check if the graph G contains the checked 4-vertex subgraphs</li>");
         $('#modalBody ul').append("<li> G's k-vertex -> Checks if G contains a k-vertex without contained an induced subgraph of the ones checked</li>");
         $('#modal').modal("show")
+    }
+    function toggleCopyCommands(){
+        $(".CopyCommands").toggle();
     }
     </script>
     <script src="{{ url_for('static', filename="js/force_viewer.js") }}"></script>
