@@ -179,18 +179,21 @@ def text_to_d3(lines):
     graph = {'nodes':[], 'edges':[]}
     for line in lines:
         entries = line.split(":")
-        node = int(entries[0])
-        entries[1] = entries[1].replace(" ", "")
-        edges = entries[1].split(",")
-        for edge in edges:
-            if edge != '':
-                e = int(edge)
-                if [e, node] not in graph['edges'] and node != e:
-                    # do not want to add an edges twice
-                    graph['edges'].append([node, e])
-        graph['nodes'].append(node)
-#     except:
-#         graph = None
+        try:
+            node = int(entries[0])
+        except:
+            node = None
+        if (len(entries) > 1):
+            entries[1] = entries[1].replace(" ", "")
+            edges = entries[1].split(",")
+            for edge in edges:
+                if edge != '':
+                    e = int(edge)
+                    if [e, node] not in graph['edges'] and node != e:
+                        # do not want to add an edges twice
+                        graph['edges'].append([node, e])
+        if node is not None:
+            graph['nodes'].append(node)
     return graph
 
 def d3_to_text(g):
@@ -243,6 +246,7 @@ class tester(unittest.TestCase):
         self.assertEqual(edges, g.edges(), "Make Diamond: failed on edges")
         self.assertEqual(vertices, g.nodes(),
                          "Make Diamond: failed on vertices")
+
     def testMakeCoDiamond(self):
         g = make_co_diamond()
         edges = [(2, 3)]
@@ -251,6 +255,7 @@ class tester(unittest.TestCase):
                          "Make Co-Diamond: failed on edges")
         self.assertEqual(vertices, g.nodes(),
                          "Make Co-Diamond: failed on vertices")
+
     def testMakeClaw(self):
         g = make_claw()
         edges = [(0, 1), (0, 2), (0, 3)]
