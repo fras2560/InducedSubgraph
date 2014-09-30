@@ -910,6 +910,30 @@ $(function(){
         for (var i = 0; i < arrayLength; i++) {
           G.edges.push([g_graph.links[i].source.index, g_graph.links[i].target.index]);
         }
+        saveFile_aux(G);
+    });
+})
+
+$(function(){
+    $('#save-file-btn-h').click(function(){
+
+        var H = {
+          nodes: [],
+          edges: []
+        };
+        var arrayLength = h_graph.nodes.length;
+        for (var i = 0; i < arrayLength; i++) {
+          H.nodes.push(h_graph.nodes[i].index);
+        }
+        arrayLength = h_graph.links.length;
+        for (var i = 0; i < arrayLength; i++) {
+          H.edges.push([h_graph.links[i].source.index, h_graph.links[i].target.index]);
+        }
+        saveFile_aux(H);
+    });
+})
+
+function saveFile_aux(G){
         $.ajax({
             type: "POST",
             url: "/save_file",
@@ -926,5 +950,4 @@ $(function(){
                 console.log(error);
             }
         });
-    });
-})
+}
