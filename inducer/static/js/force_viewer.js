@@ -1,12 +1,12 @@
 var width = 400,
-    height = 200,
+    height = 400,
     fill = d3.scale.category20();
 
 
 var g_outer = d3.select("#g_graph")
   .append("svg:svg")
     .attr("width", width)
-    .attr("height". height)
+    .attr("height", height)
     .attr("pointer-events", 'all')
 
 // init svg
@@ -28,7 +28,7 @@ var g_vis = g_outer
 g_vis.append('svg:rect')
     .attr('width', width)
     .attr('height', height)
-    .attr('fill', 'white');  
+    .attr('fill', 'white')
 
 var h_vis = h_outer
   .append('svg:g')
