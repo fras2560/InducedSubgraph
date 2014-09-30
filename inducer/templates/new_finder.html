@@ -47,6 +47,9 @@
                     <a onclick="showFile();">Load File</a>
                 </ll>
                 <li>
+                    <a onclick="saveFile();">Save File</a>
+                </li>
+                <li>
                     <a onclick="toggleComplementCommands();">Complement <img src="{{ url_for('static', filename="images/dropdown.png") }}" alt="Dropdown" style="height:15px;width:15px;"></a>
                 </li>
                 <li class="complementCommands" style="display:none">
@@ -77,12 +80,12 @@
                     <a onclick="toggleCopyCommands();">
                         Copy <img src="{{ url_for('static', filename="images/dropdown.png") }}" alt="Dropdown" style="height:15px;width:15px;" >
                     </a>
+                </li>
                 <li class="copyCommands" style="display:none" >
                     <a role="menuitem" tabindex="-1" onclick="copyGraph(g_graph, h_graph);">Copy G to H</a>
                 </li>
                 <li class="copyCommands" style="display:none">
                     <a role="menuitem" tabindex="-1" onclick="copyGraph(h_graph, g_graph);">Copy H to G</a>
-                </li>
                 </li>
                 <li class="sidebar-brand">
                     <a href="#">
@@ -199,6 +202,7 @@
             </div><!-- /.modal-content -->
           </div><!-- /.modal-dialog -->
         </div><!-- /.k_modal -->
+        
         <div class="modal fade" id="file_modal">
           <div class="modal-dialog">
             <div class="modal-content">
@@ -228,6 +232,27 @@
             </div><!-- /.modal-content -->
           </div><!-- /.modal-dialog -->
         </div><!-- /.k_modal -->
+        <div class="modal fade" id="save_modal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <button type="button" class="close loadClose" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only" style="display: none;">Close</span></button>
+                    <h4 class="modal-title" >Save Graph</h4>
+                  </div>
+                  <div class="modal-body" id="save_modalBody" >
+                    <p id="save_modalText"> Save a graph to a text file:</p>
+                        <button id="save-file-btn-g" type="button" class=" btn btn-success" style="">Save to graph G
+                        <br/>
+                        <button id="save-file-btn-h" type="button" class="btn btn-warning" style=""> Save to graph H</button>
+                        <a href="/graph.txt" target="_blank" id="downloadLink" style="display: none">downloadLink</a>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-default loadClose" data-dismiss="modal" style="display: none;">Close</button>
+                  </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+        </div><!-- /.k_modal -->
+
     <a class="btn btn-mini btn-link " onclick="showAbout()">About</a>
     <a class="btn btn-mini btn-link " onclick="showHelp();">Help</a>
     <a class="btn btn-mini btn-link " href="http://jquery.com/">jQuery</a>
@@ -287,6 +312,10 @@
     }
     function showFile(){
         $('#file_modal').modal("show");
+    }
+    function saveFile(){
+        $('#downloadLink').hide();
+        $('#save_modal').modal("show");
     }
     </script>
     <script src="{{ url_for('static', filename="js/force_viewer.js") }}"></script>

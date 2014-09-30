@@ -21,7 +21,7 @@ app.config.update(dict(
                        USERNAME="admin",
                        PASSWORD="default"))
 app.config.from_envvar('FLASKR_SETTINGS', silent=True)
-
+app.config['UPLOAD_FOLDER'] = 'uploads'
 from inducer import views
 
 if __name__ == '__main__':

@@ -9,12 +9,15 @@ Email:   fras2560@mylaurier.ca
 Version: 2014-09-18
 -------------------------------------------------------
 """
-from flask import render_template, json, request
+from flask import render_template, json, request, make_response
 from inducer import app
 from inducer.container import induced_subgraph, k_vertex
 from pprint import PrettyPrinter
 from inducer.helper import convert_to_networkx, convert_to_d3, text_to_d3
-from inducer.helper import complement, join
+from inducer.helper import complement, join, d3_to_text
+from os.path import join as filepath
+from os import getcwd
+
 pp = PrettyPrinter(indent=5)
 ALLOWED_EXTENSIONS = set(['txt'])
 
@@ -86,4 +89,26 @@ def join_graphs():
     f = convert_to_d3(f)
     return json.dumps(f)
 
-    
+@app.route("/save_file", methods=["POST"])
+def save_graph():
+    graph = json.loads(request.data)
+    graph = d3_to_text(graph)
+    fp = filepath(getcwd(), app.config['UPLOAD_FOLDER'], "graph.txt")
+    print(fp)
+    with open(fp, 'w') as f:
+        for line in graph:
+            f.write(line + "\n")
+            print(line)
+    return json.dumps("graph.txt")
+
+@app.route("/<file_name>")
+def getFile(file_name):
+    fp = filepath(getcwd(), app.config['UPLOAD_FOLDER'],file_name)
+    result = ""
+    with open (fp, "r") as f:
+        for line in f:
+            result += line
+    print(result)
+    response = make_response(result)
+    response.headers["Content-Disposition"] = "attachment; filename=outbound.txt"
+    return response

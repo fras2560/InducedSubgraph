@@ -193,6 +193,28 @@ def text_to_d3(lines):
 #         graph = None
     return graph
 
+def d3_to_text(g):
+    '''
+    d3_to_text
+    a function that takes a d3 representation and converts it to text
+    Parameters:
+        g: the d3 graph representation
+    Returns:
+        graph: list of text representation the graph (list)
+    '''
+    graph = []
+    for node in g['nodes']:
+        line = str(node) +":"
+        edges = []
+        for edge in g['edges']:
+            if node == edge[0]:
+                edges.append(str(edge[1]))
+            elif node == edge[1]:
+                edges.append(str(edge[0]))
+        line = line + ",".join(edges)
+        graph.append(line)
+    return graph
+
 def complement(g):
     '''
     complement

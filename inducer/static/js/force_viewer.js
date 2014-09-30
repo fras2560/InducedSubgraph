@@ -714,6 +714,7 @@ function loadGraph(A, form_data){
       }
   });
 }
+
 function resetGraph(A){
   /*
     resetGraph
@@ -870,6 +871,7 @@ function joinGraphs(A, B){
     }
   });
 }
+
 function copyGraph(A, B){
   /* copyGraph
       a function which copies one graph to another
@@ -892,3 +894,37 @@ function copyGraph(A, B){
   }
   redraw(B);
 }
+
+$(function(){
+    $('#save-file-btn-g').click(function(){
+
+        var G = {
+          nodes: [],
+          edges: []
+        };
+        var arrayLength = g_graph.nodes.length;
+        for (var i = 0; i < arrayLength; i++) {
+          G.nodes.push(g_graph.nodes[i].index);
+        }
+        arrayLength = g_graph.links.length;
+        for (var i = 0; i < arrayLength; i++) {
+          G.edges.push([g_graph.links[i].source.index, g_graph.links[i].target.index]);
+        }
+        $.ajax({
+            type: "POST",
+            url: "/save_file",
+            contentType: "application/json",
+            data: JSON.stringify(G),
+            dataType: "json",
+            success: function(result) {
+                // check for a filename
+                console.log(result);
+                $('#downloadLink').show();
+            },error: function(request, error){
+                alert("Error: check console");
+                console.log(request);
+                console.log(error);
+            }
+        });
+    });
+})
