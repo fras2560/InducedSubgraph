@@ -47,7 +47,7 @@ def coloring(G):
     Returns:
         chromatic: the chromatic number (int)
     '''
-    coloring = [G.nodes]
+    coloring = [G.nodes()]
     chromatic = 1
     valid = True
     nodes = G.nodes()
@@ -199,6 +199,12 @@ class Test(unittest.TestCase):
         result = coloring(g)
         expect = [[3, 2], [1], [0]]
         self.assertEqual(expect, result, "Coloring: Diamond Case")
+        g = nx.Graph()
+        g.add_node(0)
+        g.add_node(1)
+        result = coloring(g)
+        expect = [[0, 1]]
+        self.assertEqual(expect, result, "Coloring: Stable Set")
 
     def testValidColoring(self):
         g = make_claw()
