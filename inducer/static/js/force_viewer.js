@@ -86,6 +86,7 @@ var h_graph = {
     mousedown_link: null,
     mousedown_node: null,
     mouseup_node: null,
+    coloring: null,
     vis: h_vis,
     force: h_force,
     type:"H",
@@ -109,6 +110,7 @@ var g_graph = {
     type:"G",
     induced_nodes:null,
     induced_edges:null,
+    coloring:null,
     scale:grescale,
     text:g_vis.selectAll(".text")
 };
@@ -172,6 +174,7 @@ function mouseup(graph, xpoint, ypoint) {
     if (!graph.mouseup_node) {
       // induced subgraph no longer valid
       clearSubgraph();
+      clearColoring();
 
       // add node
       var node = {x: xpoint, y: ypoint, name:graph.nodes.length},
@@ -359,6 +362,27 @@ function redraw(graph) {
             }
           }
         );
+    if (graph.coloring != null){
+      var colors = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+      for(var i = 0; i < graph.coloring.length; i++){
+        graph.node
+          .classed("color_" + colors[i], function(d){
+            if($.inArray(d.index, graph.coloring[i]) != -1){
+              return true;
+            }else{
+              return false;
+            }
+          });
+      }
+    }else{
+      var colors = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+      for(var i = 0; i < colors.length; i++){
+        graph.node
+          .classed("color_" + colors[i], function(d){
+            return false;
+          });
+      }
+    }
   }
   graph.text = graph.text.data(graph.nodes);
   graph.text.enter()
@@ -475,6 +499,14 @@ function clearGraph(graph){
 function updateClickLabel(graph){
   $('#selected').text("Selected Graph: "+graph);
 }
+function clearColoring(){
+  $('GColoring').text("G Coloring:");
+  $('HColoring').text("H Coloring:");
+  g_graph.coloring = null;
+  h_graph.colorin = null;
+  redraw(g_graph);
+  redraw(h_graph); 
+}
 
 function clearSubgraph(){
   /* clearSubgraph
@@ -487,6 +519,7 @@ function clearSubgraph(){
 }
 
 function checkContains(){
+  clearColoring();
   var G = {
       nodes: [],
       edges: []
@@ -517,6 +550,7 @@ function checkContains(){
 
 function check4VertexGraphs(){
   clearSubgraph();
+  clearColoring();
   var G = {
       nodes: [],
       edges: []
@@ -603,6 +637,8 @@ function complementGraph(A){
     Parameters:
       A: the graph to take the complement of
   */
+  clearColoring();
+  clearSubgraph();
   var G = {
       nodes: [],
       edges: []
@@ -670,6 +706,8 @@ function loadGraph(A, form_data){
       Parameters:
         A: the graph A to be loaded to
    */
+      clearSubgraph();
+      clearColoring();
      $('.loadClose').hide();
      $.ajax({
       type: 'POST',
@@ -723,6 +761,7 @@ function resetGraph(A){
       A: the graph A to be reset
   */
   clearGraph(A);
+  clearColoring();
   var node = {x: width/2, y: height / 2, name:0};
   A.nodes.push(node);
   redraw(A);
@@ -802,6 +841,49 @@ function k_vertex(){
       console.log(error);
     }
   });
+}
+
+function colorGraph(A, graph_name){
+  /* colorGraph
+    a function which colors one graph with lowest chromatic number
+    Parameters:
+      A: the graph to color
+      graph_name: the name of the graph labels to update
+  */
+  var G = {
+      nodes: [],
+      edges: []
+  }
+  var arrayLength = A.nodes.length;
+  for (var i = 0; i < arrayLength; i++){
+    G.nodes.push(A.nodes[i].index);
+  }
+  arrayLength = A.links.length;
+  for (var i = 0; i < arrayLength; i++){
+    G.edges.push([A.links[i].source.index, A.links[i].target.index]);
+  }
+  console.log(G);
+  $.ajax({
+    type: 'POST',
+    url: '/coloring',
+    contentType: "application/json",
+    data: JSON.stringify(G),
+      dataType: "json",
+    success: function(graph){
+      console.log(graph);
+      if (graph != null){
+        A.coloring = graph;
+        $("#" + graph_name +"Coloring").text(graph_name + " Coloring: " + graph.length);
+        redraw(A);
+      }else{
+        alert("No coloring could be found (>10)");
+      }
+    }, error: function(request, error){
+        alert("Error-> check console");
+        console.log(request);
+        console.log(error);
+    }
+  });  
 }
 
 function joinGraphs(A, B){
