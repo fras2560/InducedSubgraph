@@ -38,7 +38,7 @@ def valid_coloring(coloring, G):
             break;
     return valid
 
-def chromatic_number(G):
+def coloring(G):
     '''
     a function that finds the chromatic number of graph G
     using brute force
@@ -47,6 +47,7 @@ def chromatic_number(G):
     Returns:
         chromatic: the chromatic number (int)
     '''
+    coloring = [G.nodes]
     chromatic = 1
     valid = True
     nodes = G.nodes()
@@ -79,10 +80,13 @@ def chromatic_number(G):
         if chromatic > 10:
             # stop case
             valid = True
-            chromatic = None
+            coloring = None
         if chromatic == len(nodes):
             valid = True
-    return chromatic
+    return coloring
+
+def chromatic_number(G):
+    return len(coloring(G))
 
 def valid_split(split):
     '''
@@ -180,14 +184,21 @@ def unlabeled_balls_in_unlabeled_boxe(balls, box_sizes):
 from helper import make_claw, make_diamond
 class Test(unittest.TestCase):
 
-
     def setUp(self):
         pass
-
 
     def tearDown(self):
         pass
 
+    def testColoring(self):
+        g = make_claw()
+        result = coloring(g)
+        expect = [[3, 2, 1], [0]]
+        self.assertEqual(expect, result, "Coloring: Claw Case")
+        g = make_diamond()
+        result = coloring(g)
+        expect = [[3, 2], [1], [0]]
+        self.assertEqual(expect, result, "Coloring: Diamond Case")
 
     def testValidColoring(self):
         g = make_claw()
@@ -228,7 +239,6 @@ class Test(unittest.TestCase):
         chromatic = chromatic_number(g)
         expect = 3
         self.assertEqual(expect, chromatic, "Chromatic Number: Diamond Case")
-
 
     def testValidSplit(self):
         split = (4, 0)
