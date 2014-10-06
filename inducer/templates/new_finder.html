@@ -87,16 +87,34 @@
                 <li class="copyCommands" style="display:none">
                     <a role="menuitem" tabindex="-1" onclick="copyGraph(h_graph, g_graph);">Copy H to G</a>
                 </li>
-                <li class="sidebar-brand">
-                    <a href="#">
-                        Status
+                <li>
+                    <a onclick="toggleColorCommands();">
+                        Color<img src="{{ url_for('static', filename="images/dropdown.png") }}" alt="Dropdown" style="height:15px;width:15px;" >
                     </a>
                 </li>
+                <li class="colorCommands" style="display: none">
+                    <a onclick="colorGraph(g_graph,'G');"> Color G</a> 
+                </li>
+                <li class="colorCommands" style="display: none">
+                    <a onclick="colorGraph(h_graph, 'H');">Color H</a>
+                </li>
+                <li class="sidebar-brand">
+                    <a href="#">
+                        Status 
+                    </a>
+                </li>
+
                 <li>
                     <a id="selected">Selected Graph:</a>
                 </li>
                 <li>
                     <a id="contains">G contains H:</a>
+                </li>
+                <li>
+                    <a id="GColoring">G Colors:</a> 
+                </li>
+                <li>
+                    <a id="HColoring">H Colors:</a>
                 </li>
             </ul>
         </div>
@@ -298,24 +316,34 @@
         $('#modalBody ul').append("<li> G's k-vertex -> Checks if G contains a k-vertex without contained an induced subgraph of the ones checked</li>");
         $('#modal').modal("show")
     }
+
     function toggleCopyCommands(){
         $(".copyCommands").toggle();
     }
+
     function toggleJoinCommands(){
         $(".joinCommands").toggle();
     }
+
     function toggleResetCommands(){
         $('.resetCommands').toggle();
     }
+
     function toggleComplementCommands(){
         $('.complementCommands').toggle();
     }
+
     function showFile(){
         $('#file_modal').modal("show");
     }
+
     function saveFile(){
         $('#downloadLink').hide();
         $('#save_modal').modal("show");
+    }
+
+    function toggleColorCommands(){
+        $('.colorCommands').toggle();
     }
     </script>
     <script src="{{ url_for('static', filename="js/force_viewer.js") }}"></script>
