@@ -181,7 +181,7 @@ def unlabeled_balls_in_unlabeled_boxe(balls, box_sizes):
                 if distribution_other[0] <= balls_in_first_box:
                     yield (balls_in_first_box,) + distribution_other
 
-from helper import make_claw, make_diamond
+from inducer.helper import make_claw, make_diamond
 class Test(unittest.TestCase):
 
     def setUp(self):

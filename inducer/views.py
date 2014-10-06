@@ -15,6 +15,7 @@ from inducer.container import induced_subgraph, k_vertex
 from pprint import PrettyPrinter
 from inducer.helper import convert_to_networkx, convert_to_d3, text_to_d3
 from inducer.helper import complement, join, d3_to_text
+from inducer.colorable import coloring
 from os.path import join as filepath
 from os import getcwd
 
@@ -112,3 +113,11 @@ def getFile(file_name):
     response = make_response(result)
     response.headers["Content-Disposition"] = "attachment; filename=outbound.txt"
     return response
+
+@app.route("/coloring", methods=["POST"])
+def find_coloring():
+    print(request.data)
+    graph = json.loads(request.data)
+    graph = convert_to_networkx(graph)
+    colored = coloring(graph)
+    return json.dumps(colored) 
