@@ -74,6 +74,7 @@ def chromatic_number(G):
                 break
     return chromatic
 
+from helper import make_claw, make_diamond
 class Test(unittest.TestCase):
 
 
@@ -85,9 +86,30 @@ class Test(unittest.TestCase):
         pass
 
 
-    def testName(self):
-        pass
-
+    def testValidColoring(self):
+        nodes = [0,1,2]
+        g = make_claw()
+        # test valid claw coloring
+        coloring = [[0], [1, 2, 3]]
+        valid = valid_coloring(coloring, g)
+        self.assertEqual(valid, True,
+                         "Valid coloring: Failed for valid coloring on claw")
+        # test invalid claw coloring
+        coloring = [[0, 1], [2, 3]]
+        valid = valid_coloring(coloring, g)
+        self.assertEqual(valid, False,
+                         "Valid coloring: Failed for invalid coloring on claw")
+        # test valid diamond coloring
+        g = make_diamond()
+        coloring = [[0], [1], [2, 3]]
+        valid = valid_coloring(coloring, g)
+        self.assertEqual(valid, True, 
+                         "Valid coloring: failed for valid coloring on diamond")
+        coloring = [[3], [2], [0, 1]]
+        valid = valid_coloring(coloring, g)
+        self.assertEqual(valid, False, 
+                         "Valid coloring: failed for invalid coloring on diamond")
+        
 
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']
