@@ -64,3 +64,43 @@ body {
 .text{
   stroke: #B6B9B8;
 }
+
+.color_0{
+    fill: #F80000;
+}
+
+.color_1{
+    fill: #0000FF;
+}
+
+.color_2{
+    fill: #00FFFF;
+}
+
+.color_3{
+    fill: #33FF00;
+}
+
+.color_4{
+    fill: #660033;
+}
+
+.color_5{
+    fill: #FF6666;
+}
+
+.color_6{
+    fill: #FFFF33;
+}
+
+.color_7{
+    fill: #FF9933;
+}
+
+.color_8 {
+    fill: #CCFFFF;
+}
+
+.color_9 {
+    fill: #003333;
+}
