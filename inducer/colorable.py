@@ -109,7 +109,21 @@ class Test(unittest.TestCase):
         valid = valid_coloring(coloring, g)
         self.assertEqual(valid, False, 
                          "Valid coloring: failed for invalid coloring on diamond")
-        
+
+    def testColorPermutations(self):
+        # very simple tests
+        nodes = [1, 1, 1]
+        baskets = 2
+        expect = [
+                    [[1, 1], [1]],
+                    [[1, 1, 1], []]
+                 ]
+        for color in color_permutations(nodes, baskets):
+            print(color)
+            self.assertEqual(color in expect, True, 
+                             '''Color Permuations Simple Test: %s extra case''' 
+                             % color)
+
 
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']
