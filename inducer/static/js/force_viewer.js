@@ -466,6 +466,7 @@ function keydown() {
     case 8: // backspace
     case 46: { // delete
       clearSubgraph();
+      clearColoring();
       if (last_clicked.selected_node) {
         last_clicked.nodes.splice(last_clicked.nodes.indexOf(last_clicked.selected_node), 1);
         spliceLinksForNode(last_clicked, last_clicked.selected_node);
@@ -872,6 +873,7 @@ function colorGraph(A, graph_name){
     success: function(graph){
       console.log(graph);
       if (graph != null){
+        clearSubgraph();
         A.coloring = graph;
         $("#" + graph_name +"Coloring").text(graph_name + " Coloring: " + graph.length);
         redraw(A);
