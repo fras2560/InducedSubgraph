@@ -47,16 +47,20 @@ def coloring(G):
     Returns:
         chromatic: the chromatic number (int)
     '''
-    coloring = [G.nodes()]
-    chromatic = 1
-    valid = True
+    valid = False
+    largest = 0
+    # find largest clique
+    for clique in nx.find_cliques(G):
+        if len(clique) > largest:
+            largest = len(clique)
+    # set chromatic to the largest clique
+    chromatic  = largest - 1 # one less since add at start of loop
+    if chromatic == 0:
+        # can be no edge between any node
+        coloring = [G.nodes()]
+        valid = True
     nodes = G.nodes()
     balls = len(nodes)
-    # manually check the one case 
-    for node in G.nodes():
-        if len(G.neighbors(node)) != 0:
-            valid = False
-            break;
     while not valid:
         chromatic += 1
         print('''
