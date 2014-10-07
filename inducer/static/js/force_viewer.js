@@ -460,6 +460,11 @@ function spliceLinksForNode(graph, node) {
 }
 
 function keydown() {
+  /*
+    the function that handles any keydown events
+    Parameters:
+      none
+  */
   if (!last_clicked) return;
   if (!last_clicked.selected_node && !last_clicked.selected_link) return;
   switch (d3.event.keyCode) {
@@ -477,6 +482,14 @@ function keydown() {
       last_clicked.selected_link = null;
       last_clicked.selected_node = null;
       redraw(last_clicked);
+      break;
+    }
+    case 32:{ // space
+      check4VertexGraphs();
+      break;
+    }
+    case 67:{ // C
+      checkContains();
       break;
     }
   }
@@ -500,7 +513,13 @@ function clearGraph(graph){
 function updateClickLabel(graph){
   $('#selected').text("Selected Graph: "+graph);
 }
+
 function clearColoring(){
+  /* clearColoring
+     a function that clears the colored nodes
+     Parameters
+        none 
+  */
   $('GColoring').text("G Coloring:");
   $('HColoring').text("H Coloring:");
   g_graph.coloring = null;
@@ -694,6 +713,7 @@ $(function() {
         loadGraph(g_graph, form_data);
     });
 });
+
 $(function() {
     $('#upload-file-btn-h').click(function() {
         var form_data = new FormData($('#upload-file')[0]);
