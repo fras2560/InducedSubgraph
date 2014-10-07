@@ -350,38 +350,38 @@ function redraw(graph) {
         );
       graph.link
         .classed("induced_edge", function(d) { 
-            if (!g_graph.induced_edges){return false}
-            arrayLength = g_graph.induced_edges.length;
-            for (var i = 0; i < arrayLength; i++) {
-              if ((d.target.index === g_graph.induced_edges[i][0] && d.source.index === g_graph.induced_edges[i][1]) 
-                  || (d.target.index === g_graph.induced_edges[i][1] && d.source.index === g_graph.induced_edges[i][0])
-                ){
-                return true;
-              }else{
-              }
-            }
-          }
-        );
-    if (graph.coloring != null){
-      var colors = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
-      for(var i = 0; i < graph.coloring.length; i++){
-        graph.node
-          .classed("color_" + colors[i], function(d){
-            if($.inArray(d.index, graph.coloring[i]) != -1){
+          if (!g_graph.induced_edges){return false}
+          arrayLength = g_graph.induced_edges.length;
+          for (var i = 0; i < arrayLength; i++) {
+            if ((d.target.index === g_graph.induced_edges[i][0] && d.source.index === g_graph.induced_edges[i][1]) 
+                || (d.target.index === g_graph.induced_edges[i][1] && d.source.index === g_graph.induced_edges[i][0])
+              ){
               return true;
             }else{
-              return false;
             }
-          });
-      }
-    }else{
-      var colors = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
-      for(var i = 0; i < colors.length; i++){
-        graph.node
-          .classed("color_" + colors[i], function(d){
+          }
+        }
+      );
+    }
+  if (graph.coloring != null){
+    var colors = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+    for(var i = 0; i < graph.coloring.length; i++){
+      graph.node
+        .classed("color_" + colors[i], function(d){
+          if($.inArray(d.index, graph.coloring[i]) != -1){
+            return true;
+          }else{
             return false;
-          });
-      }
+          }
+        });
+    }
+  }else{
+    var colors = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+    for(var i = 0; i < colors.length; i++){
+      graph.node
+        .classed("color_" + colors[i], function(d){
+          return false;
+        });
     }
   }
   graph.text = graph.text.data(graph.nodes);
@@ -504,7 +504,7 @@ function clearColoring(){
   $('GColoring').text("G Coloring:");
   $('HColoring').text("H Coloring:");
   g_graph.coloring = null;
-  h_graph.colorin = null;
+  h_graph.coloring = null;
   redraw(g_graph);
   redraw(h_graph); 
 }
