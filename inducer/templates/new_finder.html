@@ -93,10 +93,10 @@
                     </a>
                 </li>
                 <li class="colorCommands" style="display: none">
-                    <a onclick="colorGraph(g_graph,'G');"> Color G</a> 
+                    <a onclick="colorGraph(g_graph,'G');" title="A very slow process"> Color G<img src="{{ url_for('static', filename="images/ajax-loader.gif") }}" alt="Loader" style="height: 15px; width: 15px; display: none;" id="GColorLoader" ></a>
                 </li>
                 <li class="colorCommands" style="display: none">
-                    <a onclick="colorGraph(h_graph, 'H');">Color H</a>
+                    <a onclick="colorGraph(h_graph, 'H');" title="A very slow process">Color H<img src="{{ url_for('static', filename="images/ajax-loader.gif") }}" alt="Loader" style="height: 15px; width: 15px; display: none;" id="HColorLoader" ></a>
                 </li>
                 <li class="sidebar-brand">
                     <a href="#">

@@ -851,6 +851,7 @@ function colorGraph(A, graph_name){
       A: the graph to color
       graph_name: the name of the graph labels to update
   */
+  $('#' + graph_name + 'ColorLoader').show();
   var G = {
       nodes: [],
       edges: []
@@ -877,6 +878,7 @@ function colorGraph(A, graph_name){
         A.coloring = graph;
         $("#" + graph_name +"Coloring").text(graph_name + " Coloring: " + graph.length);
         redraw(A);
+        $('#' + graph_name + 'ColorLoader').hide();
       }else{
         alert("No coloring could be found (>10)");
       }
