@@ -12,8 +12,6 @@ Version: 2014-09-17
 import unittest
 import networkx as nx
 from itertools import permutations
-import logging
-import copy
 
 def valid_coloring(coloring, G):
     '''
@@ -26,92 +24,35 @@ def valid_coloring(coloring, G):
         valid: True if valid coloring,
                False otherwise
     '''
-    valid = False
-    if coloring is not None:
-        valid = True
-        for color in coloring:
-            for vertex in color:
-                neighbors = G.neighbors(vertex)
-                for neighbor in neighbors:
-                    if neighbor in color:
-                        valid = False
-                        break;
-                if not valid:
+    valid = True
+    for color in coloring:
+        for vertex in color:
+            neighbors = G.neighbors(vertex)
+            for neighbor in neighbors:
+                if neighbor in color:
+                    valid = False
                     break;
             if not valid:
                 break;
+        if not valid:
+            break;
     return valid
 
-def add_list(l1, l2, index):
-    '''
-    a function that  adds the list l1 to the two dimensional
-    list l2
-    Parameters:
-        l1: the first list (list)
-        l2: the second list (list of lists)
-        i1: the starting index to l1 (int)
-    Returns:
-        l: the list of lists(list of lists)
-    '''
-    l = copy.deepcopy(l1)
-    i = 0
-    while i < len(l2):
-        l[index] += l2[i]
-        i += 1
-        index += 1
-    return l
-
-def combine_color_clique(clique, color):
-    '''
-    a function that takes a clique list and a color split
-    and yields all the ways the clique list can be combine with coloring
-    Parameters:
-        clique: the clique (list of lists)
-        color: the coloring (list of lists)
-        index: the index
-    Returns:
-        coloring: the combined color (list of lists)
-    '''
-    color_length = len(color)
-    clique_number = len(clique)
-    for c in permutations(clique):
-        c = convert_combo(c)
-        if clique_number < color_length:
-            index = 0
-            while index <= color_length - clique_number:
-                yield add_list(color, c, index)
-                index += 1
-        elif clique_number > color_length:
-            index = 0
-            while index <= clique_number - color_length:
-                yield add_list(c, color, index)
-                index += 1
-        else:
-            yield add_list(c, color, 0)
-
-def coloring(G, logger=None):
+def coloring(G):
     '''
     a function that finds the chromatic number of graph G
     using brute force
     Parameters:
         G: the networkx graph (networkx)
-        logger: the logger for the function (logging)
     Returns:
         chromatic: the chromatic number (int)
     '''
-    if logger is None:
-        logging.basicConfig(level=logging.DEBUG,
-                            format='%(asctime)s %(message)s')
-        logger = logging.getLogger(__name__)
-
     valid = False
     largest = 0
-    largest_clique = []
     # find largest clique
     for clique in nx.find_cliques(G):
         if len(clique) > largest:
             largest = len(clique)
-            largest_clique = clique
     # set chromatic to the largest clique
     chromatic  = largest - 1 # one less since add at start of loop
     if chromatic == 0:
@@ -119,41 +60,25 @@ def coloring(G, logger=None):
         coloring = [G.nodes()]
         valid = True
     nodes = G.nodes()
-    # remove nodes from largest clique
-    i = 0
-    clique = []
-    # reformat the clique
-    for node in largest_clique:
-        clique.append([node])
-    while i < len(nodes):
-        if nodes[i] in largest_clique:
-            nodes.pop(i)
-        else:
-            i += 1
     balls = len(nodes)
-    print("Nodes:", nodes)
     while not valid:
         chromatic += 1
-        logger.info('''
-                    ------------------------------\n
-                    Testing Chromatic Number of %s\n
-                    ------------------------------\n
-                    ''' %chromatic)
+        print('''
+                ------------------------------
+                Testing Chromatic Number of %s
+                ------------------------------
+              ''' %chromatic)
         boxes = [balls] * chromatic
         for combo in permutations(nodes):
-            logger.debug(combo)
             for split in unlabeled_balls_in_unlabeled_boxes(balls, boxes):
                 coloring = None
-                node_combo = convert_combo(combo)
-                coloring = assemble_coloring(node_combo, split)
-                print("Coloring:", coloring, " Clique: ",clique)
-                for check in combine_color_clique(clique, coloring):
-                    if valid_coloring(check, G):
-                        coloring = check
+                if valid_split(split):
+                    node_combo = convert_combo(combo)
+                    coloring = assemble_coloring(node_combo, split)
+                if coloring is not None:
+                    if valid_coloring(coloring, G):
                         valid = True
                         break;
-                if valid:
-                    break
             if valid:
                 break
         if chromatic > 10:
@@ -165,13 +90,6 @@ def coloring(G, logger=None):
     return coloring
 
 def chromatic_number(G):
-    '''
-    a function that finds the chromatic number of a graph
-    Parameter:
-        G: the networkx graph
-    Returns:
-        : the chromatic number (int)
-    '''
     return len(coloring(G))
 
 def valid_split(split):
@@ -224,7 +142,7 @@ def assemble_coloring(nodes, split):
                 color.append(nodes.pop())
             coloring.append(color)
     return coloring
-
+    
 def unlabeled_balls_in_unlabeled_boxes(balls, box_sizes):
     '''
     @author Dr. Phillip M. Feldman
@@ -247,6 +165,7 @@ def unlabeled_balls_in_unlabeled_boxes(balls, box_sizes):
                          "number of balls to be distributed.")
     box_sizes= list( sorted(box_sizes)[::-1] )
     return unlabeled_balls_in_unlabeled_boxe(balls, box_sizes)
+
 
 def unlabeled_balls_in_unlabeled_boxe(balls, box_sizes):
     '''
@@ -278,11 +197,11 @@ class Test(unittest.TestCase):
     def testColoring(self):
         g = make_claw()
         result = coloring(g)
-        expect = [[1, 3, 2], [0]]
+        expect = [[3, 2, 1], [0]]
         self.assertEqual(expect, result, "Coloring: Claw Case")
         g = make_diamond()
         result = coloring(g)
-        expect = [[2, 3], [0], [1]]
+        expect = [[3, 2], [1], [0]]
         self.assertEqual(expect, result, "Coloring: Diamond Case")
         g = nx.Graph()
         g.add_node(0)
@@ -290,43 +209,6 @@ class Test(unittest.TestCase):
         result = coloring(g)
         expect = [[0, 1]]
         self.assertEqual(expect, result, "Coloring: Stable Set")
-    
-    def testCombineColorClique(self):
-        coloring = [[3], [2]]
-        clique = [[0], [1]]
-        expect = [
-                  [[0, 3], [1, 2]],
-                  [[1, 3], [0, 2]]
-                 ]
-        index = 0
-        for combo in combine_color_clique(clique, coloring):
-            self.assertEqual(combo, expect[index])
-            index += 1
-        coloring = [[0, 1]]
-        clique = [[2], [3]]
-        expect = [
-                  [[2, 0, 1], [3]],
-                  [[2], [3, 0, 1]],
-                  [[3, 0, 1], [2]],
-                  [[3], [2, 0, 1]]
-                 ]
-        index = 0
-        for combo in combine_color_clique(clique, coloring):
-            self.assertEqual(combo, expect[index])
-            self.assertEqual(combo, expect[index])
-            index += 1
-        coloring = [[0], [1], [2]]
-        clique = [[3], [4]]
-        expect = [
-                  [[0, 3], [1, 4], [2]],
-                  [[0], [1, 3], [2, 4]],
-                  [[0, 4], [1, 3], [2]],
-                  [[0], [1, 4], [2, 3]]
-                 ]
-        index = 0
-        for combo in combine_color_clique(clique, coloring):
-            self.assertEqual(combo, expect[index])
-            index += 1
 
     def testValidColoring(self):
         g = make_claw()
@@ -335,11 +217,6 @@ class Test(unittest.TestCase):
         valid = valid_coloring(coloring, g)
         self.assertEqual(valid, False,
                          "Valid coloring: Failed for one coloring on claw")
-        
-        coloring = [[1, 3, 2], [0]]
-        valid = valid_coloring(coloring, g)
-        self.assertEqual(valid, True,
-                         "Valid coloring: Failed for valid coloring on claw")
         # test valid claw coloring
         coloring = [[0], [1, 2, 3]]
         valid = valid_coloring(coloring, g)
@@ -362,21 +239,6 @@ class Test(unittest.TestCase):
                          '''
                          Valid coloring: failed for invalid coloring on diamond
                          ''')
-
-    def testAddList(self):
-        l1 = [[1],[2]]
-        l2 = [[3],[4,5]]
-        result = add_list(l1, l2, 0)
-        expect = [[1, 3], [2, 4, 5]]
-        self.assertEqual(result, expect)
-        l1 = [[1],[2], [6]]
-        l2 = [[3],[4,5]]
-        result = add_list(l1, l2, 0)
-        expect = [[1, 3], [2, 4, 5], [6]]
-        self.assertEqual(result, expect)
-        result = add_list(l1, l2, 1)
-        expect = [[1], [2, 3], [6, 4, 5]]
-        self.assertEqual(result, expect)
 
     def testChromaticNumber(self):
         g = make_claw()
