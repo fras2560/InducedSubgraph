@@ -131,6 +131,9 @@ def coloring(G, logger=None):
         else:
             i += 1
     balls = len(nodes)
+    if balls == 0:
+        valid = True
+        coloring = clique
     logger.debug(nodes)
     logger.debug(clique)
     while not valid:
@@ -304,6 +307,13 @@ class Test(unittest.TestCase):
         self.assertEqual(len(color), 4)
         expect = [[4], [3, 1], [2, 0], [5]]
         self.assertEqual(expect, color)
+
+    def testColoringClique(self):
+        g = make_cycle(3)
+        color = coloring(g)
+        expect = [[0], [1], [2]]
+        self.assertEqual(len(color), 3)
+        self.assertEqual(color, expect)
 
     def testCombineColorClique(self):
         coloring = [[3], [2]]
