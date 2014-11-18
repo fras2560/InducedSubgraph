@@ -585,16 +585,17 @@ function check4VertexGraphs(){
   }
   var n = [0,1,2,3];
   var FourGraphs = {
-                  claw:{nodes:n, edges:[[0,1],[0,2],[0,3]]},
-                  co_claw:{nodes:n, edges:[[1,2],[2,3],[1,3]]},
-                  K4:{nodes:n, edges:[[0,1],[0,2],[0,3],[1,2],[1,3],[2,3]]},
+                  claw:{nodes:n, edges:[[0, 1], [0, 2], [0, 3]]},
+                  co_claw:{nodes:n, edges:[[1, 2], [2, 3], [1, 3]]},
+                  K4:{nodes:n, edges:[[0, 1], [0, 2], [0, 3], [1, 2], [1, 3], [2, 3]]},
                   co_K4:{nodes:n, edges:[]},
-                  diamond:{nodes:n, edges:[[0,1],[0,2],[0,3],[1,2],[1,3]]},
-                  co_diamond:{nodes:n, edges:[[2,3]]},
-                  C4:{nodes:n, edges:[[0,1],[0,3],[1,2],[2,3]]},
-                  co_C4:{nodes:n, edges:[[0,2],[1,3]]},
-                  paw:{nodes:n, edges:[[0,1],[1,2],[2,3],[1,3]]},
-                  co_paw:{nodes:n, edges:[[0,2],[0,3]]}
+                  diamond:{nodes:n, edges:[[0, 1], [0, 2], [0, 3], [1, 2], [1, 3]]},
+                  co_diamond:{nodes:n, edges:[[2, 3]]},
+                  C4:{nodes:n, edges:[[0, 1], [0, 3], [1, 2], [2, 3]]},
+                  co_C4:{nodes:n, edges:[[0, 2], [1, 3]]},
+                  paw:{nodes:n, edges:[[0, 1], [1, 2], [2, 3], [1, 3]]},
+                  co_paw:{nodes:n, edges:[[0, 2], [0, 3]]},
+                  C5:{nodes:[0, 1, 2, 3, 4], edges:[[0, 1], [0, 4], [1, 2], [2, 3], [3, 4]]}
                 };
   var Hgraphs = [];
   var names = [];
@@ -808,16 +809,17 @@ function k_vertex(){
   }
   var n = [0,1,2,3];
   var FourGraphs = {
-                  claw:{nodes:n, edges:[[0,1],[0,2],[0,3]]},
-                  co_claw:{nodes:n, edges:[[1,2],[2,3],[1,3]]},
-                  K4:{nodes:n, edges:[[0,1],[0,2],[0,3],[1,2],[1,3],[2,3]]},
+                  claw:{nodes:n, edges:[[0, 1], [0, 2], [0, 3]]},
+                  co_claw:{nodes:n, edges:[[1, 2], [2, 3], [1, 3]]},
+                  K4:{nodes:n, edges:[[0, 1], [0, 2], [0, 3], [1, 2], [1, 3], [2, 3]]},
                   co_K4:{nodes:n, edges:[]},
-                  diamond:{nodes:n, edges:[[0,1],[0,2],[0,3],[1,2],[1,3]]},
-                  co_diamond:{nodes:n, edges:[[2,3]]},
-                  C4:{nodes:n, edges:[[0,1],[0,3],[1,2],[2,3]]},
-                  co_C4:{nodes:n, edges:[[0,2],[1,3]]},
-                  paw:{nodes:n, edges:[[0,1],[1,2],[2,3],[1,3]]},
-                  co_paw:{nodes:n, edges:[[0,2],[0,3]]}
+                  diamond:{nodes:n, edges:[[0, 1], [0, 2], [0, 3], [1, 2], [1, 3]]},
+                  co_diamond:{nodes:n, edges:[[2, 3]]},
+                  C4:{nodes:n, edges:[[0, 1], [0, 3], [1, 2], [2, 3]]},
+                  co_C4:{nodes:n, edges:[[0, 2], [1, 3]]},
+                  paw:{nodes:n, edges:[[0, 1], [1, 2], [2, 3], [1, 3]]},
+                  co_paw:{nodes:n, edges:[[0, 2], [0, 3]]},
+                  C5:{nodes:[0, 1, 2, 3, 4], edges:[[0, 1], [0, 4], [1, 2], [2, 3], [3, 4]]}
                 };
   var Hgraphs = [];
   var names = [];
