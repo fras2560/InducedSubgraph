@@ -10,7 +10,7 @@ Version: 2014-09-18
 -------------------------------------------------------
 """
 from flask import render_template, json, request, make_response
-from inducer import app
+from inducer import app, logger
 from inducer.container import induced_subgraph, k_vertex
 from pprint import PrettyPrinter
 from inducer.helper import convert_to_networkx, convert_to_d3, text_to_d3
@@ -21,7 +21,6 @@ from os import getcwd
 
 pp = PrettyPrinter(indent=5)
 ALLOWED_EXTENSIONS = set(['txt'])
-
 
 def allowed_file(filename):
     return '.' in filename and \
@@ -119,5 +118,5 @@ def find_coloring():
     print(request.data)
     graph = json.loads(request.data)
     graph = convert_to_networkx(graph)
-    colored = coloring(graph)
+    colored = coloring(graph, logger=logger)
     return json.dumps(colored) 

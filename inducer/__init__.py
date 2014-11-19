@@ -11,6 +11,7 @@ Version: 2014-09-11
 -------------------------------------------------------
 """
 from flask import Flask, g , request
+import logging
 # create the application
 app = Flask(__name__)
 app.config.from_object("config")
@@ -22,6 +23,10 @@ app.config.update(dict(
                        PASSWORD="default"))
 app.config.from_envvar('FLASKR_SETTINGS', silent=True)
 app.config['UPLOAD_FOLDER'] = 'uploads'
+logging.basicConfig(level=logging.INFO,
+                    format='%(asctime)s %(message)s')
+logger = logging.getLogger(__name__)
+
 from inducer import views
 
 if __name__ == '__main__':
