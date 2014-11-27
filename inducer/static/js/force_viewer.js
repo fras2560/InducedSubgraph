@@ -116,7 +116,34 @@ var g_graph = {
 };
 // keeps track of which grpah is selected
 var last_clicked = null;
-
+var four_nodes = [0, 1, 2, 3];
+var five_nodes =  [0, 1, 2, 3, 4];
+var six_nodes = [0, 1, 2, 3, 4, 5];
+var GRAPHS ={
+                  claw:{nodes:four_nodes, edges:[[0, 1], [0, 2], [0, 3]]},
+                  co_claw:{nodes:four_nodes, edges:[[1, 2], [2, 3], [1, 3]]},
+                  K4:{nodes:four_nodes, edges:[[0, 1], [0, 2], [0, 3], [1, 2], [1, 3], [2, 3]]},
+                  co_K4:{nodes:four_nodes, edges:[]},
+                  diamond:{nodes:four_nodes, edges:[[0, 1], [0, 2], [0, 3], [1, 2], [1, 3]]},
+                  co_diamond:{nodes:four_nodes, edges:[[2, 3]]},
+                  C4:{nodes:four_nodes, edges:[[0, 1], [0, 3], [1, 2], [2, 3]]},
+                  co_C4:{nodes:four_nodes, edges:[[0, 2], [1, 3]]},
+                  paw:{nodes:four_nodes, edges:[[0, 1], [1, 2], [2, 3], [1, 3]]},
+                  co_paw:{nodes:four_nodes, edges:[[0, 2], [0, 3]]},
+                  C5:{nodes:five_nodes, edges:[[0, 1], [0, 4], [1, 2], [2, 3], [3, 4]]},
+                  K5:{nodes:five_nodes, edges:[[0, 1],[0, 2], [0, 3], [0, 4], [1, 2], [1, 3], [1, 4], [2, 3], [2, 4], [3, 4]]},
+                  co_K5:{nodes:five_nodes, edges:[]},
+                  K5minusE:{nodes:five_nodes, edges:[[0, 1] ,[0, 2], [0, 3], [0, 4], [1, 2], [1, 3], [1, 4], [2, 3], [2, 4]]},
+                  gem:{nodes:five_nodes, edges:[[0, 1], [0, 2], [0, 3], [0, 4], [1, 2], [2, 3], [3, 4]]},
+                  chair:{nodes:five_nodes, edges:[[0, 1], [1, 2], [1, 3], [3, 4]]},
+                  butterfly:{nodes:five_nodes, edges:[[0, 1], [0, 2], [0, 3], [0, 4], [1, 2], [3, 4]]},
+                  W4:{nodes:five_nodes, edges:[[0, 1], [0, 3], [1, 2], [2, 3], [0, 4], [1, 4], [2, 4], [3, 4]]},
+                  co_butterfly:{nodes:five_nodes, edges:[[1, 2], [1, 4], [2, 3], [3, 4]]},
+                  kite:{nodes:five_nodes, edges:[[0, 1], [1, 2], [1, 3], [2, 3], [2, 4], [3, 4]]},
+                  co_twin:{nodes:six_nodes, edges:[[0, 1], [0, 2], [0,5], [1, 2], [1, 5], [2, 3], [3, 4], [4, 5]]},
+                  co_twin_house:{nodes:six_nodes, edges:[[0, 1], [1, 2], [1, 3], [2, 3], [2, 4], [3, 4], [4, 5]]},
+                  W5:{nodes:six_nodes, edges:[[0, 1], [0, 4], [1, 2], [2, 3], [3, 4], [0, 5], [1, 5], [2, 5], [3, 5], [4, 5]]},
+                };
 // add keyboard callback
 d3.select(window)
     .on("keydown", keydown);
@@ -584,24 +611,12 @@ function check4VertexGraphs(){
     G.edges.push([g_graph.links[i].source.index, g_graph.links[i].target.index]);
   }
   var n = [0,1,2,3];
-  var FourGraphs = {
-                  claw:{nodes:n, edges:[[0, 1], [0, 2], [0, 3]]},
-                  co_claw:{nodes:n, edges:[[1, 2], [2, 3], [1, 3]]},
-                  K4:{nodes:n, edges:[[0, 1], [0, 2], [0, 3], [1, 2], [1, 3], [2, 3]]},
-                  co_K4:{nodes:n, edges:[]},
-                  diamond:{nodes:n, edges:[[0, 1], [0, 2], [0, 3], [1, 2], [1, 3]]},
-                  co_diamond:{nodes:n, edges:[[2, 3]]},
-                  C4:{nodes:n, edges:[[0, 1], [0, 3], [1, 2], [2, 3]]},
-                  co_C4:{nodes:n, edges:[[0, 2], [1, 3]]},
-                  paw:{nodes:n, edges:[[0, 1], [1, 2], [2, 3], [1, 3]]},
-                  co_paw:{nodes:n, edges:[[0, 2], [0, 3]]},
-                  C5:{nodes:[0, 1, 2, 3, 4], edges:[[0, 1], [0, 4], [1, 2], [2, 3], [3, 4]]}
-                };
+
   var Hgraphs = [];
   var names = [];
   $(':checkbox').each(function() {
     if (this.checked == true){
-       Hgraphs.push(FourGraphs[this.value]);
+       Hgraphs.push(GRAPHS[this.value]);
        names.push(this.value);
     }
   });
@@ -808,24 +823,11 @@ function k_vertex(){
     G.edges.push([g_graph.links[i].source.index, g_graph.links[i].target.index]);
   }
   var n = [0,1,2,3];
-  var FourGraphs = {
-                  claw:{nodes:n, edges:[[0, 1], [0, 2], [0, 3]]},
-                  co_claw:{nodes:n, edges:[[1, 2], [2, 3], [1, 3]]},
-                  K4:{nodes:n, edges:[[0, 1], [0, 2], [0, 3], [1, 2], [1, 3], [2, 3]]},
-                  co_K4:{nodes:n, edges:[]},
-                  diamond:{nodes:n, edges:[[0, 1], [0, 2], [0, 3], [1, 2], [1, 3]]},
-                  co_diamond:{nodes:n, edges:[[2, 3]]},
-                  C4:{nodes:n, edges:[[0, 1], [0, 3], [1, 2], [2, 3]]},
-                  co_C4:{nodes:n, edges:[[0, 2], [1, 3]]},
-                  paw:{nodes:n, edges:[[0, 1], [1, 2], [2, 3], [1, 3]]},
-                  co_paw:{nodes:n, edges:[[0, 2], [0, 3]]},
-                  C5:{nodes:[0, 1, 2, 3, 4], edges:[[0, 1], [0, 4], [1, 2], [2, 3], [3, 4]]}
-                };
   var Hgraphs = [];
   var names = [];
   $(':checkbox').each(function() {
     if (this.checked == true){
-       Hgraphs.push(FourGraphs[this.value]);
+       Hgraphs.push(GRAPHS[this.value]);
        names.push(this.value);
     }
   });

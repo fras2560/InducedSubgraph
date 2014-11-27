@@ -135,50 +135,158 @@
                         </h3>
                     </div>
                     <div id="4-vertex-graphs" class="span12">
-                        <input type="checkbox" id="K4" name="K4" value="K4">: K4 
-                        <img src="{{ url_for('static', filename="images/small-checkmark.jpg") }}" alt="Induced subgraph in G" style="height:15px;width:15px;display: none;" id="K4Yes" class="containsPictures">
-                        <img src="{{ url_for('static', filename="images/small-x.jpg") }}" alt="Induced subgraph in G" style="height:15px;width:15px;display: none;" id="K4No" class="containsPictures">
-                        <br/>
-                        <input type="checkbox" id="co-K4" name="co-K4" value="co_K4">: co-K4
-                        <img src="{{ url_for('static', filename="images/small-checkmark.jpg") }}" alt="Induced subgraph in G" style="height:15px;width:15px;display: none;" id="co_K4Yes" class="containsPictures">
-                        <img src="{{ url_for('static', filename="images/small-x.jpg") }}" alt="Induced subgraph in G" style="height:15px;width:15px;display: none;" id="co_K4No" class="containsPictures">
-                        <br/>
-                        <input type="checkbox" id="diamond" name="diamond" value="diamond">: diamond
-                        <img src="{{ url_for('static', filename="images/small-checkmark.jpg") }}" alt="Induced subgraph in G" style="height:15px;width:15px;display: none;" id="diamondYes" class="containsPictures">
-                        <img src="{{ url_for('static', filename="images/small-x.jpg") }}" alt="Induced subgraph in G" style="height:15px;width:15px;display: none;" id="diamondNo" class="containsPictures">
-                        <br/>
-                        <input type="checkbox" id="co-diamond" name="co-diamond" value="co_diamond">: co-diamond
-                        <img src="{{ url_for('static', filename="images/small-checkmark.jpg") }}" alt="Induced subgraph in G" style="height:15px;width:15px;display: none;" id="co_diamondYes" class="containsPictures">
-                        <img src="{{ url_for('static', filename="images/small-x.jpg") }}" alt="Induced subgraph in G" style="height:15px;width:15px;display: none;" id="co_diamondNo" class="containsPictures">
-                        <br/>
-                        <input type="checkbox" id="paw" name="paw" value="paw">: paw
-                        <img src="{{ url_for('static', filename="images/small-checkmark.jpg") }}" alt="Induced subgraph in G" style="height:15px;width:15px;display: none;" id="pawYes" class="containsPictures">
-                        <img src="{{ url_for('static', filename="images/small-x.jpg") }}" alt="Induced subgraph in G" style="height:15px;width:15px;display: none;" id="pawNo" class="containsPictures">
-                        <br/>
-                        <input type="checkbox" id="co-paw" name="co-paw" value="co_paw">: co-paw
-                        <img src="{{ url_for('static', filename="images/small-checkmark.jpg") }}" alt="Induced subgraph in G" style="height:15px;width:15px;display: none;" id="co_pawYes"  class="containsPictures">
-                        <img src="{{ url_for('static', filename="images/small-x.jpg") }}" alt="Induced subgraph in G" style="height:15px;width:15px;display: none;" id="co_pawNo" class="containsPictures">
-                        <br/>
-                        <input type="checkbox" id="claw" name="claw" value="claw">: claw
-                        <img src="{{ url_for('static', filename="images/small-checkmark.jpg") }}" alt="Induced subgraph in G" style="height:15px;width:15px;display: none;" id="clawYes" class="containsPictures">
-                        <img src="{{ url_for('static', filename="images/small-x.jpg") }}" alt="Induced subgraph in G" style="height:15px;width:15px;display: none;" id="clawNo" class="containsPictures">
-                        <br/>
-                        <input type="checkbox" id="co-claw" name="co-claw" value="co_claw">: co-claw
-                        <img src="{{ url_for('static', filename="images/small-checkmark.jpg") }}" alt="Induced subgraph in G" style="height:15px;width:15px;display: none;" id="co_clawYes" class="containsPictures">
-                        <img src="{{ url_for('static', filename="images/small-x.jpg") }}" alt="Induced subgraph in G" style="height:15px;width:15px;display: none;" id="co_clawNo" class="containsPictures">
-                        <br/>
-                        <input type="checkbox" id="C4" name="C4" value="C4">: C4
-                        <img src="{{ url_for('static', filename="images/small-checkmark.jpg") }}" alt="Induced subgraph in G" style="height:15px;width:15px;display: none;" id="C4Yes"  class="containsPictures">
-                        <img src="{{ url_for('static', filename="images/small-x.jpg") }}" alt="Induced subgraph in G" style="height:15px;width:15px;display: none;" id="C4No" class="containsPictures">
-                        <br/>
-                        <input type="checkbox" id="2K2" name="2K2" value="co_C4">: 2K2
-                        <img src="{{ url_for('static', filename="images/small-checkmark.jpg") }}" alt="Induced subgraph in G" style="height:15px;width:15px;display: none;" id="co_C4Yes"  class="containsPictures">
-                        <img src="{{ url_for('static', filename="images/small-x.jpg") }}" alt="Induced subgraph in G" style="height:15px;width:15px;display: none;" id="co_C4No" class="containsPictures">
-                        <br/>
-                        <input type="checkbox" id="C5" name="C5" value="C5">: C5
-                        <img src="{{ url_for('static', filename="images/small-checkmark.jpg") }}" alt="Induced subgraph in G" style="height:15px;width:15px;display: none;" id="C5Yes"  class="containsPictures">
-                        <img src="{{ url_for('static', filename="images/small-x.jpg") }}" alt="Induced subgraph in G" style="height:15px;width:15px;display: none;" id="C5No" class="containsPictures">
-                        <br/><br/>
+                        <table class="">
+                            <thead>
+                                <th> 4-Vertex</th>
+                                <th> 5-Vertex</th>
+                                <th> Special Graphs</th>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <input type="checkbox" id="K4" name="K4" value="K4">: K4 
+                                        <img src="{{ url_for('static', filename="images/small-checkmark.jpg") }}" alt="Induced subgraph in G" style="height:15px;width:15px;display: none;" id="K4Yes" class="containsPictures">
+                                        <img src="{{ url_for('static', filename="images/small-x.jpg") }}" alt="Induced subgraph in G" style="height:15px;width:15px;display: none;" id="K4No" class="containsPictures">
+                                    </td>
+                                    <td>
+                                        <input type="checkbox" id="K5" name="K5" value="K5">: K5
+                                        <img src="{{ url_for('static', filename="images/small-checkmark.jpg") }}" alt="Induced subgraph in G" style="height:15px;width:15px;display: none;" id="K5Yes" class="containsPictures">
+                                        <img src="{{ url_for('static', filename="images/small-x.jpg") }}" alt="Induced subgraph in G" style="height:15px;width:15px;display: none;" id="K5No" class="containsPictures">
+                                    </td>
+                                    <td>
+                                        <input type="checkbox" id="co-twin" name="co-twin" value="co_twin">: co-twin-C5
+                                        <img src="{{ url_for('static', filename="images/small-checkmark.jpg") }}" alt="Induced subgraph in G" style="height:15px;width:15px;display: none;" id="co_twinYes" class="containsPictures">
+                                        <img src="{{ url_for('static', filename="images/small-x.jpg") }}" alt="Induced subgraph in G" style="height:15px;width:15px;display: none;" id="co_twinNo" class="containsPictures">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <input type="checkbox" id="co-K4" name="co-K4" value="co_K4">: co-K4
+                                        <img src="{{ url_for('static', filename="images/small-checkmark.jpg") }}" alt="Induced subgraph in G" style="height:15px;width:15px;display: none;" id="co_K4Yes" class="containsPictures">
+                                        <img src="{{ url_for('static', filename="images/small-x.jpg") }}" alt="Induced subgraph in G" style="height:15px;width:15px;display: none;" id="co_K4No" class="containsPictures">
+                                    </td>
+                                    <td>
+                                        <input type="checkbox" id="co-K5" name="co-K5" value="co_K5">: co-K5
+                                        <img src="{{ url_for('static', filename="images/small-checkmark.jpg") }}" alt="Induced subgraph in G" style="height:15px;width:15px;display: none;" id="co_K5Yes" class="containsPictures">
+                                        <img src="{{ url_for('static', filename="images/small-x.jpg") }}" alt="Induced subgraph in G" style="height:15px;width:15px;display: none;" id="co_K5No" class="containsPictures">
+                                    </td>
+                                    <td>
+                                        <input type="checkbox" id="co-twin-house" name="co-twin-house" value="co_twin_house">: co-twin-house
+                                        <img src="{{ url_for('static', filename="images/small-checkmark.jpg") }}" alt="Inducsubgraph in G" style="height:15px;width:15px;display: none;" id="co_twin_houseYes" class="containsPictures">
+                                        <img src="{{ url_for('static', filename="images/small-x.jpg") }}" alt="Induced subgraph in G" style="height:15px;width:15px;display: none;" id="co_twin_houseNo" class="containsPictures">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <input type="checkbox" id="diamond" name="diamond" value="diamond">: diamond
+                                        <img src="{{ url_for('static', filename="images/small-checkmark.jpg") }}" alt="Induced subgraph in G" style="height:15px;width:15px;display: none;" id="diamondYes" class="containsPictures">
+                                        <img src="{{ url_for('static', filename="images/small-x.jpg") }}" alt="Induced subgraph in G" style="height:15px;width:15px;display: none;" id="diamondNo" class="containsPictures">
+                                    </td>
+                                    <td>
+                                        <input type="checkbox" id="K5minusE" name="K5minusE" value="K5minusE">: K5 - e
+                                        <img src="{{ url_for('static', filename="images/small-checkmark.jpg") }}" alt="Induced subgraph in G" style="height:15px;width:15px;display: none;" id="K5minusEYes" class="    containsPictures">
+                                        <img src="{{ url_for('static', filename="images/small-x.jpg") }}" alt="Induced subgraph in G" style="height:15px;width:15px;display: none;" id="K5minusENo" class="containsPictures">
+                                    </td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <input type="checkbox" id="co-diamond" name="co-diamond" value="co_diamond">: co-diamond
+                                        <img src="{{ url_for('static', filename="images/small-checkmark.jpg") }}" alt="Induced subgraph in G" style="height:15px;width:15px;display: none;" id="co_diamondYes" class="containsPictures">
+                                        <img src="{{ url_for('static', filename="images/small-x.jpg") }}" alt="Induced subgraph in G" style="height:15px;width:15px;display: none;" id="co_diamondNo" class="containsPictures">
+                                    </td>
+                                    <td>
+                                        <input type="checkbox" id="W4" name="W4" value="W4">: W4
+                                        <img src="{{ url_for('static', filename="images/small-checkmark.jpg") }}" alt="Induced subgraph in G" style="height:15px;width:15px;display: none;" id="W4Yes" class="containsPictures">
+                                        <img src="{{ url_for('static', filename="images/small-x.jpg") }}" alt="Induced subgraph in G" style="height:15px;width:15px;display: none;" id="W4No" class="containsPictures">
+                                    </td>
+                                    <td>
+                                        <input type="checkbox" id="W5" name="W5" value="W5">: W5
+                                        <img src="{{ url_for('static', filename="images/small-checkmark.jpg") }}" alt="Induced subgraph in G" style="height:15px;width:15px;display: none;" id="W5Yes" class="containsPictures">
+                                        <img src="{{ url_for('static', filename="images/small-x.jpg") }}" alt="Induced subgraph in G" style="height:15px;width:15px;display: none;" id="W5No" class="containsPictures">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <input type="checkbox" id="paw" name="paw" value="paw">: paw
+                                        <img src="{{ url_for('static', filename="images/small-checkmark.jpg") }}" alt="Induced subgraph in G" style="height:15px;width:15px;display: none;" id="pawYes" class="containsPictures">
+                                        <img src="{{ url_for('static', filename="images/small-x.jpg") }}" alt="Induced subgraph in G" style="height:15px;width:15px;display: none;" id="pawNo" class="containsPictures">
+                                    </td>
+                                    <td>
+                                        <input type="checkbox" id="gem" name="gem" value="gem">: gem (3-Fan)
+                                        <img src="{{ url_for('static', filename="images/small-checkmark.jpg") }}" alt="Induced subgraph in G" style="height:15px;width:15px;display: none;" id="gemYes" class="containsPictures">
+                                        <img src="{{ url_for('static', filename="images/small-x.jpg") }}" alt="Induced subgraph in G" style="height:15px;width:15px;display: none;" id="gemNo" class="containsPictures">
+
+                                    </td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <input type="checkbox" id="co-paw" name="co-paw" value="co_paw">: co-paw
+                                        <img src="{{ url_for('static', filename="images/small-checkmark.jpg") }}" alt="Induced subgraph in G" style="height:15px;width:15px;display: none;" id="co_pawYes"  class="containsPictures">
+                                        <img src="{{ url_for('static', filename="images/small-x.jpg") }}" alt="Induced subgraph in G" style="height:15px;width:15px;display: none;" id="co_pawNo" class="containsPictures">
+                                    </td>
+                                    <td>
+                                        <input type="checkbox" id="chair" name="chair" value="chair">: chair
+                                        <img src="{{ url_for('static', filename="images/small-checkmark.jpg") }}" alt="Induced subgraph in G" style="height:15px;width:15px;display: none;" id="chairYes"  class="containsPictures">
+                                        <img src="{{ url_for('static', filename="images/small-x.jpg") }}" alt="Induced subgraph in G" style="height:15px;width:15px;display: none;" id="chairNo" class="containsPictures">
+                                    </td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <input type="checkbox" id="claw" name="claw" value="claw">: claw
+                                        <img src="{{ url_for('static', filename="images/small-checkmark.jpg") }}" alt="Induced subgraph in G" style="height:15px;width:15px;display: none;" id="clawYes" class="containsPictures">
+                                        <img src="{{ url_for('static', filename="images/small-x.jpg") }}" alt="Induced subgraph in G" style="height:15px;width:15px;display: none;" id="clawNo" class="containsPictures">
+                                    </td>
+                                    <td>
+                                        <input type="checkbox" id="butterfly" name="butterfly" value="butterfly">: butterfly
+                                        <img src="{{ url_for('static', filename="images/small-checkmark.jpg") }}" alt="Induced subgraph in G" style="height:15px;width:15px;display: none;" id="butterflyYes" class="containsPictures">
+                                        <img src="{{ url_for('static', filename="images/small-x.jpg") }}" alt="Induced subgraph in G" style="height:15px;width:15px;display: none;" id="butterflyNo" class="containsPictures">
+                                    </td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <input type="checkbox" id="co-claw" name="co-claw" value="co_claw">: co-claw
+                                        <img src="{{ url_for('static', filename="images/small-checkmark.jpg") }}" alt="Induced subgraph in G" style="height:15px;width:15px;display: none;" id="co_clawYes" class="containsPictures">
+                                        <img src="{{ url_for('static', filename="images/small-x.jpg") }}" alt="Induced subgraph in G" style="height:15px;width:15px;display: none;" id="co_clawNo" class="containsPictures">
+                                    </td>
+                                    <td>
+                                        <input type="checkbox" id="co-butterfly" name="co-butterfly" value="co_butterfly">: co-butterfly
+                                        <img src="{{ url_for('static', filename="images/small-checkmark.jpg") }}" alt="Induced subgraph in G" style="height:15px;width:15px;display: none;" id="co_butterflyYes" class="containsPictures">
+                                        <img src="{{ url_for('static', filename="images/small-x.jpg") }}" alt="Induced subgraph in G" style="height:15px;width:15px;display: none;" id="co_butterflyNo" class="containsPictures">
+                                    </td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <input type="checkbox" id="C4" name="C4" value="C4">: C4
+                                        <img src="{{ url_for('static', filename="images/small-checkmark.jpg") }}" alt="Induced subgraph in G" style="height:15px;width:15px;display: none;" id="C4Yes"  class="containsPictures">
+                                        <img src="{{ url_for('static', filename="images/small-x.jpg") }}" alt="Induced subgraph in G" style="height:15px;width:15px;display: none;" id="C4No" class="containsPictures">
+                                    </td>
+                                    <td>
+                                        <input type="checkbox" id="C5" name="C5" value="C5">: C5
+                                        <img src="{{ url_for('static', filename="images/small-checkmark.jpg") }}" alt="Induced subgraph in G" style="height:15px;width:15px;display: none;" id="C5Yes"  class="containsPictures">
+                                        <img src="{{ url_for('static', filename="images/small-x.jpg") }}" alt="Induced subgraph in G" style="height:15px;width:15px;display: none;" id="C5No" class="containsPictures">
+                                    </td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <input type="checkbox" id="2K2" name="2K2" value="co_C4">: 2K2
+                                        <img src="{{ url_for('static', filename="images/small-checkmark.jpg") }}" alt="Induced subgraph in G" style="height:15px;width:15px;display: none;" id="co_C4Yes"  class="containsPictures">
+                                        <img src="{{ url_for('static', filename="images/small-x.jpg") }}" alt="Induced subgraph in G" style="height:15px;width:15px;display: none;" id="co_C4No" class="containsPictures">
+                                    </td>
+                                    <td>
+                                        <input type="checkbox" id="kite" name="kite" value="kite">: kite
+                                        <img src="{{ url_for('static', filename="images/small-checkmark.jpg") }}" alt="Induced subgraph in G" style="height:15px;width:15px;display: none;" id="kiteYes"  class="containsPictures">
+                                        <img src="{{ url_for('static', filename="images/small-x.jpg") }}" alt="Induced subgraph in G" style="height:15px;width:15px;display: none;" id="kiteNo" class="containsPictures">
+                                    </td>
+                                    <td></td>
+                                </tr>
+                            </tbody>
+                        </table>
                         <button onclick="check4VertexGraphs()" type="button" class="btn btn-info" value="G contains">G contains?</button>
                         <button onclick="k_vertex()" type="button" class="btn btn-success" value="G's k-vertex">G find k-vertex</button>
                     </div>
