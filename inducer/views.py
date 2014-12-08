@@ -15,6 +15,7 @@ from inducer.container import induced_subgraph, k_vertex
 from pprint import PrettyPrinter
 from inducer.helper import convert_to_networkx, convert_to_d3, text_to_d3
 from inducer.helper import complement, join, d3_to_text
+from inducer.dcolor import Dcolor 
 from inducer.colorable import coloring
 from os.path import join as filepath
 from os import getcwd
@@ -120,3 +121,11 @@ def find_coloring():
     graph = convert_to_networkx(graph)
     colored = coloring(graph, logger=logger)
     return json.dumps(colored) 
+
+@app.route("/dcoloring", methods=["POST"])
+def find_dcoloring():
+    print(request.data)
+    graph = json.loads(request.data)
+    graph = convert_to_networkx(graph)
+    colored = Dcolor(graph).color()
+    return json.dumps(colored)

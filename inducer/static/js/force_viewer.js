@@ -908,10 +908,60 @@ function colorGraph(A, graph_name){
         redraw(A);
         $('#' + graph_name + 'ColorLoader').hide();
       }else{
+        $('#' + graph_name + 'ColorLoader').hide();
         alert("No coloring could be found (>10)");
       }
     }, error: function(request, error){
         alert("Error-> check console");
+        $('#' + graph_name + 'ColorLoader').hide();
+        console.log(request);
+        console.log(error);
+    }
+  });  
+}
+
+function dColorGraph(A, graph_name){
+  /* dColorGraph
+    a function which colors one graph with lowest chromatic number
+    using the dcolor method
+    Parameters:
+      A: the graph to color
+      graph_name: the name of the graph labels to update
+  */
+  $('#D' + graph_name + 'ColorLoader').show();
+  var G = {
+      nodes: [],
+      edges: []
+  }
+  var arrayLength = A.nodes.length;
+  for (var i = 0; i < arrayLength; i++){
+    G.nodes.push(A.nodes[i].index);
+  }
+  arrayLength = A.links.length;
+  for (var i = 0; i < arrayLength; i++){
+    G.edges.push([A.links[i].source.index, A.links[i].target.index]);
+  }
+  console.log(G);
+  $.ajax({
+    type: 'POST',
+    url: '/dcoloring',
+    contentType: "application/json",
+    data: JSON.stringify(G),
+      dataType: "json",
+    success: function(graph){
+      console.log(graph);
+      if (graph != null){
+        clearSubgraph();
+        A.coloring = graph;
+        $("#" + graph_name +"Coloring").text(graph_name + " Coloring: " + graph.length);
+        redraw(A);
+        $('#D' + graph_name + 'ColorLoader').hide();
+      }else{
+        alert("No coloring could be found (>10)");
+      }
+    }, error: function(request, error){
+        alert("Error-> check console");
+        $('#D' + graph_name + 'ColorLoader').hide();
         console.log(request);
         console.log(error);
     }
