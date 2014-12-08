@@ -14,7 +14,6 @@ from itertools import permutations
 import logging
 import copy
 from pprint import PrettyPrinter
-from inducer.stack import DStack
 class Dcolor():
     def __init__(self, graph, logger=None):
         if logger is None:
@@ -27,16 +26,39 @@ class Dcolor():
         self.pp = PrettyPrinter(indent=4)
 
     def chromaic_number(self):
+        '''
+        a method to determine the chromatic number of the graph
+        Parameters:
+            None
+        Returns:
+            : the chromatic number (int)
+        '''
         if self.coloring is None:
             self.color()
         return len(self.coloring)
     
     def color(self):
+        '''
+        a method to determine a graph coloring
+        Parameters:
+            None
+        Returns:
+            self.coloring: the graph coloring (list)
+        '''
         if self.coloring is None:
             self.color_aux()
         return self.coloring
 
     def create_clique_list(self):
+        '''
+        a method to create a list of cliques
+        Parameters:
+            None
+        Returns:
+            cliques: the list of cliques (list)
+            chromatic: the chromatic number (int)
+            l_index: the largest clique index (int)
+        '''
         g = self.graph.copy()
         chromatic = 0
         l_index = 0
@@ -61,19 +83,41 @@ class Dcolor():
         return cliques, chromatic, l_index
 
     def color_aux(self):
-        cliques = []
-        g = self.graph.copy()
+        '''
+        a method to help with coloring
+        Sets self.coloring to a valid coloring
+        Parameters:
+            None
+        Returns:
+            None
+        '''
+        self.logger.debug("Coloring")
         cliques, chromatic, index = self.create_clique_list()
         done = False
         if chromatic == len(self.graph.nodes()):
             done = True
             coloring = cliques[0]
+            self.logger.debug("Graph is a Clique: %d" % chromatic)
+        elif chromatic == 2:
+            cycles = nx.cycle_basis(self.graph)
+            odd = False
+            for cycle in cycles:
+                if len(cycle) % 2 == 1:
+                    odd = True
+            if odd:
+                largest = cliques.pop(index)
+                largest.append([])
+                chromatic += 1
+            else:
+                largest = cliques.pop(index)
         else:
             largest = cliques.pop(index)
         while not done:
+            self.logger.info('Testing Chromatic Number: %d' % chromatic)
             coloring = self.coloring_step(cliques, largest)
             if coloring is None:
-                largest.append([])
+                largest.append([]) # equivalent to adding a new color
+                chromatic += 1
             else:
                 done = True
         self.coloring = coloring
@@ -105,7 +149,15 @@ class Dcolor():
                     if result is not None:
                         break
         return result
+
     def copy_list(self, l):
+        '''
+        a method to copy a list
+        Parameters:
+            l: the list to copy (list)
+        Returns:
+            result: the copied list (list)
+        '''
         result = []
         for element in l:
             result.append(copy.deepcopy(element))
@@ -222,7 +274,6 @@ class Test(unittest.TestCase):
         self.assertEqual(i, 0)
         
     def testColor(self):
-        g = make_claw()
         result = self.dcolor.color()
         expect = [[0], [1, 2, 3]]
         self.assertEqual(expect, result, "Coloring: Claw Case")
@@ -254,6 +305,7 @@ class Test(unittest.TestCase):
         self.assertEqual(expect, color)
 
     def testColoringHardGraph(self):
+        # C5 + 5 Xi
         g = make_cycle(5)
         index = 0
         for i in range(5, 10):
@@ -266,12 +318,50 @@ class Test(unittest.TestCase):
         g.add_edge(5, 8)
         g.add_edge(6, 8)
         g.add_edge(7, 9)
-        print(g.edges())
         self.dcolor = Dcolor(g)
         color = self.dcolor.color()
-        print(color)
+        expect = [[1, 8, 9], [5, 4, 7], [2], [0, 3, 6]]
+        self.assertEqual(self.dcolor.valid_coloring(color), True)
+        self.assertEqual(color, expect)
+        # C5 + 2 Yi
+        g = make_cycle(5)
+        g.add_node(5)
+        g.add_edge(0,5)
+        g.add_edge(1,5)
+        g.add_edge(2,5)
+        g.add_node(6)
+        g.add_edge(0,6)
+        g.add_edge(3,6)
+        g.add_edge(4,6)
+        self.dcolor = Dcolor(g)
+        color = self.dcolor.color()
+        expect = [[0, 3], [1, 4], [5, 6], [2]]
+        self.assertEqual(self.dcolor.valid_coloring(color), True)
+        self.assertEqual(color, expect)
         
-        
+        # C5 Joined K5
+        # does not work efficiently for this atm
+#         k5 = nx.Graph()
+#         for i in range (0,5):
+#             k5.add_node(i)
+#             for edge in range(0, i):
+#                 k5.add_edge(edge, i)
+#         g = join(k5, make_cycle(5))
+#         self.dcolor = Dcolor(g)
+#         print('color hard one')
+#         color = self.dcolor.color()
+#         print(color)
+
+    def testColorCycle(self):
+        g = make_cycle(5)
+        for i in range(5, 100):
+            g.add_node(i)
+            g.add_edge(i - 1, i)
+        self.dcolor = Dcolor(g)
+        color = self.dcolor.color()
+        self.assertEqual(len(color), 3)
+        self.assertEqual(self.dcolor.valid_coloring(color), True)
+
     def testColoringClique(self):
         g = make_cycle(3)
         self.dcolor = Dcolor(g)
