@@ -119,6 +119,7 @@ var last_clicked = null;
 var four_nodes = [0, 1, 2, 3];
 var five_nodes =  [0, 1, 2, 3, 4];
 var six_nodes = [0, 1, 2, 3, 4, 5];
+var seven_nodes = [0, 1 ,2 ,3 ,4, 5, 6, 7];
 var GRAPHS ={
                   claw:{nodes:four_nodes, edges:[[0, 1], [0, 2], [0, 3]]},
                   co_claw:{nodes:four_nodes, edges:[[1, 2], [2, 3], [1, 3]]},
@@ -147,7 +148,9 @@ var GRAPHS ={
                   co_p2_p3:{nodes:five_nodes, edges:[[0, 1], [0, 3], [0, 4], [1, 2], [1, 3], [2, 3], [2, 4]]},
                   co_R:{nodes:six_nodes, edges:[[0, 1], [0, 2], [0, 3], [1, 2], [1, 3], [1, 4], [2, 3], [3, 4], [4, 5]]},
                   bridge:{nodes:six_nodes, edges:[[0, 1], [0, 2], [0, 3], [1, 2], [1, 3], [1, 4], [1, 5], [2, 3], [3, 4], [3, 5], [4, 5]]},
-                  C6:{nodes:six_nodes, edges:[[0, 1], [0, 5], [1, 2], [2, 3], [3, 4], [4, 5]]}
+                  C6:{nodes:six_nodes, edges:[[0, 1], [0, 5], [1, 2], [2, 3], [3, 4], [4, 5]]},
+                  C7:{nodes:six_nodes, edges:[[0, 1], [0, 6], [1, 2], [2, 3], [3, 4], [4, 5], [5,6]]}
+                  //C7:{nodes:seven_nodes, edges:[[0,1], [0,6], [1,2], [2,3], [3,4], [4,5], [5,6]]}
                 };
 // add keyboard callback
 d3.select(window)
