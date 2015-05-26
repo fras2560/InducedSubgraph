@@ -207,6 +207,7 @@ function hmousemove(){
 }
 
 function gdragstart(){
+  console.log("Gdrag");
   last_clicked = g_graph;
   updateClickLabel("G");
   mousedown(g_graph);
@@ -219,6 +220,7 @@ function hdragstart(){
 }
 
 function gdrag(){
+  console.log("Gdrag");
   var point = d3.svg.touch(this);
   mousemove(g_graph, point[0], point[1]);
 }
@@ -344,6 +346,7 @@ function redraw(graph) {
         })
       .on("dragstart",
         function(d){
+          console.log("Drag start");
           graph.mousedown_link = d; 
           if (graph.mousedown_link == graph.selected_link) graph.selected_link = null;
           else graph.selected_link = graph.mousedown_link; 
@@ -556,10 +559,48 @@ function redraw(graph) {
         redraw(graph);
       } 
     })
-    .transition()
-      .duration(750)
-      .ease('elastic');
+  .on("drag", 
+      function(d){
+        // redraw()
+      })
+  .on("dragstart", function(d){
+      // disable zoom
+      graph.vis.call(d3.behavior.zoom().on("zoom"), null);
 
+      graph.mousedown_node = d;
+      if (graph.mousedown_node == graph.selected_node) graph.selected_node = null;
+      else graph.selected_node = graph.mousedown_node; 
+      graph.selected_link = null; 
+      // reposition drag line
+      graph.drag_line
+          .attr("class", "link")
+          .attr("x1", graph.mousedown_node.x)
+          .attr("y1", graph.mousedown_node.y)
+          .attr("x2", graph.mousedown_node.x)
+          .attr("y2", graph.mousedown_node.y);
+      redraw(graph); 
+  })
+  .on("dragend", function(d){
+      if (graph.mousedown_node) {
+        graph.mouseup_node = d; 
+        if (graph.mouseup_node == graph.mousedown_node) { resetMouseVars(graph); return; }
+
+        // add link
+        var link = {source: graph.mousedown_node, target: graph.mouseup_node};
+        graph.links.push(link);
+
+        // select new link
+        graph.selected_link = link;
+        graph.selected_node = null;
+
+        // enable zoom
+        graph.vis.call(d3.behavior.zoom().on("zoom"), graph.scale);
+        redraw(graph);
+      } 
+    })
+  .transition()
+      .duration(750)
+      .ease('elastic')
   graph.text.exit().transition()
     .remove();
 
