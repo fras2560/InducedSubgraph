@@ -1,6 +1,7 @@
 var width = 400,
     height = 400,
-    fill = d3.scale.category20();
+    fill = d3.scale.category20(),
+    touchLast;
 
 
 var g_outer = d3.select("#g_graph")
@@ -21,9 +22,9 @@ var g_vis = g_outer
     .call(d3.behavior.zoom().on("zoom", grescale))
     .on("dblclick.zoom", null)
   .append("svg:g")
-    .on("drag", gdrag)
-    .on("dragstart", gdragstart)
-    .on("dragend", gdragend)
+    .on("touchmove", gdrag)
+    .on("touchstart", gdragstart)
+    .on("touchend", gdragend)
     .on("mousemove", gmousemove)
     .on("mousedown", gmousedown)
     .on("mouseup", gmouseup);
@@ -38,9 +39,9 @@ var h_vis = h_outer
     .call(d3.behavior.zoom().on("zoom", hrescale))
     .on("dblclick.zoom", null)
   .append('svg:g')
-    .on("drag", hdrag)
-    .on("dragstart", hdragstart)
-    .on("dragend", hdragend)
+    .on("touchmove", hdrag)
+    .on("touchstart", hdragstart)
+    .on("touchend", hdragend)
     .on("mousemove", hmousemove)
     .on("mousedown", hmousedown)
     .on("mouseup", hmouseup);
@@ -198,39 +199,43 @@ function hmousedown(){
 
 function gmousemove(){
   var point = d3.svg.mouse(this);
-  mousemove(g_graph, point[0], point[1]);
+  mousemove(g_graph, parseInt(point[0]), parseInt(point[1]));
 }
 
 function hmousemove(){
   var point = d3.svg.mouse(this)
-  mousemove(h_graph, point[0], point[1]);
+  mousemove(h_graph, parseInt(point[0]), parseInt(point[1]));
 }
 
 function gdragstart(){
   console.log("Gdrag");
   last_clicked = g_graph;
   updateClickLabel("G");
+  touchLast = d3.svg.touches(this)[0]
   mousedown(g_graph);
 }
 
 function hdragstart(){
   last_clicked = h_graph;
   updateClickLabel("H")
+  touchLast = d3.svg.touches(this)[0]
   mousedown(h_graph);
 }
 
 function gdrag(){
-  console.log("Gdrag");
-  var point = d3.svg.touch(this);
-  mousemove(g_graph, point[0], point[1]);
+  var point = d3.svg.touches(this)[0];
+  touchLast = point;
+  mousemove(g_graph, parseInt(point[0]), parseInt(point[1]));
 }
 
 function hdrag(){
-  var point = d3.svg.touch(this)
-  mousemove(h_graph, point[0], point[1]);
+  var point = d3.svg.touches(this)[0];
+  touchLast = point;
+  mousemove(h_graph, parseInt(point[0]), parseInt(point[1]));
 }
 
 function mouseup(graph, xpoint, ypoint) {
+  console.log("Touch end", graph);
   if (graph.mousedown_node) {
     // hide drag line
     graph.drag_line
@@ -242,6 +247,7 @@ function mouseup(graph, xpoint, ypoint) {
       clearColoring();
 
       // add node
+      console.log("Node Added")
       var node = {x: xpoint, y: ypoint, name:graph.nodes.length},
         n = graph.nodes.push(node);
 
@@ -265,12 +271,15 @@ function gmouseup(){
 }
 
 function gdragend(){
-  var point = d4.svg.touch(this);
-  mouseup(g_graph, point[0], point[1]);
+  var point =touchLast;
+  touchLast = null;
+  console.log("Done", point);
+  mouseup(g_graph, parseInt(point[0]), parseInt(point[1]));
 }
 
 function hdragend(){
-  var point = d4.svg.touch(this);
+  var point = touchLast;
+  touchLast = null;
   mouseup(h_graph, point[0], point[1]);
 }
 
@@ -344,7 +353,7 @@ function redraw(graph) {
           graph.selected_node = null; 
           redraw(graph); 
         })
-      .on("dragstart",
+      .on("touchstart",
         function(d){
           console.log("Drag start");
           graph.mousedown_link = d; 
@@ -384,8 +393,9 @@ function redraw(graph) {
 
           redraw(graph); 
         })
-      .on("dragstart", function(d){
+      .on("touchstart", function(d){
           // disable zoom
+          console.log("Touch Start", d)
           graph.vis.call(d3.behavior.zoom().on("zoom"), null);
 
           graph.mousedown_node = d;
@@ -403,14 +413,14 @@ function redraw(graph) {
 
           redraw(graph); 
       })
-      .on("drag", function(d){
+      .on("touchmove", function(d){
           // nothing
       })
       .on("mousedrag",
         function(d) {
           // redraw();
       })
-      .on('dragend', function(d){
+      .on('touchend', function(d){
           if (graph.mousedown_node) {
             graph.mouseup_node = d; 
             if (graph.mouseup_node == graph.mousedown_node) { resetMouseVars(graph); return; }
@@ -559,11 +569,11 @@ function redraw(graph) {
         redraw(graph);
       } 
     })
-  .on("drag", 
+  .on("touchmove", 
       function(d){
         // redraw()
       })
-  .on("dragstart", function(d){
+  .on("touchstart", function(d){
       // disable zoom
       graph.vis.call(d3.behavior.zoom().on("zoom"), null);
 
@@ -580,7 +590,7 @@ function redraw(graph) {
           .attr("y2", graph.mousedown_node.y);
       redraw(graph); 
   })
-  .on("dragend", function(d){
+  .on("touchend", function(d){
       if (graph.mousedown_node) {
         graph.mouseup_node = d; 
         if (graph.mouseup_node == graph.mousedown_node) { resetMouseVars(graph); return; }
