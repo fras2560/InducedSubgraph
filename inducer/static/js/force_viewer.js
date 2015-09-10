@@ -761,8 +761,12 @@ function check4VertexGraphs(){
   var names = [];
   $(':checkbox').each(function() {
     if (this.checked == true){
+      if (this.value == "ehf"){
+        checkEvenHoleFree(G)
+      }else{
        Hgraphs.push(GRAPHS[this.value]);
        names.push(this.value);
+      }
     }
   });
   // hide all indicators
@@ -771,6 +775,37 @@ function check4VertexGraphs(){
   for(var graph = 0; graph < end;graph++){
     checkContains_aux(G, Hgraphs[graph], names[graph]);
   }
+}
+function checkEvenHoleFree(G){
+  var contains = false;
+  $.ajax(
+  {
+     type: "POST",
+     contentType: "application/json",
+     url: "/evenholefree",
+     data: JSON.stringify({"G":G}),
+             dataType: "json",
+             success: function(results)
+             {
+              if (results.success == true){
+                $('#contains').text("G contains H: Yes");
+                g_graph.induced_nodes = results.nodes;
+                g_graph.induced_edges = results.edges;
+                redraw(g_graph);
+                $('#ehfYes').show();
+              }else{
+                $('#ehfNo').show();
+                g_graph.induced_nodes = null;
+                g_graph.induced_edges = null;
+                redraw(g_graph);
+              }
+             }, error: function(request, error){ 
+               alert("Error: Check console");
+               console.log(request);
+               console.log(error)
+             }          
+    }
+  );
 }
 
 function checkContains_aux(G, H, multi){

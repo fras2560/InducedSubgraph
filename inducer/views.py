@@ -17,6 +17,7 @@ from inducer.helper import convert_to_networkx, convert_to_d3, text_to_d3
 from inducer.helper import complement, join, d3_to_text
 from inducer.dcolor import Dcolor 
 from inducer.colorable import coloring
+from inducer.EvenHoleFree import even_hole_free
 from os.path import join as filepath
 from os import getcwd
 
@@ -30,6 +31,18 @@ def allowed_file(filename):
 @app.route("/")
 def index():
     return render_template('new_finder.html')
+
+@app.route("/evenholefree", methods=["POST"])
+def ehf():
+    graph = json.loads(request.data)
+    g = convert_to_networkx(graph['G'])
+    subgraph = even_hole_free(g)
+    if subgraph is None:
+        subgraph = {'success': False}
+    else:
+        subgraph = convert_to_d3(subgraph)
+        subgraph['success'] = True
+    return json.dumps(subgraph)
 
 @app.route("/contains" , methods=["POST"])
 def contains():
