@@ -3,8 +3,8 @@ Created on Oct 21, 2015
 
 @author: Mobile Team
 '''
-from dcolor import dense_color_wrapper
-from colorable import coloring as color
+from inducer.dcolor import dense_color_wrapper
+from inducer.colorable import coloring as color
 def critical(G, logger=None, dense=False):
     '''
     a method that finds if the graph is critical

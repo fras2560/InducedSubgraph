@@ -22,7 +22,7 @@ from os.path import join as filepath
 from os import getcwd
 from inducer.clique_cutset import clique_cutset
 from inducer.strong_stable_set import strong_stable_set
-
+from inducer.critical import critical as is_critical
 pp = PrettyPrinter(indent=5)
 ALLOWED_EXTENSIONS = set(['txt'])
 
@@ -51,7 +51,8 @@ def sss():
 def critical():
     graph = json.loads(request.data)
     g = convert_to_networkx(graph)
-    return json.dumps(critical(g))
+    return json.dumps(is_critical(g))
+
 @app.route("/clique_cutset", methods=["POST"])
 def cutset():
     graph = json.loads(request.data)

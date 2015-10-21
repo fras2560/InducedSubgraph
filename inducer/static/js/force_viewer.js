@@ -1393,5 +1393,40 @@ function strongStableSet(A){
 }
 
 function critical(A){
-
+  $('#CriticalResult').text("")
+  $('#CriticalLoader').show();
+  var G = {
+      nodes: [],
+      edges: []
+  }
+  var arrayLength = A.nodes.length;
+  for (var i = 0; i < arrayLength; i++){
+    G.nodes.push(A.nodes[i].index);
+  }
+  arrayLength = A.links.length;
+  for (var i = 0; i < arrayLength; i++){
+    G.edges.push([A.links[i].source.index, A.links[i].target.index]);
+  }
+  console.log(G);
+  $.ajax({
+    type: 'POST',
+    url: '/critical',
+    contentType: "application/json",
+    data: JSON.stringify(G),
+      dataType: "json",
+    success: function(results){
+      console.log(results);
+      $('#CriticalLoader').hide();
+      if (results != null){
+          $('#CriticalResult').text("Yes - " + results);
+      }else{
+          $('#CriticalResult').text("No");
+      }
+    }, error: function(request, error){
+        alert("Error-> check console");
+        $('#CriticalLoader').hide();
+        console.log(request);
+        console.log(error);
+    }
+  });  
 }
