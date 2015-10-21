@@ -14,6 +14,10 @@ from itertools import permutations
 import logging
 import copy
 from pprint import PrettyPrinter
+
+def dense_color_wrapper(G, logger=None):
+    return Dcolor(G, logger=logger).color()
+
 class Dcolor():
     def __init__(self, graph, logger=None):
         if logger is None:

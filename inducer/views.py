@@ -21,6 +21,7 @@ from inducer.EvenHoleFree import even_hole_free
 from os.path import join as filepath
 from os import getcwd
 from inducer.clique_cutset import clique_cutset
+from strong_stable_set import strong_stable_set
 
 pp = PrettyPrinter(indent=5)
 ALLOWED_EXTENSIONS = set(['txt'])
@@ -34,6 +35,23 @@ def index():
     return render_template('new_finder.html')
 
 
+@app.route("/strong_stable_set", methods=["POST"])
+def sss():
+    graph = json.loads(request.data)
+    g = convert_to_networkx(graph)
+    subgraph = strong_stable_set(g)
+    if subgraph is None:
+        subgraph = {'success': False}
+    else:
+        subgraph = convert_to_d3(subgraph)
+        subgraph['success'] = True
+    return json.dumps(subgraph)
+
+@app.route("/critical", methods=["POST"])
+def critical():
+    graph = json.loads(request.data)
+    g = convert_to_networkx(graph)
+    return json.dumps(critical(g))
 @app.route("/clique_cutset", methods=["POST"])
 def cutset():
     graph = json.loads(request.data)
