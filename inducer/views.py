@@ -21,7 +21,7 @@ from inducer.EvenHoleFree import even_hole_free
 from os.path import join as filepath
 from os import getcwd
 from inducer.clique_cutset import clique_cutset
-from strong_stable_set import strong_stable_set
+from inducer.strong_stable_set import strong_stable_set
 
 pp = PrettyPrinter(indent=5)
 ALLOWED_EXTENSIONS = set(['txt'])

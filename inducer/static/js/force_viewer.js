@@ -1296,8 +1296,7 @@ function cliqueCutset(A){
     /* cliqueCutset
     a function which checks if a graph has a clique cutset
     Parameters:
-      A: the graph to color
-      graph_name: the name of the graph labels to update
+      A: the graph to check
   */
   $('#CliqueCutsetResult').text("")
   $('#CliqueCutsetLoader').show();
@@ -1341,4 +1340,58 @@ function cliqueCutset(A){
         console.log(error);
     }
   });  
+}
+
+function strongStableSet(A){
+    /* strongStableSet
+    a function which checks if a graph has a strong stable set
+    Parameters:
+      A: the graph to check
+  */
+  $('#StrongStableSetResult').text("")
+  $('#StrongStableSetLoader').show();
+  var G = {
+      nodes: [],
+      edges: []
+  }
+  var arrayLength = A.nodes.length;
+  for (var i = 0; i < arrayLength; i++){
+    G.nodes.push(A.nodes[i].index);
+  }
+  arrayLength = A.links.length;
+  for (var i = 0; i < arrayLength; i++){
+    G.edges.push([A.links[i].source.index, A.links[i].target.index]);
+  }
+  console.log(G);
+  $.ajax({
+    type: 'POST',
+    url: '/strong_stable_set',
+    contentType: "application/json",
+    data: JSON.stringify(G),
+      dataType: "json",
+    success: function(results){
+      console.log(results);
+      $('#StrongStableSetLoader').hide();
+      if (results.success == true){
+          $('#StrongStableSetResult').text("Yes")
+          A.induced_nodes = results.nodes;
+          A.induced_edges = results.edges;
+          redraw(A);
+      }else{
+          $('#StrongStableSetResult').text("No")
+          A.induced_nodes = null;
+          A.induced_edges = null;
+          redraw(A);
+      }
+    }, error: function(request, error){
+        alert("Error-> check console");
+        $('#StrongStableSetLoader').hide();
+        console.log(request);
+        console.log(error);
+    }
+  });  
+}
+
+function critical(A){
+
 }
