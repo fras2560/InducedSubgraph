@@ -10,6 +10,70 @@ Version: 2014-09-10
 -------------------------------------------------------
 """
 import networkx as nx
+
+def make_co_R():
+    '''
+    a method to assemble a co-R graph
+    Parameters:
+        None
+    Returns:
+        g: the graph g (networkx)
+    '''
+    g = make_diamond()
+    g.add_node(4)
+    g.add_node(5)
+    g.add_edge(0, 4)
+    g.add_edge(1, 4)
+    g.add_edge(2, 4)
+    g.add_edge(3, 5)
+    return g
+
+
+def make_bridge():
+    '''
+    a method to assemble a bridge graph
+    Parameters:
+        None
+    Returns:
+        g: the graph g (networkx)
+    '''
+    g = make_co_R()
+    g.add_edge(0, 5)
+    g.add_edge(1, 5)
+    return g
+
+def make_clique(n):
+    '''
+    makes a clique of size n
+    Parameters:
+        n: the size of the clique (int)
+    Returns:
+        clique: the graph (networkx)
+    '''
+    clique = nx.Graph()
+    for v in range(0, n):
+        clique.add_node(v)
+    end = len(clique.nodes())
+    for target in clique.nodes():
+        for source in range(target+1, end):
+            clique.add_edge(target, source)
+    return clique
+
+def make_kite():
+    '''
+    
+    make_kite
+    assembles a kite (co-chair)
+    Parameters:
+        None
+    Returns:
+        kite: the kite (Graph)
+    '''
+    kite = make_diamond()
+    kite.add_node(4)
+    kite.add_edge(2, 4)
+    return kite
+
 def make_claw():
     '''
     make_claw

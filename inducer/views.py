@@ -20,6 +20,7 @@ from inducer.colorable import coloring
 from inducer.EvenHoleFree import even_hole_free
 from os.path import join as filepath
 from os import getcwd
+from inducer.clique_cutset import clique_cutset
 
 pp = PrettyPrinter(indent=5)
 ALLOWED_EXTENSIONS = set(['txt'])
@@ -31,6 +32,19 @@ def allowed_file(filename):
 @app.route("/")
 def index():
     return render_template('new_finder.html')
+
+
+@app.route("/clique_cutset", methods=["POST"])
+def cutset():
+    graph = json.loads(request.data)
+    g = convert_to_networkx(graph)
+    subgraph = clique_cutset(g)
+    if subgraph is None:
+        subgraph = {'success': False}
+    else:
+        subgraph = convert_to_d3(subgraph)
+        subgraph['success'] = True
+    return json.dumps(subgraph)
 
 @app.route("/evenholefree", methods=["POST"])
 def ehf():

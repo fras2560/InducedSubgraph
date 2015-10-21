@@ -105,6 +105,18 @@
                     <a onclick="dColorGraph(h_graph,'G');" title="Use D color method"> DColor H<img src="{{ url_for('static', filename="images/ajax-loader.gif") }}" alt="Loader" style="height: 15px; width: 15px; display: none;" id="DHColorLoader" ></a>
                     
                 </li>
+                <li>
+                    <a onclick="togglePropertyCommands();">
+                        Properties<img src="{{ url_for('static', filename="images/dropdown.png") }}" alt="Dropdown" style="height:15px;width:15px;" >
+                    </a>
+                </li>
+                <li class="propertyCommands" style="display: none">
+                    <a onclick="cliqueCutset(g_graph);" title="Check for clique cutset">Clique Cutset:<img src="{{ url_for('static', filename="images/ajax-loader.gif") }}" alt="Loader" style="height: 15px; width: 15px; display: none;" id="CliqueCutsetLoader" ><span id="CliqueCutsetResult"></span></a>
+                </li>
+                <li class="propertyCommands" style="display: none">
+                    <a onclick="critical(g_graph);" title="Check for clique cutset">Critical:<img src="{{ url_for('static', filename="images/ajax-loader.gif") }}" alt="Loader" style="height: 15px; width: 15px; display: none;" id="CriticalLoader" ><span id="CriticalResult"></span></a>
+                </li>
+                
                 <li class="sidebar-brand">
                     <a href="#">
                         Status 
@@ -467,6 +479,10 @@
 
     function toggleCopyCommands(){
         $(".copyCommands").toggle();
+    }
+
+    function togglePropertyCommands(){
+        $('.propertyCommands').toggle();
     }
 
     function toggleJoinCommands(){

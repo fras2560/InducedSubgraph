@@ -1291,3 +1291,54 @@ function saveFile_aux(G){
             }
         });
 }
+
+function cliqueCutset(A){
+    /* cliqueCutset
+    a function which checks if a graph has a clique cutset
+    Parameters:
+      A: the graph to color
+      graph_name: the name of the graph labels to update
+  */
+  $('#CliqueCutsetResult').text("")
+  $('#CliqueCutsetLoader').show();
+  var G = {
+      nodes: [],
+      edges: []
+  }
+  var arrayLength = A.nodes.length;
+  for (var i = 0; i < arrayLength; i++){
+    G.nodes.push(A.nodes[i].index);
+  }
+  arrayLength = A.links.length;
+  for (var i = 0; i < arrayLength; i++){
+    G.edges.push([A.links[i].source.index, A.links[i].target.index]);
+  }
+  console.log(G);
+  $.ajax({
+    type: 'POST',
+    url: '/clique_cutset',
+    contentType: "application/json",
+    data: JSON.stringify(G),
+      dataType: "json",
+    success: function(results){
+      console.log(results);
+      $('#CliqueCutsetLoader').hide();
+      if (results.success == true){
+          $('#CliqueCutsetResult').text("Yes")
+          A.induced_nodes = results.nodes;
+          A.induced_edges = results.edges;
+          redraw(A);
+      }else{
+          $('#CliqueCutsetResult').text("No")
+          A.induced_nodes = null;
+          A.induced_edges = null;
+          redraw(A);
+      }
+    }, error: function(request, error){
+        alert("Error-> check console");
+        $('#CliqueCutsetLoader').hide();
+        console.log(request);
+        console.log(error);
+    }
+  });  
+}
