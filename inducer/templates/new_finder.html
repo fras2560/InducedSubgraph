@@ -222,7 +222,11 @@
                                         <img src="{{ url_for('static', filename="images/small-checkmark.jpg") }}" alt="Induced subgraph in G" style="height:15px;width:15px;display: none;" id="co_AYes" class="    containsPictures">
                                         <img src="{{ url_for('static', filename="images/small-x.jpg") }}" alt="Induced subgraph in G" style="height:15px;width:15px;display: none;" id="co_ANo" class="containsPictures">
                                     </td>
-                                <td></td>
+                                    <td>
+                                        <input type="checkbox" id="ISK4" name="ISK4" value="isk4">: ISK4
+                                        <img src="{{ url_for('static', filename="images/small-checkmark.jpg") }}" alt="Induced subgraph in G" style="height:15px;width:15px;display: none;" id="isk4Yes"  class="containsPictures">
+                                        <img src="{{ url_for('static', filename="images/small-x.jpg") }}" alt="Induced subgraph in G" style="height:15px;width:15px;display: none;" id="isk4No" class="containsPictures">
+                                    </td>
                                 </tr>
                                 <tr>
                                     <td>
@@ -346,11 +350,11 @@
                                         <img src="{{ url_for('static', filename="images/small-checkmark.jpg") }}" alt="Induced subgraph in G" style="height:15px;width:15px;display: none;" id="kiteYes"  class="containsPictures">
                                         <img src="{{ url_for('static', filename="images/small-x.jpg") }}" alt="Induced subgraph in G" style="height:15px;width:15px;display: none;" id="kiteNo" class="containsPictures">
                                     </td>
-                                    <td><input type="checkbox" id="EvenHoleFree" name="Even Hole Free" value="ehf">: Even Hole Free
+                                    <td>
+                                        <input type="checkbox" id="EvenHoleFree" name="Even Hole Free" value="ehf">: Even Hole Free
                                         <img src="{{ url_for('static', filename="images/small-checkmark.jpg") }}" alt="Induced subgraph in G" style="height:15px;width:15px;display: none;" id="ehfYes"  class="containsPictures">
                                         <img src="{{ url_for('static', filename="images/small-x.jpg") }}" alt="Induced subgraph in G" style="height:15px;width:15px;display: none;" id="ehfNo" class="containsPictures">
                                     </td>
-                                <td></td>
                                 </tr>
                             </tbody>
                         </table>

@@ -23,6 +23,7 @@ from os import getcwd
 from inducer.clique_cutset import clique_cutset
 from inducer.strong_stable_set import strong_stable_set
 from inducer.critical import critical as is_critical
+from inducer.isk4 import ISK4Free
 pp = PrettyPrinter(indent=5)
 ALLOWED_EXTENSIONS = set(['txt'])
 
@@ -70,6 +71,18 @@ def ehf():
     graph = json.loads(request.data)
     g = convert_to_networkx(graph['G'])
     subgraph = even_hole_free(g)
+    if subgraph is None:
+        subgraph = {'success': False}
+    else:
+        subgraph = convert_to_d3(subgraph)
+        subgraph['success'] = True
+    return json.dumps(subgraph)
+
+@app.route("/isk4free", methods=["POST"])
+def isk4():
+    graph = json.loads(request.data)
+    g = convert_to_networkx(graph['G'])
+    subgraph = ISK4Free(g).free()
     if subgraph is None:
         subgraph = {'success': False}
     else:

@@ -295,6 +295,21 @@ def complement(g):
     '''
     return nx.complement(g)
 
+def make_co_twin_c5():
+    '''
+    a function to assemble a co-Twin-C5
+    Parameters:
+        None
+    Returns:
+        g: the graph g (networkx)
+    '''
+    g = make_cycle(5)
+    g.add_node(5)
+    g.add_edge(5, 0)
+    g.add_edge(5, 2)
+    g.add_edge(5, 1)
+    return g
+
 import unittest
 import os
 class tester(unittest.TestCase):
