@@ -15,8 +15,8 @@ from inducer.container import induced_subgraph, k_vertex
 from pprint import PrettyPrinter
 from inducer.helper import convert_to_networkx, convert_to_d3, text_to_d3
 from inducer.helper import complement, join, d3_to_text
-from inducer.dcolor import Dcolor 
-from inducer.colorable import coloring
+from inducer.dsatur import inducer_coloring as dcoloring
+from inducer.backtracking import inducer_coloring as coloring
 from inducer.EvenHoleFree import even_hole_free
 from os.path import join as filepath
 from os import getcwd
@@ -27,9 +27,11 @@ from inducer.isk4 import ISK4Free
 pp = PrettyPrinter(indent=5)
 ALLOWED_EXTENSIONS = set(['txt'])
 
+
 def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
+
 
 @app.route("/")
 def index():
@@ -48,11 +50,13 @@ def sss():
         subgraph['success'] = True
     return json.dumps(subgraph)
 
+
 @app.route("/critical", methods=["POST"])
 def critical():
     graph = json.loads(request.data)
     g = convert_to_networkx(graph)
     return json.dumps(is_critical(g))
+
 
 @app.route("/clique_cutset", methods=["POST"])
 def cutset():
@@ -66,6 +70,7 @@ def cutset():
         subgraph['success'] = True
     return json.dumps(subgraph)
 
+
 @app.route("/evenholefree", methods=["POST"])
 def ehf():
     graph = json.loads(request.data)
@@ -77,6 +82,7 @@ def ehf():
         subgraph = convert_to_d3(subgraph)
         subgraph['success'] = True
     return json.dumps(subgraph)
+
 
 @app.route("/isk4free", methods=["POST"])
 def isk4():
@@ -90,7 +96,8 @@ def isk4():
         subgraph['success'] = True
     return json.dumps(subgraph)
 
-@app.route("/contains" , methods=["POST"])
+
+@app.route("/contains", methods=["POST"])
 def contains():
     print(request.data)
     graphs = json.loads(request.data)
@@ -107,10 +114,11 @@ def contains():
     print("Done")
     return json.dumps(subgraph)
 
+
 @app.route("/loadGraph", methods=["POST"])
 def load_graph():
     file = request.files['file']
-    result = {'graph': None, 'success':False}
+    result = {'graph': None, 'success': False}
     if file and allowed_file(file.filename):
         content = (file.read()).decode("UTF-8")
         print(content)
@@ -122,6 +130,7 @@ def load_graph():
             result['success'] = True
         return json.dumps(result)
 
+
 @app.route("/complement", methods=["POST"])
 def complement_graph():
     graph = json.loads(request.data)
@@ -129,6 +138,7 @@ def complement_graph():
     co_g = complement(g)
     co_g = convert_to_d3(co_g)
     return json.dumps(co_g)
+
 
 @app.route("/k_vertex", methods=["POST"])
 def k():
@@ -140,6 +150,7 @@ def k():
     k_vertexes = k_vertex(g, subgraphs)
     return json.dumps(k_vertexes)
 
+
 @app.route("/join", methods=["POST"])
 def join_graphs():
     graphs = json.loads(request.data)
@@ -148,6 +159,7 @@ def join_graphs():
     f = join(g, h)
     f = convert_to_d3(f)
     return json.dumps(f)
+
 
 @app.route("/save_file", methods=["POST"])
 def save_graph():
@@ -161,30 +173,34 @@ def save_graph():
             print(line)
     return json.dumps("graph.txt")
 
+
 @app.route("/<file_name>")
 def getFile(file_name):
-    fp = filepath(getcwd(), app.config['UPLOAD_FOLDER'],file_name)
+    fp = filepath(getcwd(), app.config['UPLOAD_FOLDER'], file_name)
     result = ""
-    with open (fp, "r") as f:
+    with open(fp, "r") as f:
         for line in f:
             result += line
     print(result)
     response = make_response(result)
-    response.headers["Content-Disposition"] = "attachment; filename=outbound.txt"
+    text = "attachment; filename=outbound.txt"
+    response.headers["Content-Disposition"] = text
     return response
+
 
 @app.route("/coloring", methods=["POST"])
 def find_coloring():
     print(request.data)
     graph = json.loads(request.data)
     graph = convert_to_networkx(graph)
-    colored = coloring(graph, logger=logger)
-    return json.dumps(colored) 
+    colored = coloring(graph)
+    return json.dumps(colored)
+
 
 @app.route("/dcoloring", methods=["POST"])
 def find_dcoloring():
     print(request.data)
     graph = json.loads(request.data)
     graph = convert_to_networkx(graph)
-    colored = Dcolor(graph).color()
+    colored = dcoloring(graph)
     return json.dumps(colored)
