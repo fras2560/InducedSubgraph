@@ -1115,6 +1115,7 @@ function colorGraph(A, graph_name){
       console.log(graph);
       if (graph != null){
         clearSubgraph();
+        clearColoring();
         A.coloring = graph;
         $("#" + graph_name +"Coloring").text(graph_name + " Coloring: " + graph.length);
         redraw(A);
@@ -1153,6 +1154,7 @@ function dColorGraph(A, graph_name){
   for (var i = 0; i < arrayLength; i++){
     G.edges.push([A.links[i].source.index, A.links[i].target.index]);
   }
+  clearColoring();
   console.log(G);
   $.ajax({
     type: 'POST',
@@ -1164,6 +1166,7 @@ function dColorGraph(A, graph_name){
       console.log(graph);
       if (graph != null){
         clearSubgraph();
+        clearColoring();
         A.coloring = graph;
         $("#" + graph_name +"Coloring").text(graph_name + " Coloring: " + graph.length);
         redraw(A);
