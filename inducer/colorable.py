@@ -14,12 +14,14 @@ import networkx as nx
 from itertools import permutations
 import logging
 import copy
+from inducer.helper import make_claw, make_diamond, make_cycle, join
+
 
 def valid_coloring(coloring, G):
-    '''
-    a function that determines if the coloring is valid
+    '''Returns whether a coloring is valid
+
     Parameters:
-        coloring: a list of colors in which each color is a list of nodes 
+        coloring: a list of colors in which each color is a list of nodes
                   e.g. [[1,2],[3]]
         G: a networkx graph (networkx)
     Returns:
@@ -35,21 +37,21 @@ def valid_coloring(coloring, G):
                 for neighbor in neighbors:
                     if neighbor in color:
                         valid = False
-                        break;
+                        break
                 if not valid:
-                    break;
+                    break
             if not valid:
-                break;
+                break
     return valid
 
+
 def add_list(l1, l2, index):
-    '''
-    a function that  adds the list l1 to the two dimensional
-    list l2
+    '''Returns list by adding l1 to l2
+
     Parameters:
         l1: the first list (list)
         l2: the second list (list of lists)
-        i1: the starting index to l1 (int)
+        index: the starting index to l1 (int)
     Returns:
         l: the list of lists(list of lists)
     '''
@@ -61,14 +63,13 @@ def add_list(l1, l2, index):
         index += 1
     return l
 
+
 def combine_color_clique(clique, color):
-    '''
-    a function that takes a clique list and a color split
-    and yields all the ways the clique list can be combine with coloring
+    '''Yields all the ways clique can be combine with coloring
+
     Parameters:
         clique: the clique (list of lists)
         color: the coloring (list of lists)
-        index: the index
     Returns:
         coloring: the combined color (list of lists)
     '''
@@ -89,10 +90,10 @@ def combine_color_clique(clique, color):
         else:
             yield add_list(c, color, 0)
 
+
 def coloring(G, logger=None):
-    '''
-    a function that finds the chromatic number of graph G
-    using brute force
+    '''Returns a coloring of G using brute force
+
     Parameters:
         G: the networkx graph (networkx)
         logger: the logger for the function (logging)
@@ -103,7 +104,6 @@ def coloring(G, logger=None):
         logging.basicConfig(level=logging.DEBUG,
                             format='%(asctime)s %(message)s')
         logger = logging.getLogger(__name__)
-
     valid = False
     largest = 0
     largest_clique = []
@@ -113,7 +113,8 @@ def coloring(G, logger=None):
             largest = len(clique)
             largest_clique = clique
     # set chromatic to the largest clique
-    chromatic  = largest - 1 # one less since add at start of loop
+    # one less since add at start of loop
+    chromatic = largest - 1
     if chromatic == 0:
         # can be no edge between any node
         coloring = [G.nodes()]
@@ -142,7 +143,7 @@ def coloring(G, logger=None):
                     ------------------------------\n
                     Testing Chromatic Number of %s\n
                     ------------------------------\n
-                    ''' %chromatic)
+                    ''' % chromatic)
         boxes = [balls] * chromatic
         for combo in permutations(nodes):
             logger.debug(combo)
@@ -156,7 +157,7 @@ def coloring(G, logger=None):
                         logger.debug(check)
                         coloring = check
                         valid = True
-                        break;
+                        break
                 if valid:
                     break
             if valid:
@@ -166,6 +167,7 @@ def coloring(G, logger=None):
             valid = True
             coloring = None
     return coloring
+
 
 def chromatic_number(G):
     '''
@@ -177,9 +179,10 @@ def chromatic_number(G):
     '''
     return len(coloring(G))
 
+
 def valid_split(split):
     '''
-    a function that checks if the split of nodes is valid 
+    a function that checks if the split of nodes is valid
     for that number of colors
     Parameters:
         split: the split of each color (tuple)
@@ -193,6 +196,7 @@ def valid_split(split):
             valid = False
     return valid
 
+
 def convert_combo(combo):
     '''
     a function that converts a combo tuple to a list
@@ -202,9 +206,10 @@ def convert_combo(combo):
         conversion: the converted combination (list)
     '''
     conversion = []
-    for c  in combo:
+    for c in combo:
         conversion.append(c)
     return conversion
+
 
 def assemble_coloring(nodes, split):
     '''
@@ -228,6 +233,7 @@ def assemble_coloring(nodes, split):
             coloring.append(color)
     return coloring
 
+
 def unlabeled_balls_in_unlabeled_boxes(balls, box_sizes):
     '''
     @author Dr. Phillip M. Feldman
@@ -236,20 +242,21 @@ def unlabeled_balls_in_unlabeled_boxes(balls, box_sizes):
         raise TypeError("balls must be a non-negative integer.")
     if balls < 0:
         raise ValueError("balls must be a non-negative integer.")
-    if not isinstance(box_sizes,list):
+    if not isinstance(box_sizes, list):
         raise ValueError("box_sizes must be a non-empty list.")
-    capacity= 0
+    capacity = 0
     for size in box_sizes:
         if not isinstance(size, int):
             raise TypeError("box_sizes must contain only positive integers.")
         if size < 1:
             raise ValueError("box_sizes must contain only positive integers.")
-        capacity+= size
+        capacity += size
     if capacity < balls:
         raise ValueError("The total capacity of the boxes is less than the "
                          "number of balls to be distributed.")
-    box_sizes= list( sorted(box_sizes)[::-1] )
+    box_sizes = list(sorted(box_sizes)[::-1])
     return unlabeled_balls_in_unlabeled_boxe(balls, box_sizes)
+
 
 def unlabeled_balls_in_unlabeled_boxe(balls, box_sizes):
     '''
@@ -261,7 +268,7 @@ def unlabeled_balls_in_unlabeled_boxe(balls, box_sizes):
         if box_sizes[0] >= balls:
             yield (balls,)
     else:
-        for balls_in_first_box in range( min(balls, box_sizes[0]), -1, -1 ):
+        for balls_in_first_box in range(min(balls, box_sizes[0]), -1, -1):
             balls_in_other_boxes = balls - balls_in_first_box
             short = unlabeled_balls_in_unlabeled_boxe
             for distribution_other in short(balls_in_other_boxes,
@@ -269,9 +276,8 @@ def unlabeled_balls_in_unlabeled_boxe(balls, box_sizes):
                 if distribution_other[0] <= balls_in_first_box:
                     yield (balls_in_first_box,) + distribution_other
 
-from inducer.helper import make_claw, make_diamond, make_cycle, join
-class Test(unittest.TestCase):
 
+class Test(unittest.TestCase):
     def setUp(self):
         pass
 
@@ -357,44 +363,51 @@ class Test(unittest.TestCase):
         # test invalid claw coloring
         coloring = [[0, 1, 2, 3]]
         valid = valid_coloring(coloring, g)
-        self.assertEqual(valid, False,
+        self.assertEqual(valid,
+                         False,
                          "Valid coloring: Failed for one coloring on claw")
-        
         coloring = [[1, 3, 2], [0]]
         valid = valid_coloring(coloring, g)
-        self.assertEqual(valid, True,
+        self.assertEqual(valid,
+                         True,
                          "Valid coloring: Failed for valid coloring on claw")
         # test valid claw coloring
         coloring = [[0], [1, 2, 3]]
         valid = valid_coloring(coloring, g)
-        self.assertEqual(valid, True,
+        self.assertEqual(valid,
+                         True,
                          "Valid coloring: Failed for valid coloring on claw")
         # test invalid claw coloring
         coloring = [[0, 1], [2, 3]]
         valid = valid_coloring(coloring, g)
-        self.assertEqual(valid, False,
+        self.assertEqual(valid,
+                         False,
                          "Valid coloring: Failed for invalid coloring on claw")
         # test valid diamond coloring
         g = make_diamond()
         coloring = [[0], [1], [2, 3]]
         valid = valid_coloring(coloring, g)
-        self.assertEqual(valid, True, 
-                         "Valid coloring: failed for valid coloring on diamond")
+        self.assertEqual(valid,
+                         True,
+                         '''
+                         Valid coloring: failed for valid coloring on diamond
+                         ''')
         coloring = [[3], [2], [0, 1]]
         valid = valid_coloring(coloring, g)
-        self.assertEqual(valid, False, 
+        self.assertEqual(valid,
+                         False,
                          '''
                          Valid coloring: failed for invalid coloring on diamond
                          ''')
 
     def testAddList(self):
-        l1 = [[1],[2]]
-        l2 = [[3],[4,5]]
+        l1 = [[1], [2]]
+        l2 = [[3], [4, 5]]
         result = add_list(l1, l2, 0)
         expect = [[1, 3], [2, 4, 5]]
         self.assertEqual(result, expect)
-        l1 = [[1],[2], [6]]
-        l2 = [[3],[4,5]]
+        l1 = [[1], [2], [6]]
+        l2 = [[3], [4, 5]]
         result = add_list(l1, l2, 0)
         expect = [[1, 3], [2, 4, 5], [6]]
         self.assertEqual(result, expect)
@@ -414,16 +427,19 @@ class Test(unittest.TestCase):
 
     def testValidSplit(self):
         split = (4, 0)
-        self.assertEqual(valid_split(split), False,
+        self.assertEqual(valid_split(split),
+                         False,
                          "Valid split: True on Invalid Split")
         split = (4, 1)
-        self.assertEqual(valid_split(split), True,
+        self.assertEqual(valid_split(split),
+                         True,
                          "Valid split: True on Valid Split")
 
     def testConvertCombo(self):
         combo = (4, 1)
         conversion = convert_combo(combo)
-        self.assertEqual(type(conversion), list,
+        self.assertEqual(type(conversion),
+                         list,
                          "Convert Combo: did not return list")
 
     def testAssembleColoring(self):
@@ -431,8 +447,10 @@ class Test(unittest.TestCase):
         combo = [1, 2, 3]
         result = assemble_coloring(combo, split)
         expect = [[3], [2, 1]]
-        self.assertEqual(expect, result, "Assemble Coloring: unexpected result")
+        self.assertEqual(expect,
+                         result,
+                         "Assemble Coloring: unexpected result")
 
 if __name__ == "__main__":
-    #import sys;sys.argv = ['', 'Test.testName']
+    # import sys;sys.argv = ['', 'Test.testName']
     unittest.main()

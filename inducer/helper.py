@@ -10,6 +10,9 @@ Version: 2014-09-10
 -------------------------------------------------------
 """
 import networkx as nx
+import unittest
+import os
+
 
 def make_co_R():
     '''
@@ -42,6 +45,7 @@ def make_bridge():
     g.add_edge(1, 5)
     return g
 
+
 def make_clique(n):
     '''
     makes a clique of size n
@@ -59,9 +63,9 @@ def make_clique(n):
             clique.add_edge(target, source)
     return clique
 
+
 def make_kite():
     '''
-    
     make_kite
     assembles a kite (co-chair)
     Parameters:
@@ -73,6 +77,7 @@ def make_kite():
     kite.add_node(4)
     kite.add_edge(2, 4)
     return kite
+
 
 def make_claw():
     '''
@@ -87,10 +92,12 @@ def make_claw():
     for x in range(0, 4):
         # add four vertices
         claw.add_node(x)
-    hub = 0 # 0-vertex is the hub of claw
+    # 0-vertex is the hub of claw
+    hub = 0
     for x in range(1, 4):
         claw.add_edge(hub, x)
     return claw
+
 
 def make_diamond():
     '''
@@ -112,6 +119,7 @@ def make_diamond():
     diamond.add_edge(1, 3)
     return diamond
 
+
 def make_co_diamond():
     '''
     make_co_diamond
@@ -122,6 +130,7 @@ def make_co_diamond():
         co_diamond: the co-diamond graph (networkx)
     '''
     return nx.complement(make_diamond())
+
 
 def make_co_claw():
     '''
@@ -134,6 +143,7 @@ def make_co_claw():
     '''
     return nx.complement(make_claw())
 
+
 def make_cycle(n):
     '''
     make_cycle
@@ -144,14 +154,15 @@ def make_cycle(n):
         cycle: the cycle (networkx)
     '''
     cycle = nx.Graph()
-    for vertex in range(0,n):
+    for vertex in range(0, n):
         # add all the vertices
         cycle.add_node(vertex)
-    for vertex in range(0,n):
+    for vertex in range(0, n):
         # add all the edges
         cycle.add_edge(vertex, (vertex+1) % n)
         cycle.add_edge(vertex, (vertex-1) % n)
     return cycle
+
 
 def make_wheel(n):
     '''
@@ -164,9 +175,10 @@ def make_wheel(n):
     '''
     wheel = make_cycle(n-1)
     wheel.add_node(n-1)
-    for edge in range(0,n-1):
-        wheel.add_edge(edge,n-1)
+    for edge in range(0, n-1):
+        wheel.add_edge(edge, n-1)
     return wheel
+
 
 def join(G, H):
     '''
@@ -192,8 +204,9 @@ def join(G, H):
     # join the two sets of nodes
     for v1 in G.nodes():
         for v2 in H.nodes():
-            F.add_edge(v1,v2+shift)
+            F.add_edge(v1, v2+shift)
     return F
+
 
 def convert_to_networkx(g):
     '''
@@ -212,6 +225,7 @@ def convert_to_networkx(g):
         graph.add_edge(edge[0], edge[1])
     return graph
 
+
 def convert_to_d3(g):
     '''
     conver_to_d3
@@ -222,17 +236,18 @@ def convert_to_d3(g):
     Returns:
         graph: python dictionary representation of a graph (dictionary)
     '''
-    graph = {'nodes': [], 'edges':[]}
+    graph = {'nodes': [], 'edges': []}
     for node in g.nodes():
         graph['nodes'].append(node)
     for edge in g.edges():
         graph['edges'].append(edge)
     return graph
 
+
 def text_to_d3(lines):
     '''
     text_to_networkx
-    a function that takes the lines from a text file and puts into a format for 
+    a function that takes the lines from a text file and puts into a format for
     d3 graph
     Parameters:
         lines: a list of lines from the text file (list)
@@ -240,7 +255,7 @@ def text_to_d3(lines):
         d3: a d3 representation of the graph
     '''
 #     try:
-    graph = {'nodes':[], 'edges':[]}
+    graph = {'nodes': [], 'edges': []}
     for line in lines:
         entries = line.split(":")
         try:
@@ -260,6 +275,7 @@ def text_to_d3(lines):
             graph['nodes'].append(node)
     return graph
 
+
 def d3_to_text(g):
     '''
     d3_to_text
@@ -271,7 +287,7 @@ def d3_to_text(g):
     '''
     graph = []
     for node in g['nodes']:
-        line = str(node) +":"
+        line = str(node) + ":"
         edges = []
         for edge in g['edges']:
             if node == edge[0]:
@@ -281,6 +297,7 @@ def d3_to_text(g):
         line = line + ",".join(edges)
         graph.append(line)
     return graph
+
 
 def complement(g):
     '''
@@ -294,6 +311,7 @@ def complement(g):
         does not have a unittest since not needed (written by someone else)
     '''
     return nx.complement(g)
+
 
 def make_co_twin_c5():
     '''
@@ -310,14 +328,14 @@ def make_co_twin_c5():
     g.add_edge(5, 1)
     return g
 
-import unittest
-import os
+
 class tester(unittest.TestCase):
     def setUp(self):
         pass
 
     def tearDown(self):
         pass
+
     def testMakeDiamond(self):
         g = make_diamond()
         edges = [(0, 1), (0, 2), (0, 3), (1, 2), (1, 3)]
@@ -338,21 +356,21 @@ class tester(unittest.TestCase):
     def testMakeClaw(self):
         g = make_claw()
         edges = [(0, 1), (0, 2), (0, 3)]
-        vertices =[0, 1, 2, 3]
+        vertices = [0, 1, 2, 3]
         self.assertEqual(edges, g.edges(), "Make Claw: failed on edges")
         self.assertEqual(vertices, g.nodes(), "Make Claw: failed on vertices")
 
     def testMakeCoClaw(self):
         g = make_co_claw()
         edges = [(1, 2), (1, 3), (2, 3)]
-        vertices =[0, 1, 2, 3]
+        vertices = [0, 1, 2, 3]
         self.assertEqual(edges, g.edges(), "Make Co-Claw: failed on edges")
         self.assertEqual(vertices, g.nodes(),
                          "Make Co-Claw: failed on vertices")
 
     def testMakeCycle(self):
         g = make_cycle(3)
-        edges = [(0,1), (0,2), (1,2)]
+        edges = [(0, 1), (0, 2), (1, 2)]
         vertices = [0, 1, 2]
         self.assertEqual(edges, g.edges(), "Make Cycle: failed on edges")
         self.assertEqual(vertices, g.nodes(), "Make Cycle: failed on vertices")
@@ -363,7 +381,8 @@ class tester(unittest.TestCase):
         h = nx.Graph()
         h.add_node(0)
         f = join(g, h)
-        expect = nx.wheel_graph(6) # expect a wheel
+        # expect a wheel
+        expect = nx.wheel_graph(6)
         self.assertEqual(expect.nodes(), f.nodes(),
                          " Join: nodes failed on wheel test")
         self.assertEqual(nx.is_isomorphic(f, expect), True,
@@ -373,9 +392,11 @@ class tester(unittest.TestCase):
         h = nx.complete_graph(3)
         f = join(g, h)
         expect = nx.complete_graph(6)
-        self.assertEqual(expect.nodes(), f.nodes(), 
+        self.assertEqual(expect.nodes(),
+                         f.nodes(),
                          "Join: nodes failed for K6 test")
-        self.assertEqual(nx.is_isomorphic(f, expect), True,
+        self.assertEqual(nx.is_isomorphic(f, expect),
+                         True,
                          " Join: edges failed on wheel K6 test")
 
     def testWheel(self):
@@ -383,14 +404,16 @@ class tester(unittest.TestCase):
         w = make_wheel(5)
         g = make_cycle(4)
         g.add_node(5)
-        g.add_edge(0,4)
-        g.add_edge(1,4)
-        g.add_edge(2,4)
-        g.add_edge(3,4)
-        self.assertEqual(w.edges(), g.edges(), "Make wheel: Failed for W5 test")
+        g.add_edge(0, 4)
+        g.add_edge(1, 4)
+        g.add_edge(2, 4)
+        g.add_edge(3, 4)
+        self.assertEqual(w.edges(),
+                         g.edges(),
+                         "Make wheel: Failed for W5 test")
 
     def testConvertToNetworkx(self):
-        g = {'edges': [[1,2]], 'nodes':[0, 1, 2]}
+        g = {'edges': [[1, 2]], 'nodes': [0, 1, 2]}
         result = convert_to_networkx(g)
         self.assertEqual(result.edges(), [(1, 2)],
                          "Convert to Networkx: Failed to add edges")
@@ -400,8 +423,8 @@ class tester(unittest.TestCase):
     def testConverToD3(self):
         g = make_cycle(4)
         result = convert_to_d3(g)
-        edges = [(0,1), (0,3), (1,2), (2,3)]
-        nodes = [0, 1, 2 ,3] 
+        edges = [(0, 1), (0, 3), (1, 2), (2, 3)]
+        nodes = [0, 1, 2, 3] 
         self.assertEqual(result['edges'], edges,
                          "Convert to D3: failed to add edges")
         self.assertEqual(result['nodes'], nodes,
@@ -411,19 +434,29 @@ class tester(unittest.TestCase):
         directory = os.getcwd()
         while "inducer" in directory:
             directory = os.path.dirname(directory)
-        claw = {'edges':[[0, 1], [0, 2], [0, 3]], 'nodes':[0, 1, 2, 3]}
-        c7 = {'edges':[[0, 1], [0, 6], [1, 2], [2, 3], [3, 4], [4, 5], [5, 6]] ,
-              'nodes':[0, 1, 2, 3, 4, 5, 6]}
-        co_claw = {'edges':[[1, 2], [1, 3], [2, 3]], 'nodes':[0, 1, 2, 3] }
+        claw = {'edges': [[0, 1], [0, 2], [0, 3]], 'nodes': [0, 1, 2, 3]}
+        c7 = {'edges': [[0, 1],
+                        [0, 6],
+                        [1, 2],
+                        [2, 3],
+                        [3, 4],
+                        [4, 5],
+                        [5, 6]],
+              'nodes': [0, 1, 2, 3, 4, 5, 6]}
+        co_claw = {'edges': [[1, 2], [1, 3], [2, 3]], 'nodes': [0, 1, 2, 3]}
         tests = {'test1.txt': claw, 'test2.txt': c7, 'test3.txt': co_claw}
-        for file, expect in tests.items():
-            filepath = os.path.join(directory, "graphs", file)
+        for f, expect in tests.items():
+            filepath = os.path.join(directory, "graphs", f)
             with open(filepath) as f:
                 content = f.read()
                 lines = content.replace("\r", "")
                 lines = lines.split("\n")
                 result = text_to_d3(lines)
-                self.assertEqual(expect ,result ,
-                                 "Test to D3 Failed: %s" % file)
+                self.assertEqual(expect,
+                                 result,
+                                 "Test to D3 Failed: %s" % f)
 
 
+if __name__ == "__main__":
+    # import sys;sys.argv = ['', 'Test.testName']
+    unittest.main()
