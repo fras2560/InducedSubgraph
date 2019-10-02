@@ -239,6 +239,7 @@ def d3_to_text(g):
 
 
 class testFunctions(unittest.TestCase):
+
     def graph_equal(self, g1, g2):
         equal = True
         for n1 in g1.nodes():
@@ -258,26 +259,26 @@ class testFunctions(unittest.TestCase):
         self.assertEqual(len(g.nodes()), 0)
         # create a simple graph
         d = {
-                "nodes": [0, 1, 2],
-                "edges":  [
-                          [0, 1],
-                          [0, 2],
-                          [1, 2]
-                         ]
-             }
+            "nodes": [0, 1, 2],
+            "edges":  [
+                [0, 1],
+                [0, 2],
+                [1, 2]
+            ]
+        }
         g = create_graph(g=d)
         self.assertEqual(len(g.edges()), 3)
         self.assertEqual(len(g.nodes()), 3)
 
     def testRest(self):
         d = {
-                "nodes": [0, 1, 2],
-                "edges": [
-                          [0, 1],
-                          [0, 2],
-                          [1, 2]
-                         ]
-             }
+            "nodes": [0, 1, 2],
+            "edges": [
+                [0, 1],
+                [0, 2],
+                [1, 2]
+            ]
+        }
         text = ['0:1,2', '1:0,2', '2:0,1']
         g = nx.Graph()
         g.add_nodes_from([x for x in range(0, 3)])
@@ -291,13 +292,13 @@ class testFunctions(unittest.TestCase):
 
     def testAvailableColor(self):
         d = {
-                "nodes": [0, 1, 2],
-                "edges": [
-                          [0, 1],
-                          [0, 2],
-                          [1, 2]
-                         ]
-             }
+            "nodes": [0, 1, 2],
+            "edges": [
+                [0, 1],
+                [0, 2],
+                [1, 2]
+            ]
+        }
         G = convert_to_networkx(d)
         is_available = available_color(G, 0, 0)
         self.assertEqual(is_available, True)
@@ -318,13 +319,13 @@ class testFunctions(unittest.TestCase):
 
     def testAvailableColors(self):
         d = {
-                "nodes": [0, 1, 2],
-                "edges": [
-                          [0, 1],
-                          [0, 2],
-                          [1, 2]
-                         ]
-             }
+            "nodes": [0, 1, 2],
+            "edges": [
+                [0, 1],
+                [0, 2],
+                [1, 2]
+            ]
+        }
         G = convert_to_networkx(d)
         colors = available_colors(G, 0, 3)
         self.assertEqual(colors, [0, 1, 2])
@@ -339,13 +340,13 @@ class testFunctions(unittest.TestCase):
 
     def testValidColoring(self):
         d = {
-                "nodes": [0, 1, 2],
-                "edges": [
-                          [0, 1],
-                          [0, 2],
-                          [1, 2]
-                         ]
-             }
+            "nodes": [0, 1, 2],
+            "edges": [
+                [0, 1],
+                [0, 2],
+                [1, 2]
+            ]
+        }
         G = convert_to_networkx(d)
         G.node[0]['node'].color = 0
         G.node[1]['node'].color = 1
@@ -375,26 +376,26 @@ class testFunctions(unittest.TestCase):
 
     def testColorVertex(self):
         d = {
-                "nodes": [0, 1, 2],
-                "edges": [
-                          [0, 1],
-                          [0, 2],
-                          [1, 2]
-                         ]
-             }
+            "nodes": [0, 1, 2],
+            "edges": [
+                [0, 1],
+                [0, 2],
+                [1, 2]
+            ]
+        }
         G = convert_to_networkx(d)
         color_vertex(G, 0, 0)
         self.assertEqual(G.node[0]['node'].color, 0)
 
     def testCopyGraph(self):
         d = {
-                "nodes": [0, 1, 2],
-                "edges": [
-                          [0, 1],
-                          [0, 2],
-                          [1, 2]
-                         ]
-             }
+            "nodes": [0, 1, 2],
+            "edges": [
+                [0, 1],
+                [0, 2],
+                [1, 2]
+            ]
+        }
         G = convert_to_networkx(d)
         H = copy_graph(G)
         # change H color and should not affect G

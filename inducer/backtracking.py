@@ -9,13 +9,13 @@ import unittest
 import logging
 import networkx as nx
 from inducer.graph import color_vertex,\
-                          copy_graph_colors,\
-                          available_colors,\
-                          get_color,\
-                          valid_coloring,\
-                          copy_graph,\
-                          convert_to_networkx,\
-                          chromatic_number
+    copy_graph_colors,\
+    available_colors,\
+    get_color,\
+    valid_coloring,\
+    copy_graph,\
+    convert_to_networkx,\
+    chromatic_number
 COUNT = 0
 ALL_OPTIONS = {"forward_check": lambda x, y: forward_check(x, y),
                "get_colors": lambda x, y, z:
@@ -107,7 +107,7 @@ def ordering_node(G, chromatic):
         colors = [x for x in range(0, chromatic)]
         already_colored = [get_color(G, x) for x in G.neighbors(node)
                            if get_color(G, x) is not None]
-        constraining = len(G.neighbors(node)) - len(already_colored)
+        constraining = len(list(G.neighbors(node))) - len(list(already_colored))
         if vertex is None or constraining >= best_constraining:
             constrained = len([c for c in colors if c not in already_colored])
             if constraining == best_constraining:
@@ -256,6 +256,7 @@ def backtrack(G, chromatic, forward_check, get_vertex, get_colors, logger):
 
 
 class testBacktracking(unittest.TestCase):
+
     def setUp(self):
         pass
 
@@ -265,15 +266,15 @@ class testBacktracking(unittest.TestCase):
     def testBacktrackBasics(self):
         # test C5
         d = {
-                "nodes": [0, 1, 2, 3, 4],
-                "edges": [
-                          [0, 1],
-                          [0, 4],
-                          [1, 2],
-                          [2, 3],
-                          [3, 4]
-                         ]
-             }
+            "nodes": [0, 1, 2, 3, 4],
+            "edges": [
+                [0, 1],
+                [0, 4],
+                [1, 2],
+                [2, 3],
+                [3, 4]
+            ]
+        }
         G = convert_to_networkx(d)
         (colored_G, steps) = coloring_aux(G, {})
         self.assertEqual(valid_coloring(colored_G), True)
@@ -283,15 +284,15 @@ class testBacktracking(unittest.TestCase):
     def testBacktrackForwardCheck(self):
         # test C5
         d = {
-                "nodes": [0, 1, 2, 3, 4],
-                "edges": [
-                          [0, 1],
-                          [0, 4],
-                          [1, 2],
-                          [2, 3],
-                          [3, 4]
-                         ]
-             }
+            "nodes": [0, 1, 2, 3, 4],
+            "edges": [
+                [0, 1],
+                [0, 4],
+                [1, 2],
+                [2, 3],
+                [3, 4]
+            ]
+        }
         G = convert_to_networkx(d)
         forward = forward_check
         (colored_G, steps) = coloring_aux(G, {'forward_check': forward})
@@ -302,15 +303,15 @@ class testBacktracking(unittest.TestCase):
     def testBacktrackOrdering(self):
         # test C5
         d = {
-                "nodes": [0, 1, 2, 3, 4],
-                "edges": [
-                          [0, 1],
-                          [0, 4],
-                          [1, 2],
-                          [2, 3],
-                          [3, 4]
-                         ]
-             }
+            "nodes": [0, 1, 2, 3, 4],
+            "edges": [
+                [0, 1],
+                [0, 4],
+                [1, 2],
+                [2, 3],
+                [3, 4]
+            ]
+        }
         G = convert_to_networkx(d)
         next_node = ordering_node
         (colored_G, steps) = coloring_aux(G, {'next_node': next_node})
@@ -321,15 +322,15 @@ class testBacktracking(unittest.TestCase):
     def testBacktrackLeastConstrainingColors(self):
         # test C5
         d = {
-                "nodes": [0, 1, 2, 3, 4],
-                "edges": [
-                          [0, 1],
-                          [0, 4],
-                          [1, 2],
-                          [2, 3],
-                          [3, 4]
-                         ]
-             }
+            "nodes": [0, 1, 2, 3, 4],
+            "edges": [
+                [0, 1],
+                [0, 4],
+                [1, 2],
+                [2, 3],
+                [3, 4]
+            ]
+        }
         G = convert_to_networkx(d)
         lcc = least_constraining_colors
         (colored_G, steps) = coloring_aux(G, {'get_colors': lcc})
@@ -340,15 +341,15 @@ class testBacktracking(unittest.TestCase):
     def testInducerColoring(self):
         # test diamond
         d = {
-                "nodes": [0, 1, 2, 3],
-                "edges": [
-                          [0, 1],
-                          [0, 2],
-                          [1, 2],
-                          [1, 3],
-                          [2, 3]
-                         ]
-             }
+            "nodes": [0, 1, 2, 3],
+            "edges": [
+                [0, 1],
+                [0, 2],
+                [1, 2],
+                [1, 3],
+                [2, 3]
+            ]
+        }
         G = convert_to_networkx(d)
         H = inducer_coloring(G)
         self.assertEqual([[1], [2], [0, 3]], H)
@@ -356,15 +357,15 @@ class testBacktracking(unittest.TestCase):
     def testLeastConstrainingColors(self):
         # test C5
         d = {
-                "nodes": [0, 1, 2, 3, 4],
-                "edges": [
-                          [0, 1],
-                          [0, 4],
-                          [1, 2],
-                          [2, 3],
-                          [3, 4]
-                         ]
-             }
+            "nodes": [0, 1, 2, 3, 4],
+            "edges": [
+                [0, 1],
+                [0, 4],
+                [1, 2],
+                [2, 3],
+                [3, 4]
+            ]
+        }
         G = convert_to_networkx(d)
         color_vertex(G, 4, 0)
         color_vertex(G, 3, 1)
@@ -377,15 +378,15 @@ class testBacktracking(unittest.TestCase):
         self.assertEqual([1, 2], colors)
         # test a diamond
         d = {
-                "nodes": [0, 1, 2, 3],
-                "edges": [
-                          [0, 1],
-                          [0, 2],
-                          [1, 2],
-                          [1, 3],
-                          [2, 3]
-                         ]
-             }
+            "nodes": [0, 1, 2, 3],
+            "edges": [
+                [0, 1],
+                [0, 2],
+                [1, 2],
+                [1, 3],
+                [2, 3]
+            ]
+        }
         G = convert_to_networkx(d)
         color_vertex(G, 0, 0)
         color_vertex(G, 2, 1)
@@ -395,15 +396,15 @@ class testBacktracking(unittest.TestCase):
     def testForwardCheck(self):
         # test C5
         d = {
-                "nodes": [0, 1, 2, 3, 4],
-                "edges": [
-                          [0, 1],
-                          [0, 4],
-                          [1, 2],
-                          [2, 3],
-                          [3, 4]
-                         ]
-             }
+            "nodes": [0, 1, 2, 3, 4],
+            "edges": [
+                [0, 1],
+                [0, 4],
+                [1, 2],
+                [2, 3],
+                [3, 4]
+            ]
+        }
         G = convert_to_networkx(d)
         # there is a path forward
         forward = forward_check(G, 2)
@@ -420,15 +421,15 @@ class testBacktracking(unittest.TestCase):
     def testOrderingNodeC5(self):
         # test C5
         d = {
-                "nodes": [0, 1, 2, 3, 4],
-                "edges": [
-                          [0, 1],
-                          [0, 4],
-                          [1, 2],
-                          [2, 3],
-                          [3, 4]
-                         ]
-             }
+            "nodes": [0, 1, 2, 3, 4],
+            "edges": [
+                [0, 1],
+                [0, 4],
+                [1, 2],
+                [2, 3],
+                [3, 4]
+            ]
+        }
         G = convert_to_networkx(d)
         node = ordering_node(G, 2)
         self.assertEqual(node, 0)
@@ -456,18 +457,18 @@ class testBacktracking(unittest.TestCase):
     def testOrderingNodeTiebreaker(self):
         # test the tiebreaker
         d = {
-                "nodes": [0, 1, 2, 3, 4, 5, 6],
-                "edges": [
-                          [0, 2],
-                          [0, 3],
-                          [0, 4],
-                          [1, 4],
-                          [1, 5],
-                          [1, 6],
-                          [3, 4],
-                          [4, 5],
-                         ]
-             }
+            "nodes": [0, 1, 2, 3, 4, 5, 6],
+            "edges": [
+                [0, 2],
+                [0, 3],
+                [0, 4],
+                [1, 4],
+                [1, 5],
+                [1, 6],
+                [3, 4],
+                [4, 5],
+            ]
+        }
         G = convert_to_networkx(d)
         # both have the same amount of moves (so first one aka 0)
         color_vertex(G, 4, 0)
@@ -491,29 +492,29 @@ class testBacktracking(unittest.TestCase):
     def testBacktrackingColorSubOptimal(self):
         # test cycle of size 5
         d = {
-                "nodes": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14],
-                "edges": [
-                          [0, 1],
-                          [0, 4],
-                          [1, 2],
-                          [2, 3],
-                          [3, 4],
-                          [0, 5],
-                          [1, 5],
-                          [2, 5],
-                          [0, 6],
-                          [3, 6],
-                          [4, 6],
-                          [1, 7],
-                          [1, 8],
-                          [2, 9],
-                          [2, 10],
-                          [3, 11],
-                          [3, 12],
-                          [4, 13],
-                          [4, 14],
-                         ]
-             }
+            "nodes": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14],
+            "edges": [
+                [0, 1],
+                [0, 4],
+                [1, 2],
+                [2, 3],
+                [3, 4],
+                [0, 5],
+                [1, 5],
+                [2, 5],
+                [0, 6],
+                [3, 6],
+                [4, 6],
+                [1, 7],
+                [1, 8],
+                [2, 9],
+                [2, 10],
+                [3, 11],
+                [3, 12],
+                [4, 13],
+                [4, 14],
+            ]
+        }
         G = convert_to_networkx(d)
         (H, chromatic) = coloring(G)
         self.assertEqual(valid_coloring(H), True)
@@ -522,52 +523,52 @@ class testBacktracking(unittest.TestCase):
         # it looks like two connected diamonds but one diamond is rotated
         # http://www.sciencedirect.com/science/article/pii/S0012365X00004398
         d = {
-                "nodes": [0, 1, 2, 3, 4, 5, 6, 7],
-                "edges": [
-                          [0, 1],
-                          [0, 2],
-                          [0, 3],
-                          [0, 4],
-                          [1, 3],
-                          [2, 3],
-                          [3, 7],
-                          [4, 5],
-                          [4, 6],
-                          [5, 6],
-                          [5, 7],
-                          [6, 7]
-                         ]
-             }
+            "nodes": [0, 1, 2, 3, 4, 5, 6, 7],
+            "edges": [
+                [0, 1],
+                [0, 2],
+                [0, 3],
+                [0, 4],
+                [1, 3],
+                [2, 3],
+                [3, 7],
+                [4, 5],
+                [4, 6],
+                [5, 6],
+                [5, 7],
+                [6, 7]
+            ]
+        }
         G = convert_to_networkx(d)
         (H, chromatic) = coloring(G)
         self.assertEqual(valid_coloring(H), True)
         self.assertEqual(chromatic, 3)
         # same as above but with a join vertex to each diamond
         d = {
-                "nodes": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
-                "edges": [
-                          [0, 1],
-                          [0, 2],
-                          [0, 3],
-                          [0, 4],
-                          [1, 3],
-                          [2, 3],
-                          [3, 7],
-                          [4, 5],
-                          [4, 6],
-                          [5, 6],
-                          [5, 7],
-                          [6, 7],
-                          [8, 0],
-                          [8, 1],
-                          [8, 2],
-                          [8, 3],
-                          [9, 4],
-                          [9, 5],
-                          [9, 6],
-                          [9, 7]
-                         ]
-             }
+            "nodes": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
+            "edges": [
+                [0, 1],
+                [0, 2],
+                [0, 3],
+                [0, 4],
+                [1, 3],
+                [2, 3],
+                [3, 7],
+                [4, 5],
+                [4, 6],
+                [5, 6],
+                [5, 7],
+                [6, 7],
+                [8, 0],
+                [8, 1],
+                [8, 2],
+                [8, 3],
+                [9, 4],
+                [9, 5],
+                [9, 6],
+                [9, 7]
+            ]
+        }
         G = convert_to_networkx(d)
         (H, chromatic) = coloring(G)
         self.assertEqual(valid_coloring(H), True)

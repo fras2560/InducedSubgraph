@@ -5,6 +5,8 @@ Created on Oct 21, 2015
 '''
 from inducer.dcolor import dense_color_wrapper
 from inducer.colorable import coloring as color
+
+
 def critical(G, logger=None, dense=False):
     '''
     a method that finds if the graph is critical
@@ -21,14 +23,15 @@ def critical(G, logger=None, dense=False):
     else:
         coloring = dense_color_wrapper
     is_critical = True
-    nodes = G.nodes()
+    nodes = list(G.nodes())
     index = 0
     chromatic = len(coloring(G))
     while is_critical and index < len(nodes):
         g = G.copy()
+        print(nodes)
         g.remove_node(nodes[index])
         check = len(coloring(g))
-        if check != (chromatic -1):
+        if check != (chromatic - 1):
             if logger is not None:
                 logger.info(index)
                 logger.info("G is not critical")
@@ -41,7 +44,10 @@ def critical(G, logger=None, dense=False):
 
 import unittest
 from inducer.helper import make_claw, make_wheel
+
+
 class Tester(unittest.TestCase):
+
     def testCritical(self):
         self.assertEqual(critical(make_claw()), None)
         self.assertEqual(critical(make_claw(), dense=True), None)

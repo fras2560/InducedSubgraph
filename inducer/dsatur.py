@@ -9,12 +9,12 @@ import logging
 import unittest
 import networkx as nx
 from inducer.graph import available_color,\
-                          color_vertex,\
-                          copy_graph,\
-                          convert_to_networkx,\
-                          valid_coloring,\
-                          chromatic_number,\
-                          is_colored, get_color
+    color_vertex,\
+    copy_graph,\
+    convert_to_networkx,\
+    valid_coloring,\
+    chromatic_number,\
+    is_colored, get_color
 
 
 def inducer_coloring(G):
@@ -50,13 +50,13 @@ def dsatur(G, logger):
     len_g = len(H)
     no_colored = 0
     distinct_colors = {}
-    for node in H.nodes_iter():
+    for node in H.nodes():
         distinct_colors[node] = set()
     while no_colored != len_g:
         if no_colored == 0:
             # When sat. for all nodes is 0, yield the node with highest degree
             node = max([x for x in H.nodes()],
-                       key=lambda x: len(H.neighbors(x)))
+                       key=lambda x: len(list(H.neighbors(x))))
         else:
             # want the vertex with the highest saturation
             highest_saturation = -1
@@ -75,7 +75,7 @@ def dsatur(G, logger):
             else:
                 # Return the node with highest degree
                 max_node = max([x for x in highest_saturation_nodes],
-                               key=lambda x: len(H.neighbors(x)))
+                               key=lambda x: len(list(H.neighbors(x))))
                 node = max_node
         color = 0
         # find some color can use for it
@@ -86,7 +86,7 @@ def dsatur(G, logger):
         logger.debug("Colored {} to {}".format(node, color))
         no_colored += 1
         # tells it neighbors what is up
-        for neighbour in H.neighbors_iter(node):
+        for neighbour in H.neighbors(node):
             distinct_colors[neighbour].add(color)
     return H
 
@@ -96,43 +96,43 @@ class Test(unittest.TestCase):
     def testDsaturColor(self):
         # test K3
         d = {
-                "nodes": [0, 1, 2],
-                "edges": [
-                          [0, 1],
-                          [0, 2],
-                          [1, 2]
-                         ]
-             }
+            "nodes": [0, 1, 2],
+            "edges": [
+                [0, 1],
+                [0, 2],
+                [1, 2]
+            ]
+        }
         G = convert_to_networkx(d)
         (H, chromatic) = coloring(G)
         self.assertEqual(valid_coloring(H), True)
         self.assertEqual(chromatic, 3)
         # test cycle of size 5
         d = {
-                "nodes": [0, 1, 2, 3, 4],
-                "edges": [
-                          [0, 1],
-                          [0, 4],
-                          [1, 2],
-                          [2, 3],
-                          [3, 4]
-                         ]
-             }
+            "nodes": [0, 1, 2, 3, 4],
+            "edges": [
+                [0, 1],
+                [0, 4],
+                [1, 2],
+                [2, 3],
+                [3, 4]
+            ]
+        }
         G = convert_to_networkx(d)
         (H, chromatic) = coloring(G)
         self.assertEqual(valid_coloring(H), True)
         self.assertEqual(chromatic, 3)
         # test diamond
         d = {
-                "nodes": [0, 1, 2, 3],
-                "edges": [
-                          [0, 1],
-                          [0, 2],
-                          [1, 2],
-                          [1, 3],
-                          [2, 3]
-                         ]
-             }
+            "nodes": [0, 1, 2, 3],
+            "edges": [
+                [0, 1],
+                [0, 2],
+                [1, 2],
+                [1, 3],
+                [2, 3]
+            ]
+        }
         G = convert_to_networkx(d)
         (H, chromatic) = coloring(G)
         self.assertEqual(valid_coloring(H), True)
@@ -147,15 +147,15 @@ class Test(unittest.TestCase):
     def testInducerColoring(self):
         # test diamond
         d = {
-                "nodes": [0, 1, 2, 3],
-                "edges": [
-                          [0, 1],
-                          [0, 2],
-                          [1, 2],
-                          [1, 3],
-                          [2, 3]
-                         ]
-             }
+            "nodes": [0, 1, 2, 3],
+            "edges": [
+                [0, 1],
+                [0, 2],
+                [1, 2],
+                [1, 3],
+                [2, 3]
+            ]
+        }
         G = convert_to_networkx(d)
         H = inducer_coloring(G)
         self.assertEqual([[1], [2], [0, 3]], H)
@@ -163,29 +163,29 @@ class Test(unittest.TestCase):
     def testDsaturColorSubOptimal(self):
         # test cycle of size 5
         d = {
-                "nodes": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14],
-                "edges": [
-                          [0, 1],
-                          [0, 4],
-                          [1, 2],
-                          [2, 3],
-                          [3, 4],
-                          [0, 5],
-                          [1, 5],
-                          [2, 5],
-                          [0, 6],
-                          [3, 6],
-                          [4, 6],
-                          [1, 7],
-                          [1, 8],
-                          [2, 9],
-                          [2, 10],
-                          [3, 11],
-                          [3, 12],
-                          [4, 13],
-                          [4, 14],
-                         ]
-             }
+            "nodes": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14],
+            "edges": [
+                [0, 1],
+                [0, 4],
+                [1, 2],
+                [2, 3],
+                [3, 4],
+                [0, 5],
+                [1, 5],
+                [2, 5],
+                [0, 6],
+                [3, 6],
+                [4, 6],
+                [1, 7],
+                [1, 8],
+                [2, 9],
+                [2, 10],
+                [3, 11],
+                [3, 12],
+                [4, 13],
+                [4, 14],
+            ]
+        }
         G = convert_to_networkx(d)
         (H, chromatic) = coloring(G)
         self.assertEqual(valid_coloring(H), True)
@@ -194,52 +194,52 @@ class Test(unittest.TestCase):
         # it looks like two connected diamonds but one diamond is rotated
         # http://www.sciencedirect.com/science/article/pii/S0012365X00004398
         d = {
-                "nodes": [0, 1, 2, 3, 4, 5, 6, 7],
-                "edges": [
-                          [0, 1],
-                          [0, 2],
-                          [0, 3],
-                          [0, 4],
-                          [1, 3],
-                          [2, 3],
-                          [3, 7],
-                          [4, 5],
-                          [4, 6],
-                          [5, 6],
-                          [5, 7],
-                          [6, 7]
-                         ]
-             }
+            "nodes": [0, 1, 2, 3, 4, 5, 6, 7],
+            "edges": [
+                [0, 1],
+                [0, 2],
+                [0, 3],
+                [0, 4],
+                [1, 3],
+                [2, 3],
+                [3, 7],
+                [4, 5],
+                [4, 6],
+                [5, 6],
+                [5, 7],
+                [6, 7]
+            ]
+        }
         G = convert_to_networkx(d)
         (H, chromatic) = coloring(G)
         self.assertEqual(valid_coloring(H), True)
         self.assertEqual(chromatic, 4)
         # same as above but with a join vertex to each diamond
         d = {
-                "nodes": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
-                "edges": [
-                          [0, 1],
-                          [0, 2],
-                          [0, 3],
-                          [0, 4],
-                          [1, 3],
-                          [2, 3],
-                          [3, 7],
-                          [4, 5],
-                          [4, 6],
-                          [5, 6],
-                          [5, 7],
-                          [6, 7],
-                          [8, 0],
-                          [8, 1],
-                          [8, 2],
-                          [8, 3],
-                          [9, 4],
-                          [9, 5],
-                          [9, 6],
-                          [9, 7]
-                         ]
-             }
+            "nodes": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
+            "edges": [
+                [0, 1],
+                [0, 2],
+                [0, 3],
+                [0, 4],
+                [1, 3],
+                [2, 3],
+                [3, 7],
+                [4, 5],
+                [4, 6],
+                [5, 6],
+                [5, 7],
+                [6, 7],
+                [8, 0],
+                [8, 1],
+                [8, 2],
+                [8, 3],
+                [9, 4],
+                [9, 5],
+                [9, 6],
+                [9, 7]
+            ]
+        }
         G = convert_to_networkx(d)
         (H, chromatic) = coloring(G)
         self.assertEqual(valid_coloring(H), True)

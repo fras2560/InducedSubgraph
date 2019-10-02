@@ -12,6 +12,7 @@ Version: 2015-10-21
 from networkx import is_connected, find_cliques
 from itertools import combinations
 
+
 def clique_cutset(G):
     '''
     a function that finds a clique cutset
@@ -30,10 +31,11 @@ def clique_cutset(G):
             for node in small_clique:
                 g.remove_node(node)
         # check if graph is connected
-            if len(g.nodes()) == 0 or not is_connected(g): 
+            if len(g.nodes()) == 0 or not is_connected(g):
                 result = G.subgraph(small_clique)
                 break
     return result
+
 
 def subset(clique):
     '''
@@ -49,8 +51,10 @@ def subset(clique):
 
 import unittest
 from inducer.helper import make_clique, make_diamond, make_cycle, make_kite,\
-                        make_bridge
+    make_bridge
 import networkx as nx
+
+
 class Test(unittest.TestCase):
 
     def testCliqueCutset(self):
@@ -61,7 +65,7 @@ class Test(unittest.TestCase):
         result = clique_cutset(make_diamond())
         self.assertEqual(result.nodes(), make_clique(2).nodes())
         self.assertEqual(result.edges(), make_clique(2).edges())
-        
+
         # just a normal cutset
         g = nx.Graph()
         g.add_node(2)
@@ -75,7 +79,7 @@ class Test(unittest.TestCase):
         result = clique_cutset(make_bridge())
         self.assertEqual(result.nodes(), make_clique(2).nodes())
         self.assertEqual(result.edges(), make_clique(2).edges())
-        
+
 
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']
