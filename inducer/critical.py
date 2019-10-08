@@ -1,12 +1,10 @@
 '''
-Created on Oct 21, 2015
-
-@author: Mobile Team
+@author: Dallas Fraser
+@date: 2019-08-10
+@summary: Holds a function to check if a given graph is critical
 '''
 from inducer.dcolor import dense_color_wrapper
 from inducer.colorable import coloring as color
-from inducer.helper import make_claw, make_wheel
-import unittest
 
 
 def critical(G, logger=None, dense=False):
@@ -30,7 +28,6 @@ def critical(G, logger=None, dense=False):
     chromatic = len(coloring(G))
     while is_critical and index < len(nodes):
         g = G.copy()
-        print(nodes)
         g.remove_node(nodes[index])
         check = len(coloring(g))
         if check != (chromatic - 1):
@@ -43,13 +40,3 @@ def critical(G, logger=None, dense=False):
     if is_critical:
         K = chromatic
     return K
-
-
-class Tester(unittest.TestCase):
-
-    def testCritical(self):
-        self.assertEqual(critical(make_claw()), None)
-        self.assertEqual(critical(make_claw(), dense=True), None)
-        self.assertEqual(critical(make_wheel(6)), 4)
-        self.assertEqual(critical(make_wheel(6), dense=True), 4)
-        self.assertEqual(critical(make_wheel(7)), None)

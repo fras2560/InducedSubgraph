@@ -1,7 +1,7 @@
 '''
 @author: Dallas Fraser
 @date: 2019-08-10
-@summary: Tests for the back tracking methods
+@summary: Tests for the back tracking functions
 '''
 import unittest
 from inducer.backtracking import forward_check, inducer_coloring,\
@@ -12,7 +12,7 @@ from inducer.graph import color_vertex,\
     convert_to_networkx
 
 
-class testBacktracking(unittest.TestCase):
+class TestBacktracking(unittest.TestCase):
 
     def setUp(self):
         pass
