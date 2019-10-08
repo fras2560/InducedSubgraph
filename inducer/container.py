@@ -9,13 +9,8 @@ Email:   fras2560@mylaurier.ca
 Version: 2014-09-17
 -------------------------------------------------------
 """
-from inducer.helper import make_cycle, make_claw, make_co_claw
-from inducer.helper import make_diamond, make_co_diamond
-from pprint import PrettyPrinter
 import itertools
 import networkx as nx
-import inducer.helper as helper
-import unittest
 
 
 def induced_subgraph(G, H):
@@ -113,65 +108,3 @@ def k_vertex(g, subgraphs):
                 k_vertexes[k]['combinations'].append(combo)
             g.remove_node(node)  # remove added node and its edges
     return k_vertexes
-
-
-class tester(unittest.TestCase):
-
-    def setUp(self):
-        self.pp = PrettyPrinter(indent=4)
-
-    def tearDown(self):
-        pass
-
-    def testInducedSubgraph(self):
-        h = helper.make_claw()
-        g = helper.make_wheel(7)
-        induced = induced_subgraph(g, h)
-        expected = [0, 2, 4, 6]
-        self.assertEqual(induced.nodes(), expected,
-                         "Contains: Failed to find a claw in W7")
-
-    def testC7CoClawClawFree(self):
-        g = make_cycle(7)
-        subgraphs = [make_claw(), make_co_claw()]
-        k_vertexes = k_vertex(g, subgraphs)
-        for index, k in enumerate(k_vertexes):
-            if index > 0:
-                self.assertEqual(k['has_k_vertex'], False,
-                                 '''
-                                 K Vertex says (claw,co-claw)-free Graph
-                                 has a %s-vertex''' % index)
-            else:
-                self.assertEqual(k['has_k_vertex'], True,
-                                 '''
-                                 K Vertex says (claw,co-claw)-free Graph
-                                 has no a %s-vertex''' % index)
-
-    def testC5DiamondCoDiamondFree(self):
-        g = make_cycle(5)
-        subgraphs = [make_diamond(), make_co_diamond()]
-        k_vertexes = k_vertex(g, subgraphs)
-        expect = [False, False, True, True, False, False]
-        for index, k in enumerate(k_vertexes):
-            self.assertEqual(k['has_k_vertex'], expect[index],
-                             '''K Vertex says (diamond,co-diamond)- free Graph
-                             %d - vertex:%r but should be %r'''
-                             % (index, k['has_k_vertex'], expect[index]))
-        set_2_vertex = [(0, 1), (0, 4), (1, 2), (2, 3), (3, 4)]
-        for check in set_2_vertex:
-            self.assertEqual(check in k_vertexes[2]['combinations'], True,
-                             '''
-                            K vertex missing 2 Vertex set (%d, %d)
-                            on (diamond, co-diamond)-free Grpah
-                            ''' % (check[0], check[1]))
-        set_3_vertex = [(0, 1, 3),
-                        (0, 2, 3),
-                        (0, 2, 4),
-                        (1, 2, 4),
-                        (1, 3, 4)]
-        for check in set_3_vertex:
-            self.assertEqual(check in k_vertexes[3]['combinations'], True,
-                             '''
-                            K vertex missing 3 Vertex set (%d, %d, %d)
-                            on (diamond, co-diamond)-free Grpah
-                            ''' % (check[0], check[1], check[2]))
