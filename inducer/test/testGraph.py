@@ -12,7 +12,7 @@ import unittest
 
 class testGraph(unittest.TestCase):
 
-    def failing_test(self):
+    def testFailingTest(self):
         self.assertEqual(True, False)
 
     def graph_equal(self, g1, g2):
