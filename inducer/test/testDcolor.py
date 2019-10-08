@@ -10,7 +10,7 @@ import networkx as nx
 import unittest
 
 
-class Test(unittest.TestCase):
+class TestDcolor(unittest.TestCase):
 
     def setUp(self):
         self.dcolor = Dcolor(make_claw())

@@ -8,7 +8,7 @@ from inducer.helper import make_cycle
 import unittest
 
 
-class Test(unittest.TestCase):
+class TestEvenHoleFree(unittest.TestCase):
 
     def setUp(self):
         pass

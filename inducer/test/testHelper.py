@@ -11,7 +11,7 @@ import os
 import unittest
 
 
-class tester(unittest.TestCase):
+class TestHelper(unittest.TestCase):
 
     def setUp(self):
         pass
