@@ -1,7 +1,7 @@
 '''
 @author: Dallas Fraser
 @date: 2019-08-10
-@summary: Tests for the clique cutset methods
+@summary: Tests for the clique cutset functions
 '''
 from inducer.clique_cutset import clique_cutset
 from inducer.helper import make_clique, make_diamond, make_cycle, make_kite,\
