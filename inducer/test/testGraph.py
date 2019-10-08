@@ -12,6 +12,9 @@ import unittest
 
 class testGraph(unittest.TestCase):
 
+    def failing_test(self):
+        self.assertEqual(True, False)
+
     def graph_equal(self, g1, g2):
         equal = True
         for n1 in g1.nodes():
