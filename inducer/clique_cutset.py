@@ -11,6 +11,10 @@ Version: 2015-10-21
 """
 from networkx import is_connected, find_cliques
 from itertools import combinations
+from inducer.helper import make_clique, make_diamond, make_cycle, make_kite,\
+    make_bridge
+import unittest
+import networkx as nx
 
 
 def clique_cutset(G):
@@ -49,11 +53,6 @@ def subset(clique):
         for x in combinations(clique, i):
             yield x
 
-import unittest
-from inducer.helper import make_clique, make_diamond, make_cycle, make_kite,\
-    make_bridge
-import networkx as nx
-
 
 class Test(unittest.TestCase):
 
@@ -82,5 +81,5 @@ class Test(unittest.TestCase):
 
 
 if __name__ == "__main__":
-    #import sys;sys.argv = ['', 'Test.testName']
+    # import sys;sys.argv = ['', 'Test.testName']
     unittest.main()

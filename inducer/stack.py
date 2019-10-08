@@ -10,11 +10,15 @@ Version: 2014-09-17
 -------------------------------------------------------
 """
 import copy
+import unittest
+
+
 class DStack():
     '''
     DStack
         a simple stack class
     '''
+
     def __init__(self):
         self.data = []
         self.size = 0
@@ -44,7 +48,7 @@ class DStack():
         Returns:
             element: None if no elements
         '''
-        if self.size >=1:
+        if self.size >= 1:
             element = self.data.pop()
             self.size -= 1
         else:
@@ -86,8 +90,9 @@ class DStack():
         '''
         return self.data[self.size - 1]
 
-import unittest
+
 class TestStack(unittest.TestCase):
+
     def setUp(self):
         self.stack = DStack()
 
@@ -128,6 +133,7 @@ class TestStack(unittest.TestCase):
         self.assertNotEqual(self.stack.data, s2.data)
         self.assertEqual(self.stack.data, elements)
 
+
 if __name__ == "__main__":
-    #import sys;sys.argv = ['', 'Test.testName']
+    # import sys;sys.argv = ['', 'Test.testName']
     unittest.main()

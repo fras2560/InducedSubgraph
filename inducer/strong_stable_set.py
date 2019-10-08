@@ -3,7 +3,7 @@
 This program analyzes (C4,C5,4K1)-free graphs.
 
 We are primarily interested in which graphs from this class
-contains a strong stable set which meets all the maximal 
+contains a strong stable set which meets all the maximal
 cliques of the graph in question. If no such strong stable
 set exists, we wonder if the chromatic number is equal
 to the ceiling of n/3.
@@ -13,13 +13,17 @@ Email:   lama3790@mylaurier.ca, fras2560@mylaurier.ca
 Version: 2015-10-21
 -------------------------------------------------------
 """
-from networkx import find_cliques, maximal_independent_set, graph_clique_number
-from networkx.exception import NetworkXUnfeasible
+
+from inducer.helper import make_clique, make_diamond, make_cycle
+import networkx as nx
+from networkx import find_cliques, graph_clique_number
 from networkx import complement
+import unittest
+
 
 def strong_stable_set(G):
     '''
-    
+
     '''
     clique = graph_clique_number(G)
     result = None
@@ -29,17 +33,16 @@ def strong_stable_set(G):
             g.remove_node(node)
         if clique != graph_clique_number(g):
             result = G.subgraph(stable)
-            break;
+            break
     return result
+
 
 def stable_set(G):
     co_g = complement(G)
     for clique in find_cliques(co_g):
         yield clique
 
-import unittest
-from inducer.helper import make_clique, make_diamond, make_cycle
-import networkx as nx
+
 class Test(unittest.TestCase):
 
     def setUp(self):
@@ -66,6 +69,7 @@ class Test(unittest.TestCase):
         result = strong_stable_set(make_cycle(5))
         self.assertEqual(result, None)
 
+
 if __name__ == "__main__":
-    #import sys;sys.argv = ['', 'Test.testName']
+    # import sys;sys.argv = ['', 'Test.testName']
     unittest.main()

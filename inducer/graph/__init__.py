@@ -5,11 +5,10 @@
 @date: 2016-04-02
 @note: contains functions for creating networkx graphs with GraphNodes
 '''
-import networkx as nx
 from os.path import isfile
 from inducer.graph.graph_node import GraphNode
+import networkx as nx
 import unittest
-import copy
 
 
 def is_colored(G, vertex):
@@ -123,7 +122,7 @@ def available_colors(G, vertex, number_of_colors):
         try:
             index = colors.index(G.node[neighbor]['node'].color)
             colors.pop(index)
-        except:
+        except Exception:
             pass
     return colors
 
@@ -200,7 +199,7 @@ def text_to_d3(lines):
         entries = line.split(":")
         try:
             node = int(entries[0])
-        except:
+        except Exception:
             node = None
         if (len(entries) > 1):
             entries[1] = entries[1].replace(" ", "")

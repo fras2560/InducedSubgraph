@@ -9,9 +9,15 @@ Email:   fras2560@mylaurier.ca
 Version: 2014-09-17
 -------------------------------------------------------
 """
+from inducer.helper import make_cycle, make_claw, make_co_claw
+from inducer.helper import make_diamond, make_co_diamond
+from pprint import PrettyPrinter
 import itertools
 import networkx as nx
 import inducer.helper as helper
+import unittest
+
+
 def induced_subgraph(G, H):
     '''
     induced_subgraph
@@ -38,9 +44,11 @@ def induced_subgraph(G, H):
         if nx.faster_could_be_isomorphic(subgraph, H):
             if nx.is_isomorphic(subgraph, H):
                 induced = subgraph
-                break # only want to find one
+                # only want to find one
+                break
     return induced
-        
+
+
 def create_permutations(n, k):
     '''
     create_permutations
@@ -52,9 +60,10 @@ def create_permutations(n, k):
         iterator: to the list of permutations
     '''
     number_list = []
-    for x in range(0,n):
+    for x in range(0, n):
         number_list.append(x)
     return itertools.combinations(number_list, k)
+
 
 def k_vertex(g, subgraphs):
     '''
@@ -64,7 +73,7 @@ def k_vertex(g, subgraphs):
         g: the graph to finds the k vertex for (networkx)
         subgraphs: the list of subgraphs g is to be free of (list of networkx)
     Returns:
-        k_vertexes: python dictionary 
+        k_vertexes: python dictionary
         eg. [{has_k_vertex: Boolean, combination: [[node,node],[node,node]]}]
     '''
     nodes = g.nodes()
@@ -74,24 +83,25 @@ def k_vertex(g, subgraphs):
     g.add_node(node)
     zero_vertex = True
     for sub in subgraphs:
-        induced = induced_subgraph(g, sub) 
+        induced = induced_subgraph(g, sub)
         if induced is not None:
             zero_vertex = False
-            break;
+            break
     if zero_vertex:
-        k_vertexes.append({'has_k_vertex':True, 'combinations':[]})
+        k_vertexes.append({'has_k_vertex': True, 'combinations': []})
     else:
-        k_vertexes.append({'has_k_vertex':False, 'combinations':[]})
+        k_vertexes.append({'has_k_vertex': False, 'combinations': []})
     # check the rest now
-    g.remove_node(node) # remove added node
+    g.remove_node(node)  # remove added node
     for k in range(1, node + 1):
-        k_vertexes.append({'has_k_vertex': False, 'combinations':[]})
+        k_vertexes.append({'has_k_vertex': False, 'combinations': []})
         for combo in itertools.combinations(nodes, k):
-            g.add_node(node) # add node
-            #add the edges
+            g.add_node(node)  # add node
+            # add the edges
             for vertex in combo:
                 g.add_edge(node, vertex)
-            does_contain = False # assume it does not contain all the subgraphs
+            # assume it does not contain all the subgraphs
+            does_contain = False
             for sub in subgraphs:
                 induced = induced_subgraph(g, sub)
                 if induced is not None:
@@ -101,16 +111,14 @@ def k_vertex(g, subgraphs):
                 # did not contain any forbidden subgraph
                 k_vertexes[k]['has_k_vertex'] = True
                 k_vertexes[k]['combinations'].append(combo)
-            g.remove_node(node) # remove added node and its edges 
+            g.remove_node(node)  # remove added node and its edges
     return k_vertexes
 
-import unittest
-from inducer.helper import make_cycle, make_claw, make_co_claw
-from inducer.helper import make_diamond, make_co_diamond
-from pprint import PrettyPrinter
+
 class tester(unittest.TestCase):
+
     def setUp(self):
-        self.pp = PrettyPrinter(indent = 4)
+        self.pp = PrettyPrinter(indent=4)
 
     def tearDown(self):
         pass
@@ -119,7 +127,7 @@ class tester(unittest.TestCase):
         h = helper.make_claw()
         g = helper.make_wheel(7)
         induced = induced_subgraph(g, h)
-        expected = [0, 2, 4, 6] 
+        expected = [0, 2, 4, 6]
         self.assertEqual(induced.nodes(), expected,
                          "Contains: Failed to find a claw in W7")
 
@@ -131,13 +139,13 @@ class tester(unittest.TestCase):
             if index > 0:
                 self.assertEqual(k['has_k_vertex'], False,
                                  '''
-                                 K Vertex says (claw,co-claw)-free Graph 
-                                 has a %s-vertex'''  % index)
+                                 K Vertex says (claw,co-claw)-free Graph
+                                 has a %s-vertex''' % index)
             else:
                 self.assertEqual(k['has_k_vertex'], True,
                                  '''
-                                 K Vertex says (claw,co-claw)-free Graph 
-                                 has no a %s-vertex'''  % index)
+                                 K Vertex says (claw,co-claw)-free Graph
+                                 has no a %s-vertex''' % index)
 
     def testC5DiamondCoDiamondFree(self):
         g = make_cycle(5)
@@ -147,15 +155,15 @@ class tester(unittest.TestCase):
         for index, k in enumerate(k_vertexes):
             self.assertEqual(k['has_k_vertex'], expect[index],
                              '''K Vertex says (diamond,co-diamond)- free Graph
-                             %d - vertex:%r but should be %r''' 
-                             %(index, k['has_k_vertex'], expect[index]))
+                             %d - vertex:%r but should be %r'''
+                             % (index, k['has_k_vertex'], expect[index]))
         set_2_vertex = [(0, 1), (0, 4), (1, 2), (2, 3), (3, 4)]
         for check in set_2_vertex:
             self.assertEqual(check in k_vertexes[2]['combinations'], True,
-                            '''
+                             '''
                             K vertex missing 2 Vertex set (%d, %d)
                             on (diamond, co-diamond)-free Grpah
-                            ''' %(check[0],check[1]))
+                            ''' % (check[0], check[1]))
         set_3_vertex = [(0, 1, 3),
                         (0, 2, 3),
                         (0, 2, 4),
@@ -163,7 +171,7 @@ class tester(unittest.TestCase):
                         (1, 3, 4)]
         for check in set_3_vertex:
             self.assertEqual(check in k_vertexes[3]['combinations'], True,
-                            '''
+                             '''
                             K vertex missing 3 Vertex set (%d, %d, %d)
                             on (diamond, co-diamond)-free Grpah
-                            ''' %(check[0],check[1], check[2]))
+                            ''' % (check[0], check[1], check[2]))

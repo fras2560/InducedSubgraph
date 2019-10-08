@@ -53,15 +53,15 @@ def add_list(l1, l2, index):
         l2: the second list (list of lists)
         index: the starting index to l1 (int)
     Returns:
-        l: the list of lists(list of lists)
+        new_list: the list of lists(list of lists)
     '''
-    l = copy.deepcopy(l1)
+    new_list = copy.deepcopy(l1)
     i = 0
     while i < len(l2):
-        l[index] += l2[i]
+        new_list[index] += l2[i]
         i += 1
         index += 1
-    return l
+    return new_list
 
 
 def combine_color_clique(clique, color):
@@ -278,6 +278,7 @@ def unlabeled_balls_in_unlabeled_boxe(balls, box_sizes):
 
 
 class Test(unittest.TestCase):
+
     def setUp(self):
         pass
 
@@ -325,9 +326,9 @@ class Test(unittest.TestCase):
         coloring = [[3], [2]]
         clique = [[0], [1]]
         expect = [
-                  [[0, 3], [1, 2]],
-                  [[1, 3], [0, 2]]
-                 ]
+            [[0, 3], [1, 2]],
+            [[1, 3], [0, 2]]
+        ]
         index = 0
         for combo in combine_color_clique(clique, coloring):
             self.assertEqual(combo, expect[index])
@@ -335,11 +336,11 @@ class Test(unittest.TestCase):
         coloring = [[0, 1]]
         clique = [[2], [3]]
         expect = [
-                  [[2, 0, 1], [3]],
-                  [[2], [3, 0, 1]],
-                  [[3, 0, 1], [2]],
-                  [[3], [2, 0, 1]]
-                 ]
+            [[2, 0, 1], [3]],
+            [[2], [3, 0, 1]],
+            [[3, 0, 1], [2]],
+            [[3], [2, 0, 1]]
+        ]
         index = 0
         for combo in combine_color_clique(clique, coloring):
             self.assertEqual(combo, expect[index])
@@ -348,11 +349,11 @@ class Test(unittest.TestCase):
         coloring = [[0], [1], [2]]
         clique = [[3], [4]]
         expect = [
-                  [[0, 3], [1, 4], [2]],
-                  [[0], [1, 3], [2, 4]],
-                  [[0, 4], [1, 3], [2]],
-                  [[0], [1, 4], [2, 3]]
-                 ]
+            [[0, 3], [1, 4], [2]],
+            [[0], [1, 3], [2, 4]],
+            [[0, 4], [1, 3], [2]],
+            [[0], [1, 4], [2, 3]]
+        ]
         index = 0
         for combo in combine_color_clique(clique, coloring):
             self.assertEqual(combo, expect[index])
@@ -450,6 +451,7 @@ class Test(unittest.TestCase):
         self.assertEqual(expect,
                          result,
                          "Assemble Coloring: unexpected result")
+
 
 if __name__ == "__main__":
     # import sys;sys.argv = ['', 'Test.testName']

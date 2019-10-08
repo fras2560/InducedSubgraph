@@ -10,17 +10,17 @@ Email:   fras2560@mylaurier.ca
 Version: 2014-09-11
 -------------------------------------------------------
 """
-from flask import Flask, g , request
+from flask import Flask
 import logging
 # create the application
 app = Flask(__name__)
 app.config.from_object("config")
-#load default config
+# load default config
 app.config.update(dict(
-                       DEBUG=True,
-                       SECRET_KEY="development key",
-                       USERNAME="admin",
-                       PASSWORD="default"))
+    DEBUG=True,
+    SECRET_KEY="development key",
+    USERNAME="admin",
+    PASSWORD="default"))
 app.config.from_envvar('FLASKR_SETTINGS', silent=True)
 app.config['UPLOAD_FOLDER'] = 'uploads'
 logging.basicConfig(level=logging.INFO,

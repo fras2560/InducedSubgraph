@@ -59,7 +59,7 @@ def make_clique(n):
         clique.add_node(v)
     end = len(clique.nodes())
     for target in clique.nodes():
-        for source in range(target+1, end):
+        for source in range(target + 1, end):
             clique.add_edge(target, source)
     return clique
 
@@ -159,8 +159,8 @@ def make_cycle(n):
         cycle.add_node(vertex)
     for vertex in range(0, n):
         # add all the edges
-        cycle.add_edge(vertex, (vertex+1) % n)
-        cycle.add_edge(vertex, (vertex-1) % n)
+        cycle.add_edge(vertex, (vertex + 1) % n)
+        cycle.add_edge(vertex, (vertex - 1) % n)
     return cycle
 
 
@@ -173,10 +173,10 @@ def make_wheel(n):
     Returns:
         wheel: the wheel (networkx)
     '''
-    wheel = make_cycle(n-1)
-    wheel.add_node(n-1)
-    for edge in range(0, n-1):
-        wheel.add_edge(edge, n-1)
+    wheel = make_cycle(n - 1)
+    wheel.add_node(n - 1)
+    for edge in range(0, n - 1):
+        wheel.add_edge(edge, n - 1)
     return wheel
 
 
@@ -204,7 +204,7 @@ def join(G, H):
     # join the two sets of nodes
     for v1 in G.nodes():
         for v2 in H.nodes():
-            F.add_edge(v1, v2+shift)
+            F.add_edge(v1, v2 + shift)
     return F
 
 
@@ -260,7 +260,7 @@ def text_to_d3(lines):
         entries = line.split(":")
         try:
             node = int(entries[0])
-        except:
+        except Exception:
             node = None
         if (len(entries) > 1):
             entries[1] = entries[1].replace(" ", "")
@@ -330,6 +330,7 @@ def make_co_twin_c5():
 
 
 class tester(unittest.TestCase):
+
     def setUp(self):
         pass
 
@@ -424,7 +425,7 @@ class tester(unittest.TestCase):
         g = make_cycle(4)
         result = convert_to_d3(g)
         edges = [(0, 1), (0, 3), (1, 2), (2, 3)]
-        nodes = [0, 1, 2, 3] 
+        nodes = [0, 1, 2, 3]
         self.assertEqual(result['edges'], edges,
                          "Convert to D3: failed to add edges")
         self.assertEqual(result['nodes'], nodes,

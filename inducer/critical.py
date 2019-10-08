@@ -5,6 +5,8 @@ Created on Oct 21, 2015
 '''
 from inducer.dcolor import dense_color_wrapper
 from inducer.colorable import coloring as color
+from inducer.helper import make_claw, make_wheel
+import unittest
 
 
 def critical(G, logger=None, dense=False):
@@ -41,9 +43,6 @@ def critical(G, logger=None, dense=False):
     if is_critical:
         K = chromatic
     return K
-
-import unittest
-from inducer.helper import make_claw, make_wheel
 
 
 class Tester(unittest.TestCase):

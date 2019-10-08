@@ -10,7 +10,7 @@ Version: 2014-09-18
 -------------------------------------------------------
 """
 from flask import render_template, json, request, make_response
-from inducer import app, logger
+from inducer import app
 from inducer.container import induced_subgraph, k_vertex
 from pprint import PrettyPrinter
 from inducer.helper import convert_to_networkx, convert_to_d3, text_to_d3
@@ -109,9 +109,6 @@ def contains():
     else:
         subgraph = convert_to_d3(subgraph)
         subgraph['success'] = True
-    pp.pprint(graphs['H'])
-    pp.pprint(graphs['G'])
-    print("Done")
     return json.dumps(subgraph)
 
 

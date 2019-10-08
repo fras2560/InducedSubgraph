@@ -9,7 +9,7 @@ Email:   fras2560@mylaurier.ca
 Version: 2014-09-18
 -------------------------------------------------------
 """
-#!flask/bin/python
+# !flask/bin/python
 from inducer import app
 if __name__ == "__main__":
-    app.run(debug = True)
+    app.run(debug=True)

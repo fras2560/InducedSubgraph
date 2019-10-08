@@ -10,23 +10,27 @@ Email:   fras2560@mylaurier.ca
 Version: 2014-09-10
 -------------------------------------------------------
 """
-import logging
-import networkx as nx
 from inducer.container import induced_subgraph
 from inducer.helper import make_clique
+from inducer.helper import make_co_twin_c5, make_cycle
+import logging
+import networkx as nx
+import unittest
 
-POSITION = {0:(0, 1),
-            1:(0, 2),
-            2:(0,3),
-            3:(1, 2),
-            4:(1,3),
-            5:(2, 3)}
+POSITION = {0: (0, 1),
+            1: (0, 2),
+            2: (0, 3),
+            3: (1, 2),
+            4: (1, 3),
+            5: (2, 3)}
+
 
 class ISK4Free():
-    def __init__(self,g,logger=None):
+
+    def __init__(self, g, logger=None):
         if logger is None:
             logging.basicConfig(level=logging.DEBUG,
-                            format='%(asctime)s %(message)s')
+                                format='%(asctime)s %(message)s')
             logger = logging.getLogger(__name__)
         self.logger = logger
         self.g = g
@@ -50,14 +54,13 @@ class ISK4Free():
             i = 0
             while i < n - 3 and sub is None:
                 for ball in unlabeled_balls_in_unlabeled_boxe(i,
-                                                              [i]*6):
+                                                              [i] * 6):
                     graph = self.create_subdivions(ball)
                     sub = induced_subgraph(self.g, graph)
                     if sub is not None:
                         break
                 i += 1
         return sub
-
 
     def create_subdivions(self, config):
         '''
@@ -68,8 +71,8 @@ class ISK4Free():
             graph: a network graph (networkx)
         '''
         graph = nx.Graph()
-        
-        for i in range(0,4):
+
+        for i in range(0, 4):
             graph.add_node(i)
         nodes = len(graph.nodes())
         for index, path_length in enumerate(config):
@@ -83,8 +86,9 @@ class ISK4Free():
             path.append(end)
             # connect the path
             for i in range(0, len(path) - 1):
-                graph.add_edge(path[i], path[i+1])
+                graph.add_edge(path[i], path[i + 1])
         return graph
+
 
 def unlabeled_balls_in_unlabeled_boxes(balls, box_sizes):
     '''
@@ -94,20 +98,21 @@ def unlabeled_balls_in_unlabeled_boxes(balls, box_sizes):
         raise TypeError("balls must be a non-negative integer.")
     if balls < 0:
         raise ValueError("balls must be a non-negative integer.")
-    if not isinstance(box_sizes,list):
+    if not isinstance(box_sizes, list):
         raise ValueError("box_sizes must be a non-empty list.")
-    capacity= 0
+    capacity = 0
     for size in box_sizes:
         if not isinstance(size, int):
             raise TypeError("box_sizes must contain only positive integers.")
         if size < 1:
             raise ValueError("box_sizes must contain only positive integers.")
-        capacity+= size
+        capacity += size
     if capacity < balls:
         raise ValueError("The total capacity of the boxes is less than the "
                          "number of balls to be distributed.")
-    box_sizes= list( sorted(box_sizes)[::-1] )
+    box_sizes = list(sorted(box_sizes)[::-1])
     return unlabeled_balls_in_unlabeled_boxe(balls, box_sizes)
+
 
 def unlabeled_balls_in_unlabeled_boxe(balls, box_sizes):
     '''
@@ -119,28 +124,24 @@ def unlabeled_balls_in_unlabeled_boxe(balls, box_sizes):
         if box_sizes[0] >= balls:
             yield (balls,)
     else:
-        for balls_in_first_box in range( min(balls, box_sizes[0]), -1, -1 ):
+        for balls_in_first_box in range(min(balls, box_sizes[0]), -1, -1):
             balls_in_other_boxes = balls - balls_in_first_box
             short = unlabeled_balls_in_unlabeled_boxe
             for distribution_other in short(balls_in_other_boxes,
                                             box_sizes[1:]):
                 if distribution_other[0] <= balls_in_first_box:
                     yield (balls_in_first_box,) + distribution_other
-            
 
-from inducer.helper import make_co_twin_c5, make_cycle
-import unittest
+
 class Test(unittest.TestCase):
-
 
     def setUp(self):
         pass
 
-
     def tearDown(self):
         pass
 
-    def compare_graphs(self,g , h):
+    def compare_graphs(self, g, h):
         same = False
         if (len(g.nodes()) == len(h.nodes())):
             induced = induced_subgraph(g, h)
@@ -150,14 +151,14 @@ class Test(unittest.TestCase):
 
     def testCreateSubdivision(self):
         g = ISK4Free(make_co_twin_c5())
-        result = g.create_subdivions([0,0,0,0,0,0])
+        result = g.create_subdivions([0, 0, 0, 0, 0, 0])
         self.assertEqual(self.compare_graphs(result, make_clique(4)), True)
-        result = g.create_subdivions([1,0,0,0,0,0])
+        result = g.create_subdivions([1, 0, 0, 0, 0, 0])
         expect = make_clique(4)
         expect.remove_edge(2, 3)
         expect.add_node(4)
-        expect.add_edge(2,4)
-        expect.add_edge(3,4)
+        expect.add_edge(2, 4)
+        expect.add_edge(3, 4)
         self.assertEqual(self.compare_graphs(result, expect), True)
 
     def testFree(self):
@@ -185,6 +186,7 @@ class Test(unittest.TestCase):
         result = g.free()
         self.assertEqual(result, None)
 
+
 if __name__ == "__main__":
-    #import sys;sys.argv = ['', 'Test.testName']
+    # import sys;sys.argv = ['', 'Test.testName']
     unittest.main()

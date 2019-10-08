@@ -31,7 +31,7 @@ class GraphNode():
         try:
             if self.index == node.index:
                 equal = True
-        except:
+        except Exception:
             pass
         return equal
 
@@ -45,7 +45,7 @@ class GraphNode():
         try:
             if self.index <= node.index:
                 equal = True
-        except:
+        except Exception:
             pass
         return equal
 
@@ -54,7 +54,7 @@ class GraphNode():
         try:
             if self.index < node.index:
                 equal = True
-        except:
+        except Exception:
             pass
         return equal
 
@@ -63,6 +63,7 @@ class GraphNode():
 
 
 class TestGraphNode(unittest.TestCase):
+
     def setUp(self):
         GraphNode.index = 0
         GraphNode.count = 0
@@ -87,6 +88,7 @@ class TestGraphNode(unittest.TestCase):
     def testHash(self):
         self.assertEqual(hash(GraphNode()), 0)
         self.assertEqual(hash(GraphNode()), 1)
+
 
 if __name__ == "__main__":
     # import sys;sys.argv = ['', 'Test.testName']

@@ -9,20 +9,25 @@ Email:   fras2560@mylaurier.ca
 Version: 2014-09-17
 -------------------------------------------------------
 """
-import networkx as nx
 from itertools import permutations
+from pprint import PrettyPrinter
+from inducer.helper import make_claw, make_diamond, make_cycle, join
 import logging
 import copy
-from pprint import PrettyPrinter
+import networkx as nx
+import unittest
+
 
 def dense_color_wrapper(G, logger=None):
     return Dcolor(G, logger=logger).color()
 
+
 class Dcolor():
+
     def __init__(self, graph, logger=None):
         if logger is None:
             logging.basicConfig(level=logging.DEBUG,
-                            format='%(asctime)s %(message)s')
+                                format='%(asctime)s %(message)s')
             logger = logging.getLogger(__name__)
         self.logger = logger
         self.coloring = None
@@ -40,7 +45,7 @@ class Dcolor():
         if self.coloring is None:
             self.color()
         return len(self.coloring)
-    
+
     def color(self):
         '''
         a method to determine a graph coloring
@@ -120,7 +125,7 @@ class Dcolor():
             self.logger.info('Testing Chromatic Number: %d' % chromatic)
             coloring = self.coloring_step(cliques, largest)
             if coloring is None:
-                largest.append([]) # equivalent to adding a new color
+                largest.append([])  # equivalent to adding a new color
                 chromatic += 1
             else:
                 done = True
@@ -135,9 +140,9 @@ class Dcolor():
         Returns:
             coloring: None if no coloring is possible
         '''
-        
+
         if len(cliques) == 0:
-            result =  coloring
+            result = coloring
         else:
             added = False
             valid = []
@@ -171,7 +176,7 @@ class Dcolor():
         '''
         a method that determines if the coloring is valid
         Parameters:
-            coloring: a list of colors in which each color is a list of nodes 
+            coloring: a list of colors in which each color is a list of nodes
                       e.g. [[1,2],[3]]
         Returns:
             valid: True if valid coloring,
@@ -186,12 +191,13 @@ class Dcolor():
                     for neighbor in neighbors:
                         if neighbor in color:
                             valid = False
-                            break;
+                            break
                     if not valid:
-                        break;
+                        break
                 if not valid:
-                    break;
+                    break
         return valid
+
 
 def add_list(l1, l2, index):
     '''
@@ -202,15 +208,16 @@ def add_list(l1, l2, index):
         l2: the second list (list of lists)
         i1: the starting index to l1 (int)
     Returns:
-        l: the list of lists(list of lists)
+        new_list: the list of lists(list of lists)
     '''
-    l = copy.deepcopy(l1)
+    new_list = copy.deepcopy(l1)
     i = 0
     while i < len(l2):
-        l[index] += l2[i]
+        new_list[index] += l2[i]
         i += 1
         index += 1
-    return l
+    return new_list
+
 
 def convert_combo(combo):
     '''
@@ -221,9 +228,10 @@ def convert_combo(combo):
         conversion: the converted combination (list)
     '''
     conversion = []
-    for c  in combo:
+    for c in combo:
         conversion.append(c)
     return conversion
+
 
 def combine_color_clique(clique, color):
     '''
@@ -253,8 +261,7 @@ def combine_color_clique(clique, color):
         else:
             yield add_list(c, color, 0)
 
-import unittest
-from inducer.helper import make_claw, make_diamond, make_cycle, join
+
 class Test(unittest.TestCase):
 
     def setUp(self):
@@ -276,7 +283,7 @@ class Test(unittest.TestCase):
         self.assertEqual([[[0], [1], [2]], [[3]]], c)
         self.assertEqual(k, 3)
         self.assertEqual(i, 0)
-        
+
     def testColor(self):
         result = self.dcolor.color()
         expect = [[0], [1, 2, 3]]
@@ -305,7 +312,7 @@ class Test(unittest.TestCase):
         self.dcolor = Dcolor(g)
         color = self.dcolor.color()
         self.assertEqual(len(color), 4)
-        expect = [[5], [0],  [1, 3], [2, 4]]
+        expect = [[5], [0], [1, 3], [2, 4]]
         self.assertEqual(expect, color)
 
     def testColoringHardGraph(self):
@@ -315,8 +322,8 @@ class Test(unittest.TestCase):
         for i in range(5, 10):
             g.add_node(i)
             # make it a two vertex
-            g.add_edge(i, (index+0) % 5) # xi
-            g.add_edge(i, (index+1) % 5)
+            g.add_edge(i, (index + 0) % 5)  # xi
+            g.add_edge(i, (index + 1) % 5)
             index += 1
         g.add_edge(5, 6)
         g.add_edge(5, 8)
@@ -330,31 +337,18 @@ class Test(unittest.TestCase):
         # C5 + 2 Yi
         g = make_cycle(5)
         g.add_node(5)
-        g.add_edge(0,5)
-        g.add_edge(1,5)
-        g.add_edge(2,5)
+        g.add_edge(0, 5)
+        g.add_edge(1, 5)
+        g.add_edge(2, 5)
         g.add_node(6)
-        g.add_edge(0,6)
-        g.add_edge(3,6)
-        g.add_edge(4,6)
+        g.add_edge(0, 6)
+        g.add_edge(3, 6)
+        g.add_edge(4, 6)
         self.dcolor = Dcolor(g)
         color = self.dcolor.color()
         expect = [[0, 3], [1, 4], [5, 6], [2]]
         self.assertEqual(self.dcolor.valid_coloring(color), True)
         self.assertEqual(color, expect)
-        
-        # C5 Joined K5
-        # does not work efficiently for this atm
-#         k5 = nx.Graph()
-#         for i in range (0,5):
-#             k5.add_node(i)
-#             for edge in range(0, i):
-#                 k5.add_edge(edge, i)
-#         g = join(k5, make_cycle(5))
-#         self.dcolor = Dcolor(g)
-#         print('color hard one')
-#         color = self.dcolor.color()
-#         print(color)
 
     def testColorCycle(self):
         g = make_cycle(5)
@@ -378,9 +372,9 @@ class Test(unittest.TestCase):
         coloring = [[3], [2]]
         clique = [[0], [1]]
         expect = [
-                  [[0, 3], [1, 2]],
-                  [[1, 3], [0, 2]]
-                 ]
+            [[0, 3], [1, 2]],
+            [[1, 3], [0, 2]]
+        ]
         index = 0
         for combo in combine_color_clique(clique, coloring):
             self.assertEqual(combo, expect[index])
@@ -388,11 +382,11 @@ class Test(unittest.TestCase):
         coloring = [[0, 1]]
         clique = [[2], [3]]
         expect = [
-                  [[2, 0, 1], [3]],
-                  [[2], [3, 0, 1]],
-                  [[3, 0, 1], [2]],
-                  [[3], [2, 0, 1]]
-                 ]
+            [[2, 0, 1], [3]],
+            [[2], [3, 0, 1]],
+            [[3, 0, 1], [2]],
+            [[3], [2, 0, 1]]
+        ]
         index = 0
         for combo in combine_color_clique(clique, coloring):
             self.assertEqual(combo, expect[index])
@@ -401,24 +395,24 @@ class Test(unittest.TestCase):
         coloring = [[0], [1], [2]]
         clique = [[3], [4]]
         expect = [
-                  [[0, 3], [1, 4], [2]],
-                  [[0], [1, 3], [2, 4]],
-                  [[0, 4], [1, 3], [2]],
-                  [[0], [1, 4], [2, 3]]
-                 ]
+            [[0, 3], [1, 4], [2]],
+            [[0], [1, 3], [2, 4]],
+            [[0, 4], [1, 3], [2]],
+            [[0], [1, 4], [2, 3]]
+        ]
         index = 0
         for combo in combine_color_clique(clique, coloring):
             self.assertEqual(combo, expect[index])
             index += 1
 
     def testAddList(self):
-        l1 = [[1],[2]]
-        l2 = [[3],[4,5]]
+        l1 = [[1], [2]]
+        l2 = [[3], [4, 5]]
         result = add_list(l1, l2, 0)
         expect = [[1, 3], [2, 4, 5]]
         self.assertEqual(result, expect)
-        l1 = [[1],[2], [6]]
-        l2 = [[3],[4,5]]
+        l1 = [[1], [2], [6]]
+        l2 = [[3], [4, 5]]
         result = add_list(l1, l2, 0)
         expect = [[1, 3], [2, 4, 5], [6]]
         self.assertEqual(result, expect)
@@ -432,6 +426,7 @@ class Test(unittest.TestCase):
         self.assertEqual(type(conversion), list,
                          "Convert Combo: did not return list")
 
+
 if __name__ == "__main__":
-    #import sys;sys.argv = ['', 'Test.testName']
+    # import sys;sys.argv = ['', 'Test.testName']
     unittest.main()
