@@ -10,7 +10,7 @@ import unittest
 import networkx as nx
 
 
-class testCliqueCutset(unittest.TestCase):
+class TestCliqueCutset(unittest.TestCase):
 
     def testCliqueCutset(self):
         # no cutset

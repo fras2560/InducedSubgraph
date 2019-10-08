@@ -12,7 +12,7 @@ from inducer.graph import color_vertex,\
     convert_to_networkx
 
 
-class testBacktracking(unittest.TestCase):
+class TestBacktracking(unittest.TestCase):
 
     def setUp(self):
         pass
