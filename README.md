@@ -41,6 +41,15 @@ To run just a single test use:
 	python -m unittest discover -s inducer/test -p <TEST_FILE_NAME>.py
 ```
 
+Linting
+-----------
+This project uses flake8 for its linting. Any PR to master will check if there are any linting issues. It is recommended that one setups pep8 linting for their IDE / editor. To run the linter locally use
+```sh
+	pip install flake8
+	flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+        flake8 . --count --max-complexity=20 --max-line-length=127 --statistics --exclude=inducer/__init__.py
+```
+
 
 Contact
 -----------
