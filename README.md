@@ -1,16 +1,12 @@
 InducedSubgraph
 ===============
 
-~~A project to take some WLU C code which finds an induced subgraph and port it over to python~~
-
-~~Creating a D3 web page to check if G contains H~~
-
 A web app that allows for the user to draw two graph G and H. It allows for the user to see if G contains an induced subgraph H.
-Check it out at [inducer]
+Additional features such as coloring and checking graph properties were added. Check it out at [inducer]
 
 
 Version
-----
+-----------
 
 1.0
 
@@ -25,8 +21,7 @@ InducedSubgraph uses a number of open source projects:
 Install Dependencies
 -----------
 ```sh
-	pip install flask
-	pip install networkx
+	pip install -r requirements.txt
 ```
 
 Start Server
@@ -35,9 +30,21 @@ Start Server
 	python run.py
 ```
 
+Running Tests
+-----------
+```sh
+	python -m unittest discover -s inducer/test
+```
+
+To run just a single test use:
+```sh
+	python -m unittest discover -s inducer/test -p <TEST_FILE_NAME>.py
+```
+
+
 Contact
 -----------
-Feel free to contact me for ideas and help at [fras2560@mylaurier.ca]
+Feel free to contact me for ideas and help at [dallas.fraser.water@gmail.com]
 
 License
 ----
@@ -48,4 +55,4 @@ MIT
 [Networkx]:http://networkx.github.io/documentation/networkx-1.9/
 [Flask]:http://flask.pocoo.org/
 [inducer]:http://induced-subgraph.herokuapp.com/
-[fras2560@mylaurier.ca]:mailto:fras2560@mylaurier.ca
+[dallas.fraser.water@gmail.com]:mailto:dallas.fraser.water@gmail.com
