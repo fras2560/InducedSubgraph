@@ -12,10 +12,8 @@ Version: 2014-09-10
 """
 from inducer.container import induced_subgraph
 from inducer.helper import make_clique
-from inducer.helper import make_co_twin_c5, make_cycle
 import logging
 import networkx as nx
-import unittest
 
 POSITION = {0: (0, 1),
             1: (0, 2),
