@@ -117,7 +117,7 @@ def coloring(G, logger=None):
         # can be no edge between any node
         coloring = [G.nodes()]
         valid = True
-    nodes = G.nodes()
+    nodes = list(G.nodes())
     # remove nodes from largest clique
     i = 0
     clique = []
