@@ -12,7 +12,7 @@ import networkx as nx
 
 def is_colored(G, vertex):
     """Returns whether the vertex is colored or not"""
-    return G.node[vertex]['node'].color is not None
+    return G.nodes[vertex]['node'].color is not None
 
 
 def chromatic_number(G):
@@ -25,8 +25,8 @@ def chromatic_number(G):
     """
     colors = []
     for node in G:
-        if G.node[node]['node'].color not in colors:
-            colors.append(G.node[node]['node'].color)
+        if G.nodes[node]['node'].color not in colors:
+            colors.append(G.nodes[node]['node'].color)
     return len(colors)
 
 
@@ -36,8 +36,8 @@ def copy_graph_colors(G):
     H = nx.Graph()
     for n in G.nodes():
         node = GraphNode(index=n,
-                         logger=G.node[n]['node'].logger,
-                         color=G.node[n]['node'].color,
+                         logger=G.nodes[n]['node'].logger,
+                         color=G.nodes[n]['node'].color,
                          )
         H.add_node(n, node=node)
     for edge in G.edges():
@@ -59,11 +59,11 @@ def color_vertex(G, vertex, color):
         vertex: the vertex number (int)
         color: the color
     """
-    G.node[vertex]['node'].color = color
+    G.nodes[vertex]['node'].color = color
 
 
 def get_color(G, vertex):
-    return G.node[vertex]['node'].color
+    return G.nodes[vertex]['node'].color
 
 
 def valid_coloring(G):
@@ -79,8 +79,8 @@ def valid_coloring(G):
         valid = True
         for node in G.nodes():
             for neighbor in G.neighbors(node):
-                if (G.node[neighbor]['node'].color ==
-                        G.node[node]['node'].color):
+                if (G.nodes[neighbor]['node'].color ==
+                        G.nodes[node]['node'].color):
                     valid = False
                     break
             if not valid:
@@ -100,7 +100,7 @@ def available_color(G, vertex, color):
     """
     available = True
     for neighbor in G.neighbors(vertex):
-        if G.node[neighbor]['node'].color == color:
+        if G.nodes[neighbor]['node'].color == color:
             available = False
             break
     return available
@@ -119,7 +119,7 @@ def available_colors(G, vertex, number_of_colors):
     colors = [x for x in range(0, number_of_colors)]
     for neighbor in G.neighbors(vertex):
         try:
-            index = colors.index(G.node[neighbor]['node'].color)
+            index = colors.index(G.nodes[neighbor]['node'].color)
             colors.pop(index)
         except Exception:
             pass
