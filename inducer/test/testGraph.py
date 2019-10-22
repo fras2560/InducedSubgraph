@@ -75,13 +75,13 @@ class testGraph(unittest.TestCase):
         is_available = available_color(G, 0, 0)
         self.assertEqual(is_available, True)
         # color one neighbor
-        G.node[1]['node'].color = 0
+        G.nodes[1]['node'].color = 0
         is_available = available_color(G, 0, 0)
         self.assertEqual(is_available, False)
         is_available = available_color(G, 0, 1)
         self.assertEqual(is_available, True)
         # color all neighbors
-        G.node[2]['node'].color = 1
+        G.nodes[2]['node'].color = 1
         is_available = available_color(G, 0, 0)
         self.assertEqual(is_available, False)
         is_available = available_color(G, 0, 1)
@@ -102,11 +102,11 @@ class testGraph(unittest.TestCase):
         colors = available_colors(G, 0, 3)
         self.assertEqual(colors, [0, 1, 2])
         # color one neighbor
-        G.node[1]['node'].color = 0
+        G.nodes[1]['node'].color = 0
         colors = available_colors(G, 0, 3)
         self.assertEqual(colors, [1, 2])
         # color other neighbor
-        G.node[2]['node'].color = 1
+        G.nodes[2]['node'].color = 1
         colors = available_colors(G, 0, 3)
         self.assertEqual(colors, [2])
 
@@ -120,29 +120,29 @@ class testGraph(unittest.TestCase):
             ]
         }
         G = convert_to_networkx(d)
-        G.node[0]['node'].color = 0
-        G.node[1]['node'].color = 1
-        G.node[2]['node'].color = 2
+        G.nodes[0]['node'].color = 0
+        G.nodes[1]['node'].color = 1
+        G.nodes[2]['node'].color = 2
         valid = valid_coloring(G)
         self.assertEqual(valid, True)
-        G.node[0]['node'].color = 0
-        G.node[1]['node'].color = 0
-        G.node[2]['node'].color = 2
+        G.nodes[0]['node'].color = 0
+        G.nodes[1]['node'].color = 0
+        G.nodes[2]['node'].color = 2
         valid = valid_coloring(G)
         self.assertEqual(valid, False)
-        G.node[0]['node'].color = 0
-        G.node[1]['node'].color = 2
-        G.node[2]['node'].color = 2
+        G.nodes[0]['node'].color = 0
+        G.nodes[1]['node'].color = 2
+        G.nodes[2]['node'].color = 2
         valid = valid_coloring(G)
         self.assertEqual(valid, False)
-        G.node[0]['node'].color = 2
-        G.node[1]['node'].color = 0
-        G.node[2]['node'].color = 2
+        G.nodes[0]['node'].color = 2
+        G.nodes[1]['node'].color = 0
+        G.nodes[2]['node'].color = 2
         valid = valid_coloring(G)
         self.assertEqual(valid, False)
-        G.node[0]['node'].color = 1
-        G.node[1]['node'].color = 1
-        G.node[2]['node'].color = 2
+        G.nodes[0]['node'].color = 1
+        G.nodes[1]['node'].color = 1
+        G.nodes[2]['node'].color = 2
         valid = valid_coloring(G)
         self.assertEqual(valid, False)
 
@@ -157,7 +157,7 @@ class testGraph(unittest.TestCase):
         }
         G = convert_to_networkx(d)
         color_vertex(G, 0, 0)
-        self.assertEqual(G.node[0]['node'].color, 0)
+        self.assertEqual(G.nodes[0]['node'].color, 0)
 
     def testCopyGraph(self):
         d = {
@@ -171,7 +171,7 @@ class testGraph(unittest.TestCase):
         G = convert_to_networkx(d)
         H = copy_graph(G)
         # change H color and should not affect G
-        H.node[0]['node'].color = 0
-        self.assertNotEqual(G.node[0]['node'].color, 0)
-        H.node[1]['node'].color = 1
-        self.assertNotEqual(G.node[1]['node'].color, 1)
+        H.nodes[0]['node'].color = 0
+        self.assertNotEqual(G.nodes[0]['node'].color, 0)
+        H.nodes[1]['node'].color = 1
+        self.assertNotEqual(G.nodes[1]['node'].color, 1)
