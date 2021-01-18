@@ -4,3 +4,4 @@ Werkzeug>=0.14
 gunicorn>=19.5.0
 networkx>=1.9
 requests>=2.9
+coverage==5.3.1

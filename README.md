@@ -1,3 +1,5 @@
+[![codecov](https://codecov.io/gh/fras2560/InducedSubgraph/branch/main/graph/badge.svg?token=ZUB7EO8ESJ)](https://codecov.io/gh/fras2560/InducedSubgraph)
+
 InducedSubgraph
 ===============
 
