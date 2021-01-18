@@ -28,4 +28,14 @@ jobs:
         flake8 . --count --max-complexity=20 --max-line-length=127 --statistics --exclude=inducer/__init__.py
     - name: Test with unittest
       run: |
-        python -m unittest discover -s inducer/test
+        coverage run --omit=venv/*  -m unittest discover -s inducer/test
+        coverage xml:unit-testing.xml
+    - name: Upload Unit-testing code coverage
+      uses: codecov/codecov-action@v1
+      with:
+        flags: unittests # optional
+        name: testing
+        files: unit-testing.xml
+        fail_ci_if_error: true # optional (default = false)
+        verbose: true # optional (default = false)
+
