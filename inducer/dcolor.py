@@ -157,16 +157,16 @@ class Dcolor():
                         break
         return result
 
-    def copy_list(self, l):
+    def copy_list(self, original_list):
         '''
         a method to copy a list
         Parameters:
-            l: the list to copy (list)
+            original_list: the list to copy (list)
         Returns:
             result: the copied list (list)
         '''
         result = []
-        for element in l:
+        for element in original_list:
             result.append(copy.deepcopy(element))
         return result
 
