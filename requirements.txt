@@ -1,4 +1,4 @@
-flask>=1.0
+Flask>=2.0.0
 Flask-RESTful>=0.3
 Werkzeug>=0.14
 gunicorn>=19.5.0
