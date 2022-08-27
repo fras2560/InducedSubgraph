@@ -38,7 +38,7 @@ def forward_check(G, chromatic):
     """
     forward = True
     for node in G.nodes():
-        if(get_color(G, node) is None and
+        if (get_color(G, node) is None and
            len(available_colors(G, node, chromatic)) == 0):
             forward = False
             break
