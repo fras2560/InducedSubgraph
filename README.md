@@ -65,5 +65,5 @@ MIT
 
 [Networkx]:http://networkx.github.io/documentation/networkx-1.9/
 [Flask]:http://flask.pocoo.org/
-[inducer]:http://induced-subgraph.herokuapp.com/
+[inducer]:https://induced-subgraph.fly.dev/
 [dallas.fraser.water@gmail.com]:mailto:dallas.fraser.water@gmail.com
