@@ -1,6 +1,9 @@
 name: Production Deployment to Fly.Io
 
 on:
+  pull_request:
+    branches:
+      - main
   push:
     branches:
       - main
