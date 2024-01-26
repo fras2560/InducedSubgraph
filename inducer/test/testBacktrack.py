@@ -4,11 +4,11 @@
 @summary: Tests for the back tracking functions
 '''
 import unittest
-from inducer.backtracking import forward_check, inducer_coloring,\
+from inducer.backtracking import forward_check, inducer_coloring, \
     least_constraining_colors, ordering_node, coloring_aux, coloring
-from inducer.graph import color_vertex,\
-    valid_coloring,\
-    chromatic_number,\
+from inducer.graph import color_vertex, \
+    valid_coloring, \
+    chromatic_number, \
     convert_to_networkx
 
 

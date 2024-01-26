@@ -3,7 +3,7 @@
 @date: 2019-08-10
 @summary: Tests for the dcolor class and methods
 '''
-from inducer.dcolor import Dcolor, combine_color_clique, convert_combo,\
+from inducer.dcolor import Dcolor, combine_color_clique, convert_combo, \
     add_list
 from inducer.helper import make_diamond, make_claw, make_cycle, join
 import networkx as nx

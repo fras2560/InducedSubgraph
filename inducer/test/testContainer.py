@@ -3,7 +3,7 @@
 @date: 2019-08-10
 @summary: Tests for the container functions
 '''
-from inducer.helper import make_cycle, make_claw, make_co_claw,\
+from inducer.helper import make_cycle, make_claw, make_co_claw, \
     make_diamond, make_co_diamond, make_wheel
 from inducer.container import induced_subgraph, k_vertex
 import unittest

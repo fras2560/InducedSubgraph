@@ -3,7 +3,7 @@
 @date: 2019-08-10
 @summary: Tests for the clique cutset functions
 '''
-from inducer.colorable import valid_coloring, combine_color_clique, coloring,\
+from inducer.colorable import valid_coloring, combine_color_clique, coloring, \
     chromatic_number, valid_split, add_list, assemble_coloring, convert_combo
 from inducer.helper import make_claw, make_diamond, make_cycle, join
 import unittest

@@ -3,8 +3,8 @@
 @date: 2019-08-10
 @summary: Tests for helper functions
 '''
-from inducer.helper import make_claw, make_cycle, join, make_diamond,\
-    make_wheel, make_co_diamond, make_co_claw, convert_to_d3,\
+from inducer.helper import make_claw, make_cycle, join, make_diamond, \
+    make_wheel, make_co_diamond, make_co_claw, convert_to_d3, \
     convert_to_networkx, text_to_d3
 import networkx as nx
 import os

@@ -7,12 +7,12 @@
 '''
 import logging
 import networkx as nx
-from inducer.graph import color_vertex,\
-    copy_graph_colors,\
-    available_colors,\
-    get_color,\
-    valid_coloring,\
-    copy_graph,\
+from inducer.graph import color_vertex, \
+    copy_graph_colors, \
+    available_colors, \
+    get_color, \
+    valid_coloring, \
+    copy_graph, \
     chromatic_number
 COUNT = 0
 ALL_OPTIONS = {"forward_check": lambda x, y: forward_check(x, y),

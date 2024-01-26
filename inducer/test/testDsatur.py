@@ -4,8 +4,8 @@
 @summary: Tests for the dsatur coloring function and helper functions
 '''
 from inducer.dsatur import coloring, inducer_coloring
-from inducer.graph import copy_graph,\
-    convert_to_networkx,\
+from inducer.graph import copy_graph, \
+    convert_to_networkx, \
     valid_coloring
 import unittest
 import networkx as nx

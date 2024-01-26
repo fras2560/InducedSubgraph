@@ -3,8 +3,8 @@
 @date: 2019-08-10
 @summary: Tests for graph and their functions
 '''
-from inducer.graph import available_color, create_graph, convert_to_d3,\
-    convert_to_networkx, d3_to_text, text_to_d3, available_colors, copy_graph,\
+from inducer.graph import available_color, create_graph, convert_to_d3, \
+    convert_to_networkx, d3_to_text, text_to_d3, available_colors, copy_graph, \
     valid_coloring, color_vertex
 import networkx as nx
 import unittest

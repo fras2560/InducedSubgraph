@@ -6,10 +6,10 @@
 @note: coloring_aux with a greedy algorithm
 '''
 import logging
-from inducer.graph import available_color,\
-    color_vertex,\
-    copy_graph,\
-    chromatic_number,\
+from inducer.graph import available_color, \
+    color_vertex, \
+    copy_graph, \
+    chromatic_number, \
     is_colored, get_color
 
 
